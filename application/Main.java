@@ -33,6 +33,7 @@ import javafx.stage.Stage;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 
 public class Main extends Application {
     // store any command-line arguments that were entered.
@@ -55,10 +56,11 @@ public class Main extends Application {
         
         Text text = new Text();
         
-        text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 10)); 
-        text.setText("                Welcome to cheese factory management system!");
+        text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15)); 
+        text.setText("Welcome to cheese factory management system!");
         
-        //Label lable = new Label(text);
+        
+        //Label label = new Label(text);
         
         
         for (String arg : args) {
@@ -107,14 +109,14 @@ public class Main extends Application {
         button4.setCursor(Cursor.HAND);
         button4.setStyle("-fx-base: darkorange;");
         
-        Button button5 = new Button("return");
-        
-        double r = 25;
-        button5.setShape(new Circle(r));
-        button5.setMaxSize(2.8*r,1.8*r);
-        button5.setMinSize(2.8*r,1.8*r);
-        button5.setCursor(Cursor.HAND);
-        button5.setStyle("-fx-base: orange;");
+//        Button button5 = new Button("return");
+//        
+//        double r = 25;
+//        button5.setShape(new Circle(r));
+//        button5.setMaxSize(2.8*r,1.8*r);
+//        button5.setMinSize(2.8*r,1.8*r);
+//        button5.setCursor(Cursor.HAND);
+//        button5.setStyle("-fx-base: orange;");
         
         
         Polygon p = new Polygon();
@@ -148,8 +150,9 @@ public class Main extends Application {
                
         // Add the vertical box to the center of the root pane
         root.setTop(text);
+        BorderPane.setAlignment(text, Pos.TOP_CENTER);
         vbox.getChildren().addAll(button,button2,button3,button4);
-        vboxR.getChildren().addAll(button5,edData,imageView3);
+        vboxR.getChildren().addAll(edData,imageView3);
         vboxL.getChildren().addAll(imageView,ldData);
         root.setRight(vboxL);
         root.setCenter(vbox);
