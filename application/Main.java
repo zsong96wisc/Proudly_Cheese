@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.List;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -18,6 +19,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -29,6 +31,7 @@ import javafx.stage.Stage;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 
 public class Main extends Application {
     // store any command-line arguments that were entered.
@@ -49,7 +52,8 @@ public class Main extends Application {
         VBox vboxR = new VBox(20);
         VBox vboxL = new VBox(5);
         
-        Label lable = new Label("                Welcome to cheese factory management system!");
+        Label lable = new Label("Welcome to cheese factory management system!");
+        lable.setFont(new Font("SimHei", 20));
         
         for (String arg : args) {
           vbox.getChildren().add(new Label("hello " + arg));
@@ -93,7 +97,7 @@ public class Main extends Application {
         button5.setShape(new Circle(r));
         button5.setMaxSize(2*r,2*r);
         button5.setMinSize(2*r,2*r);
-        button5.setBackground(new Background(new BackgroundFill(Color.ORANGE, null, null)));
+        button5.setStyle("-fx-base: orange;");
         
         
         Polygon p = new Polygon();
@@ -113,16 +117,20 @@ public class Main extends Application {
         edData.setShape(p);
         edData.setMaxSize(3*r2,3*r2);
         edData.setMinSize(3*r2,3*r2);
-        edData.setBackground(new Background(new BackgroundFill(Color.YELLOW, null, null)));
+        edData.setCursor(Cursor.HAND);
+        edData.setStyle("-fx-base: yellow;");
         
         Button ldData = new Button("Load Data");
         ldData.setShape(p);
         ldData.setMaxSize(3*r2,3*r2);
         ldData.setMinSize(3*r2,3*r2);
-        ldData.setBackground(new Background(new BackgroundFill(Color.YELLOW, null, null)));
+        
+        ldData.setCursor(Cursor.HAND);
+        ldData.setStyle("-fx-base: yellow;");
                
         // Add the vertical box to the center of the root pane
         root.setTop(lable);
+        BorderPane.setAlignment(lable, Pos.TOP_CENTER);
         //root.setLeft(combo);
         vbox.getChildren().addAll(button,button2,button3,button4);
         vboxR.getChildren().addAll(button5,edData,imageView3);
