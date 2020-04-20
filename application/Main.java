@@ -16,6 +16,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
@@ -42,72 +43,61 @@ public class Main extends Application {
 
     private static final int WINDOW_WIDTH = 500;
     private static final int WINDOW_HEIGHT = 300;
-    private static final String APP_TITLE = "Hello World!";
+    private static final String APP_TITLE = "Proudly Cheese";
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         // save args example
         args = this.getParameters().getRaw();
 
-        // Create a vertical box with Hello labels for each args
-        VBox vbox = new VBox(35);
-        VBox vboxR = new VBox(20);
+        VBox vbox = new VBox(20);
         VBox vboxL = new VBox(5);
+        VBox vboxR = new VBox(20);
         
         Text text = new Text();
         
         text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15)); 
-        text.setText("Welcome to cheese factory management system!");
+        text.setText("Welcome to cheese factory management system!\n");
         
-        
-        //Label label = new Label(text);
-        
-        
-        for (String arg : args) {
-          vbox.getChildren().add(new Label("hello " + arg));
-        }
-
         // Main layout is Border Pane example (top,left,center,right,bottom)
-        BorderPane root = new BorderPane();
-        String array[]= {"day1","day2","day3"};
-        ComboBox combo = new ComboBox(FXCollections.observableArrayList(array));
+        BorderPane root = new BorderPane();      
         
+        File inputCheese = new File("cheese.png");
+        Image imageCheese = new Image(inputCheese.toURI().toString());
+        ImageView imageViewCheese = new ImageView();
+        imageViewCheese.setImage(imageCheese);
+        imageViewCheese.setFitHeight(100);
+        imageViewCheese.setFitWidth(100);
         
-        File input = new File("cheese.png");
-        Image image = new Image(input.toURI().toString());
-        ImageView imageView = new ImageView();
-        imageView.setImage(image);
-        imageView.setFitHeight(100);
-        imageView.setFitWidth(100);
+        File inputBrand = new File("brand.png");
+        Image imageBrand = new Image(inputBrand.toURI().toString(),50,50,false,false);
+        ImageView imageViewBrand = new ImageView();
+        imageViewBrand.setImage(imageBrand);
+        imageViewBrand.setFitHeight(100);
+        imageViewBrand.setFitWidth(100);
         
-        File input2 = new File("cloud.jpg");
-        Image image2 = new Image(input2.toURI().toString(),50,50,false,false);
-        ImageView imageView2 = new ImageView();
-        imageView2.setImage(image2);
-        imageView2.setFitHeight(60);
-        imageView2.setFitWidth(60);
-        
-        File input3 = new File("label.png");
-        Image image3 = new Image(input3.toURI().toString(),50,50,false,false);
-        ImageView imageView3 = new ImageView();
-        imageView3.setImage(image3);
-        imageView3.setFitHeight(100);
-        imageView3.setFitWidth(100);
-        
-        Button button = new Button("Farm Report",new Label());
-        Button button2 = new Button("Annual Report",new Label());
-        Button button3 = new Button("Monthly Report",new Label());
-        Button button4 = new Button("Date Range Report",new Label());
+        Button buttonFarm = new Button("Farm Report",new Label());
+        buttonFarm.setPrefSize(300, 50);
+        Button buttonAnnual = new Button("Annual Report",new Label());
+        buttonAnnual.setPrefSize(300, 50);
+        Button buttonMonthly = new Button("Monthly Report",new Label());
+        buttonMonthly.setPrefSize(300, 50);
+        Button buttonDate = new Button("Date Range Report",new Label());
+        buttonDate.setPrefSize(300, 50);
         
 
-        button.setCursor(Cursor.HAND);
-        button.setStyle("-fx-base: moccasin;");
-        button2.setCursor(Cursor.HAND);
-        button2.setStyle("-fx-base: navajowhite;");
-        button3.setCursor(Cursor.HAND);
-        button3.setStyle("-fx-base: gold;");
-        button4.setCursor(Cursor.HAND);
-        button4.setStyle("-fx-base: darkorange;");
+        buttonFarm.setCursor(Cursor.HAND);
+        buttonFarm.setStyle("-fx-base: moccasin;");
+        buttonAnnual.setCursor(Cursor.HAND);
+        buttonAnnual.setStyle("-fx-base: navajowhite;");
+        buttonMonthly.setCursor(Cursor.HAND);
+        buttonMonthly.setStyle("-fx-base: gold;");
+        buttonDate.setCursor(Cursor.HAND);
+        buttonDate.setStyle("-fx-base: darkorange;");
+        
+        ToggleButton buttonCloud = new ToggleButton();
+        buttonCloud.getStylesheets().add(
+                this.getClass().getResource("imagetogglebutton.css").toExternalForm());
         
 //        Button button5 = new Button("return");
 //        
@@ -151,12 +141,12 @@ public class Main extends Application {
         // Add the vertical box to the center of the root pane
         root.setTop(text);
         BorderPane.setAlignment(text, Pos.TOP_CENTER);
-        vbox.getChildren().addAll(button,button2,button3,button4);
-        vboxR.getChildren().addAll(edData,imageView3);
-        vboxL.getChildren().addAll(imageView,ldData);
-        root.setRight(vboxL);
+        vbox.getChildren().addAll(buttonFarm, buttonAnnual, buttonMonthly, buttonDate);
+        vboxL.getChildren().addAll(buttonCloud, edData, imageViewBrand);
+        vboxR.getChildren().addAll(imageViewCheese, ldData);
+        root.setLeft(vboxL);
         root.setCenter(vbox);
-        root.setLeft(vboxR);
+        root.setRight(vboxR);
 
         
         Scene mainScene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
