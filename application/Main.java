@@ -3,6 +3,7 @@ package application;
 import java.io.File;
 import java.util.List;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
