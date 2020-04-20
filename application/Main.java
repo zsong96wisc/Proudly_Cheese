@@ -19,7 +19,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -27,11 +26,13 @@ import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 
 public class Main extends Application {
     // store any command-line arguments that were entered.
@@ -52,8 +53,13 @@ public class Main extends Application {
         VBox vboxR = new VBox(20);
         VBox vboxL = new VBox(5);
         
-        Label lable = new Label("Welcome to cheese factory management system!");
-        lable.setFont(new Font("SimHei", 20));
+        Text text = new Text();
+        
+        text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 10)); 
+        text.setText("                Welcome to cheese factory management system!");
+        
+        //Label lable = new Label(text);
+        
         
         for (String arg : args) {
           vbox.getChildren().add(new Label("hello " + arg));
@@ -91,12 +97,23 @@ public class Main extends Application {
         Button button3 = new Button("Monthly Report",new Label());
         Button button4 = new Button("Date Range Report",new Label());
         
+
+        button.setCursor(Cursor.HAND);
+        button.setStyle("-fx-base: moccasin;");
+        button2.setCursor(Cursor.HAND);
+        button2.setStyle("-fx-base: navajowhite;");
+        button3.setCursor(Cursor.HAND);
+        button3.setStyle("-fx-base: gold;");
+        button4.setCursor(Cursor.HAND);
+        button4.setStyle("-fx-base: darkorange;");
+        
         Button button5 = new Button("return");
         
-        double r = 30;
+        double r = 25;
         button5.setShape(new Circle(r));
-        button5.setMaxSize(2*r,2*r);
-        button5.setMinSize(2*r,2*r);
+        button5.setMaxSize(2.8*r,1.8*r);
+        button5.setMinSize(2.8*r,1.8*r);
+        button5.setCursor(Cursor.HAND);
         button5.setStyle("-fx-base: orange;");
         
         
@@ -119,19 +136,18 @@ public class Main extends Application {
         edData.setMinSize(3*r2,3*r2);
         edData.setCursor(Cursor.HAND);
         edData.setStyle("-fx-base: yellow;");
+
         
         Button ldData = new Button("Load Data");
         ldData.setShape(p);
         ldData.setMaxSize(3*r2,3*r2);
         ldData.setMinSize(3*r2,3*r2);
-        
         ldData.setCursor(Cursor.HAND);
         ldData.setStyle("-fx-base: yellow;");
+
                
         // Add the vertical box to the center of the root pane
-        root.setTop(lable);
-        BorderPane.setAlignment(lable, Pos.TOP_CENTER);
-        //root.setLeft(combo);
+        root.setTop(text);
         vbox.getChildren().addAll(button,button2,button3,button4);
         vboxR.getChildren().addAll(button5,edData,imageView3);
         vboxL.getChildren().addAll(imageView,ldData);
