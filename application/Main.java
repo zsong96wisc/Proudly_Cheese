@@ -8,15 +8,10 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Polygon;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
@@ -32,38 +27,32 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         // save args example
-        Double [] polygonPoints = new Double[]{
-            5.0, 0.0,
-            12.07, 0.0,
-            17.07, 5.0,
-            17.07, 10.0,
-            12.07, 15.0,
-            5.0, 15.0,
-            0.0, 10.0,
-            0.0, 5.0
-            };
         args = this.getParameters().getRaw();
 
         // Create a vertical box with Hello labels for each args
         VBox vbox = new VBox();
-
-        Label welcomeMessage = new Label("Welcome to "
-            + "Cheese Factory Management System");
-
-        Button farmReportButton = new Button("Farm Report");
-        Button annualReportButton = new Button("Anual Report");
-        Button monthlyReportButton = new Button("Monthly Report");
-        Button dateRangeReportButton = new Button("Return");
-        Polygon p = new Polygon();
         
-        p.getPoints().addAll(polygonPoints);
-        dateRangeReportButton.setShape(p);
+        // Creates a canvas that can draw shapes and text
+        Canvas canvas = new Canvas(WINDOW_WIDTH, WINDOW_HEIGHT);
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        // Write some text
+        // Text is filled with the fill color
+        gc.setFill(Color.GREEN);
+        gc.setFont(new Font(30));
+        gc.fillText("Hello World!", 70, 170);
+        // Draw a line
+        // Lines use the stroke color
+        gc.setStroke(Color.BLUE);
+        gc.setLineWidth(2);
+        gc.strokeLine(40, 100, 250, 50);
+        // Draw a few circles
+        gc.setFill(Color.BLACK);
+        // The circles draw from the top left, so to center them, subtract the radius from each coordinate
+        gc.fillOval(40-15, 100-15, 30, 30);
+        gc.setFill(Color.RED);
+        gc.fillOval(250-15, 50-15, 30, 30);
 
-        vbox.getChildren().add(welcomeMessage);
-        vbox.getChildren().add(farmReportButton);
-        vbox.getChildren().add(annualReportButton);
-        vbox.getChildren().add(monthlyReportButton);
-        vbox.getChildren().add(dateRangeReportButton);
+        vbox.getChildren().add(canvas);
 
         // Main layout is Border Pane example (top,left,center,right,bottom)
         BorderPane root = new BorderPane();
