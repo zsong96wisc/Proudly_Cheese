@@ -70,7 +70,7 @@ public class Main extends Application {
         imageViewCheese.setFitWidth(100);
         
         File inputBrand = new File("brand.png");
-        Image imageBrand = new Image(inputBrand.toURI().toString(),50,50,false,false);
+        Image imageBrand = new Image(inputBrand.toURI().toString());
         ImageView imageViewBrand = new ImageView();
         imageViewBrand.setImage(imageBrand);
         imageViewBrand.setFitHeight(100);
