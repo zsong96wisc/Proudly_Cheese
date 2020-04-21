@@ -182,14 +182,14 @@ public class GUI {
     ToggleButton buttonCloud = getbuttonCloud();
 
     // Create various layout managers
-    VBox vboxLf = new VBox();
+    VBox vboxLf = new VBox(120);
     HBox md = new HBox(10);
-    VBox vboxRt = new VBox(100);
+    VBox vboxRt = new VBox(60);
 
     // Add objects into layouts
     vboxLf.getChildren().addAll(buttonCloud, imageViewBrand);
     md.getChildren().addAll(adData, chData);
-    vboxRt.getChildren().addAll(imageViewCheese, returnBn);
+    vboxRt.getChildren().addAll(returnBn, imageViewCheese);
     // Add layouts into root pane
     root.setLeft(vboxLf);
     root.setCenter(md);
