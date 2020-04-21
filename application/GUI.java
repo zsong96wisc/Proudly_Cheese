@@ -22,6 +22,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -40,6 +41,24 @@ import javafx.stage.Stage;
  * @author aTeam 147 (2020)
  */
 public class GUI {
+  // enum variable for different scene
+  enum SceneIndex {
+    MAINMENU, 
+    
+    ADDDELETECHANGE, ADDDELETERESULT, CHANGERESULT,
+
+    FARMREPORT, FARMREPORTRESULT,
+
+    ANNUALREPORT, ANNUALREPORTRESULT,
+
+    MONTHLYREPORT, MONTHLYREPORTRESULT,
+
+    DATERANGEREPORT, DATERANGEREPORTRESULT
+  };
+  
+  ImageView imageViewCheese = null; // ImageView storing the cheese picture
+  ImageView imageViewBrand = null; // ImageView storing the brand picture
+  
   // integer for window's width
   private static final int WINDOW_WIDTH = 500;
   // integer for window's height
@@ -47,12 +66,68 @@ public class GUI {
   // String for window's title
   private static final String APP_TITLE = "Proudly Cheese";
 
+  // Info for the main menu
+  private static final String MAINMENU_INFO = "Please Load Data first. "
+      + "Then select a report type or edit data.";
+  // Info for the edit scene
+  private static final String ADDDELETECHANGE_INFO = "Add or Delete "
+      + "one piece of data. \n"
+      + "Or Change one piece of data. \n";
+  // Info for add delete scene
+  private static final String ADDDELETERESULT_INFO = 
+      "Enter Farm ID, Date, Weight to add or delete this piece of data. \n"
+      + "Clear will clear your input so that you can input new information.";
+  // Info for change scene
+  private static final String CHANGERESULT_INFO = 
+      "Enter old Farm ID, Date, Weight and the new ones accordingly to"
+      + "swap change the old record to the new one. \n"
+      + "Clear will clear your input so that you can input new information.";
+  // Info for farm report scene
+  private static final String FARMREPORT_INFO = 
+      "Please enter your Farm ID. Then press Search. \n"
+      + "Clear will clear your input so that you can input new information.";
+  // Info for farm report result scene
+  private static final String FARMREPORTRESULT_INFO = 
+      "Click Asc/Des to sort based on Date \n"
+      + "The upper circle shows the total weights of milk provided by this farm."
+      + "The lower circle shows the percentage of the total weight of "
+      + "milk provided by the farm. \n"
+      + "Export will export data shown to the file system."; 
+  // Info for annual report scene
+  private static final String ANNUALREPORT_INFO = 
+      "Please enter the year. Then click Search.\n"
+      + "Clear will clear your input so that you can input new information";
+  // Info for annual report result scene
+  private static final String ANNUALREPORTRESULT_INFO = 
+      "Click left Asc/Des to sort based on Farm ID. \n"
+      + "Click right Asc/Des to sort based on total weights.\n"
+      + "Export will export data shown to the file system.";
+  // Info for monthly report scene
+  private static final String MONTHLYREPORT_INFO = 
+      "Please enter the year or the month. Then click Search. \n"
+      + "Clear will clear your input so that you can input new information";
+  //Info for monthly report result scene
+  private static final String MONTHLYREPORTRESULT_INFO = 
+      "Click left Asc/Des to sort based on Farm ID. \n"
+      + "Click right Asc/Des to sort based on total weights. \n"
+      + "Export will export data shown to the file system.";
+  // Info for data range report scene
+  private static final String DATERANGEREPORT_INFO = 
+      "Please enter end date and start date accordingly. Then click search.\n"
+      + "Clear will clear your input so that you can input new information";
+  //Info for data range report result scene
+  private static final String DATERANGEREPORTRESULT_INFO = 
+      "Click left Asc/Des to sort based on Farm ID. \n"
+      + "Click right Asc/Des to sort based on total weights. \n"
+      + "Export will export data shown to the file system.";
+  
+  
   /**
    * Define the main scene of the GUI
    * 
    * @param primaryStage - the stage that displays the scene
    */
-  public static void getMainScene(Stage primaryStage) {
+  public void getMainScene(Stage primaryStage) {
     // Three VBox layout management in the BroadPane
     VBox vbox = new VBox(20);
     VBox vboxL = new VBox(5);
@@ -106,13 +181,13 @@ public class GUI {
     });
 
     // Create the ToggleButton buttonCloud
-    ToggleButton buttonCloud = getbuttonCloud();
+    ToggleButton buttonCloud = getbuttonCloud(SceneIndex.MAINMENU);
 
     // Create a button "Edit Data"
     Button edData = getPolygonButton("Edit Data", 30);
     // Set the event handler
     edData.setOnAction(e -> {
-      GUI.getEditScene(primaryStage);
+      getEditScene(primaryStage);
     });
 
     // Create a button "Load Data"
@@ -146,7 +221,7 @@ public class GUI {
    * 
    * @param primaryStage - the stage that displays the scene
    */
-  public static void getEditScene(Stage primaryStage) {
+  public void getEditScene(Stage primaryStage) {
     // Main layout is Border Pane example (top,left,center,right,bottom)
     BorderPane root = new BorderPane();
 
@@ -179,7 +254,8 @@ public class GUI {
     });
 
     // Create the ToggleButton buttonCloud
-    ToggleButton buttonCloud = getbuttonCloud();
+    ToggleButton buttonCloud = 
+        getbuttonCloud(SceneIndex.ADDDELETECHANGE);
 
     // Create various layout managers
     VBox vboxLf = new VBox(120);
@@ -206,7 +282,7 @@ public class GUI {
    * 
    * @param primaryStage - the stage that displays the scene
    */
-  public static void getAddDeleteScene(Stage primaryStage) {
+  public void getAddDeleteScene(Stage primaryStage) {
     // Main layout is Border Pane example (top,left,center,right,bottom)
     BorderPane root = new BorderPane();
 
@@ -246,7 +322,7 @@ public class GUI {
     root.setRight(sceneRight);
 
     // Create the ToggleButton buttonCloud
-    ToggleButton buttonCloud = getbuttonCloud();
+    ToggleButton buttonCloud = getbuttonCloud(SceneIndex.ADDDELETERESULT);
 
     // Create the ImageView Brand
     ImageView imageViewBrand = getImageViewBrand();
@@ -281,7 +357,7 @@ public class GUI {
    * 
    * @param primaryStage - the stage that displays the scene
    */
-  public static void getChangeScene(Stage primaryStage) {
+  public void getChangeScene(Stage primaryStage) {
     // Main layout is Border Pane example (top,left,center,right,bottom)
     BorderPane root = new BorderPane();
 
@@ -356,7 +432,7 @@ public class GUI {
     root.setRight(sceneRight);
 
     // Create the ToggleButton buttonCloud
-    ToggleButton buttonCloud = getbuttonCloud();
+    ToggleButton buttonCloud = getbuttonCloud(SceneIndex.CHANGERESULT);
 
     // Create the ImageView Brand
     ImageView imageViewBrand = getImageViewBrand();
@@ -375,7 +451,7 @@ public class GUI {
    * 
    * @param primaryStage - the stage that displays the scene
    */
-  public static void getFarmReportScene(Stage primaryStage) {
+  public void getFarmReportScene(Stage primaryStage) {
     // Main layout is Border Pane example (top,left,center,right,bottom)
     BorderPane root = new BorderPane();
     // Define layout managers
@@ -387,7 +463,7 @@ public class GUI {
     Text text = getTitle("Farm Report\n");
 
     // Create the ToggleButton buttonCloud
-    ToggleButton buttonCloud = getbuttonCloud();
+    ToggleButton buttonCloud = getbuttonCloud(SceneIndex.FARMREPORT);
 
     // Create the ImageView Brand
     ImageView imageViewBrand = getImageViewBrand();
@@ -441,7 +517,7 @@ public class GUI {
    * 
    * @param primaryStage - the stage that displays the scene
    */
-  public static void getFarmResultScene(Stage primaryStage) {
+  public void getFarmResultScene(Stage primaryStage) {
     // Main layout is Border Pane example (top,left,center,right,bottom)
     BorderPane root = new BorderPane();
     // Define layout managers
@@ -455,7 +531,7 @@ public class GUI {
     Text text = getTitle("Farm Report Result\n");
 
     // Create the ToggleButton buttonCloud
-    ToggleButton buttonCloud = getbuttonCloud();
+    ToggleButton buttonCloud = getbuttonCloud(SceneIndex.FARMREPORTRESULT);
 
     // Create the ImageView Brand
     ImageView imageViewBrand = getImageViewBrand();
@@ -551,12 +627,12 @@ public class GUI {
    * 
    * @param primaryStage - the stage that displays the scene
    */
-  public static void getAnnualReportScene(Stage primaryStage) {
+  public void getAnnualReportScene(Stage primaryStage) {
     // Text field for title
     Text text = getTitle("Annual Report Scene\n");
 
     // Create the ToggleButton buttonCloud
-    ToggleButton buttonCloud = getbuttonCloud();
+    ToggleButton buttonCloud = getbuttonCloud(SceneIndex.ANNUALREPORT);
 
     // Create the ImageView Brand
     ImageView imageViewBrand = getImageViewBrand();
@@ -622,12 +698,12 @@ public class GUI {
    * 
    * @param primaryStage - the stage that displays the scene
    */
-  public static void getAnnualResultScene(Stage primaryStage) {
+  public void getAnnualResultScene(Stage primaryStage) {
     // Text field for title
     Text text = getTitle("Annual Result Scene\n");
 
     // Create the ToggleButton buttonCloud
-    ToggleButton buttonCloud = getbuttonCloud();
+    ToggleButton buttonCloud = getbuttonCloud(SceneIndex.ANNUALREPORTRESULT);
 
     // Create the ImageView Brand
     ImageView imageViewBrand = getImageViewBrand();
@@ -695,7 +771,7 @@ public class GUI {
    * 
    * @param primaryStage - the stage that displays the scene
    */
-  public static void getMonthlyReportScene(Stage primaryStage) {
+  public void getMonthlyReportScene(Stage primaryStage) {
     // Main layout is Border Pane example (top,left,center,right,bottom)
     BorderPane root = new BorderPane();
 
@@ -706,7 +782,7 @@ public class GUI {
     BorderPane.setAlignment(title, Pos.TOP_CENTER);
 
     // Create the ToggleButton buttonCloud
-    ToggleButton buttonCloud = getbuttonCloud();
+    ToggleButton buttonCloud = getbuttonCloud(SceneIndex.MONTHLYREPORT);
 
     // Create the ImageView Brand
     ImageView imageViewBrand = getImageViewBrand();
@@ -768,12 +844,12 @@ public class GUI {
    * 
    * @param primaryStage - the stage that displays the scene
    */
-  public static void getMonthlyResultScene(Stage primaryStage) {
+  public void getMonthlyResultScene(Stage primaryStage) {
     // Text field for title
     Text text = getTitle("Monthly Result Scene\n");
 
     // Create the ToggleButton buttonCloud
-    ToggleButton buttonCloud = getbuttonCloud();
+    ToggleButton buttonCloud = getbuttonCloud(SceneIndex.MONTHLYREPORTRESULT);
 
     // Create the ImageView Brand
     ImageView imageViewBrand = getImageViewBrand();
@@ -842,7 +918,7 @@ public class GUI {
    * 
    * @param primaryStage - the stage that displays the scene
    */
-  public static void getDateReportScene(Stage primaryStage) {
+  public void getDateReportScene(Stage primaryStage) {
     // Main layout is Border Pane example (top,left,center,right,bottom)
     BorderPane root = new BorderPane();
 
@@ -879,7 +955,7 @@ public class GUI {
     root.setRight(sceneRight);
 
     // Create the ToggleButton buttonCloud
-    ToggleButton buttonCloud = getbuttonCloud();
+    ToggleButton buttonCloud = getbuttonCloud(SceneIndex.DATERANGEREPORT);
 
     // Create the ImageView Brand
     ImageView imageViewBrand = getImageViewBrand();
@@ -918,7 +994,7 @@ public class GUI {
    * 
    * @param primaryStage - the stage that displays the scene
    */
-  public static void getDateResultScene(Stage primaryStage) {
+  public void getDateResultScene(Stage primaryStage) {
     // Main layout is Border Pane example (top,left,center,right,bottom)
     BorderPane root = new BorderPane();
     // Text field for title
@@ -972,7 +1048,7 @@ public class GUI {
     root.setRight(sceneRight);
 
     // Create the ToggleButton buttonCloud
-    ToggleButton buttonCloud = getbuttonCloud();
+    ToggleButton buttonCloud = getbuttonCloud(SceneIndex.DATERANGEREPORTRESULT);
 
     // Create the ImageView Brand
     ImageView imageViewBrand = getImageViewBrand();
@@ -998,7 +1074,7 @@ public class GUI {
    * 
    * @return the Text
    */
-  private static Text getTitle(String content) {
+  private Text getTitle(String content) {
     // Create a new Text
     Text text = new Text(content);
     // Set the font
@@ -1007,40 +1083,48 @@ public class GUI {
   }
 
   /**
-   * Create the ImageView for the Cheese picture
+   * Create the ImageView for the Brand picture if there is no cheese picture
+   * loaded. Otherwise return the already loaded cheese picture
    * 
    * @return the ImageView Cheese
    */
-  private static ImageView getImageViewCheese() {
-    // Create a file to read image
-    File inputCheese = new File("cheese.png");
-    // Put the file into Image
-    Image imageCheese = new Image(inputCheese.toURI().toString());
-    // Put Image to ImageView
-    ImageView imageViewCheese = new ImageView();
-    imageViewCheese.setImage(imageCheese);
-    // Set the size
-    imageViewCheese.setFitHeight(100);
-    imageViewCheese.setFitWidth(100);
+  private ImageView getImageViewCheese() {
+    if (imageViewCheese == null) {
+      // Create a file to read image
+      File inputCheese = new File("cheese.png");
+      // Put the file into Image
+      Image imageCheese = new Image(inputCheese.toURI().toString());
+      // Put Image to ImageView
+      imageViewCheese = new ImageView();
+      imageViewCheese.setImage(imageCheese);
+      // Set the size
+      imageViewCheese.setFitHeight(100);
+      imageViewCheese.setFitWidth(100);
+    }
+
     return imageViewCheese;
   }
 
   /**
-   * Create the ImageView for the Brand picture
+   * Create the ImageView for the Brand picture if there is no brand picture
+   * loaded. Otherwise return the already loaded brand picture
    * 
    * @return the ImageView Brand
    */
-  private static ImageView getImageViewBrand() {
-    // Create a file to read image
-    File inputBrand = new File("brand.png");
-    // Put the file into Image
-    Image imageBrand = new Image(inputBrand.toURI().toString());
-    // Put Image to ImageView
-    ImageView imageViewBrand = new ImageView();
-    imageViewBrand.setImage(imageBrand);
-    // Set the size
-    imageViewBrand.setFitHeight(100);
-    imageViewBrand.setFitWidth(100);
+  private ImageView getImageViewBrand() {
+    if (imageViewBrand == null) {
+      // Create a file to read image
+      File inputBrand = new File("brand.png");
+      // Put the file into Image
+      Image imageBrand = new Image(inputBrand.toURI().toString());
+      // Put Image to ImageView
+      imageViewBrand = new ImageView();
+      imageViewBrand.setImage(imageBrand);
+      // Set the size
+      imageViewBrand.setFitHeight(100);
+      imageViewBrand.setFitWidth(100);
+    }
+    
     return imageViewBrand;
   }
 
@@ -1049,14 +1133,45 @@ public class GUI {
    * 
    * @return the ToggleButton for Help
    */
-  private static ToggleButton getbuttonCloud() {
+  private ToggleButton getbuttonCloud(SceneIndex i) {
     // Create a image
     Image image = new Image("cloud.png", 40, 30, false, false);
     // Put Image to ImageView
     ImageView imageView = new ImageView(image);
     // Create the button
     ToggleButton buttonCloud = new ToggleButton("", imageView);
+    buttonCloud.setOnAction(event -> {
+      Alert alert = new Alert(AlertType.INFORMATION, getSceneInstruction(i));
+      alert.setTitle("Instructions");
+      alert.showAndWait().filter(response -> response == ButtonType.OK);
+    });
+    
     return buttonCloud;
+  }
+  
+  /**
+   * Given the SceneIndex, return the corresponding instruction string.
+   * 
+   * @param i - the Scene index
+   * @return a String of instruction 
+   */
+  private String getSceneInstruction(SceneIndex i) {
+    switch(i) {
+      case MAINMENU: return MAINMENU_INFO;
+      case ADDDELETECHANGE: return ADDDELETECHANGE_INFO;
+      case ADDDELETERESULT: return  ADDDELETERESULT_INFO;
+      case CHANGERESULT: return CHANGERESULT_INFO;
+      case FARMREPORT: return FARMREPORT_INFO;
+      case FARMREPORTRESULT: return FARMREPORTRESULT_INFO;
+      case ANNUALREPORT: return ANNUALREPORT_INFO;
+      case ANNUALREPORTRESULT: return ANNUALREPORTRESULT_INFO;
+      case MONTHLYREPORT: return MONTHLYREPORT_INFO;
+      case MONTHLYREPORTRESULT: return MONTHLYREPORTRESULT_INFO;
+      case DATERANGEREPORT: return DATERANGEREPORT_INFO;
+      case DATERANGEREPORTRESULT: return DATERANGEREPORTRESULT_INFO;
+      default:
+        return ""; 
+    }
   }
 
   /**
@@ -1067,7 +1182,7 @@ public class GUI {
    * 
    * @return the Polygon Button
    */
-  private static Button getPolygonButton(String text, double r) {
+  private Button getPolygonButton(String text, double r) {
     // Define the polygon
     Polygon p = new Polygon();
     p.getPoints().addAll(new Double[] {5.0, 0.0, 12.07, 0.0, 17.07, 5.0, 17.07, 10.0, 12.07, 15.0,
@@ -1088,7 +1203,7 @@ public class GUI {
    * 
    * @return the Return Button
    */
-  private static Button getReturnButton() {
+  private Button getReturnButton() {
     // Create a button with text "return"
     Button returnButton = new Button("return");
     // Define the radius
@@ -1109,7 +1224,7 @@ public class GUI {
    * 
    * @return the Oval Button
    */
-  private static Button getOvalButton(String text, double length, double width) {
+  private Button getOvalButton(String text, double length, double width) {
     // Define the radius
     double r = 25;
     // Create a button with text "return"
@@ -1131,7 +1246,7 @@ public class GUI {
    * 
    * @return the TextField
    */
-  private static TextField getInputTextField(String text, int length, int height) {
+  private TextField getInputTextField(String text, int length, int height) {
     // Create a textField
     TextField textField = new TextField();
     textField.setPromptText(text);
@@ -1150,7 +1265,7 @@ public class GUI {
    * 
    * @return the ListView<String>
    */
-  private static ListView<String> getListView(String[] result, int length, int height) {
+  private ListView<String> getListView(String[] result, int length, int height) {
     // Create a new listView
     ListView<String> listView = new ListView<String>();
 

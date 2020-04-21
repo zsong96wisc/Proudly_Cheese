@@ -27,20 +27,6 @@ import javafx.stage.Stage;
  *
  */
 public class Main extends Application {
-  // enum variable for different scene
-  enum SceneIndex {
-    MAINMENU,
-
-    ADDDELETECHANGE, ADDDELETERESULT, CHANGERESULT,
-
-    FARMREPORT, FARMREPORTRESULT,
-
-    ANNUALREPORT, ANNUALREPORTRESULT,
-
-    MONTHLYREPORT, MONTHLYREPORTRESULT,
-
-    DATERANGEREPORT, DATERANGEREPORTRESULT
-  };
 
   /**
    * start method to generate the scene and stage
@@ -53,8 +39,9 @@ public class Main extends Application {
    */
   @Override
   public void start(Stage primaryStage) throws Exception {
+    GUI gui = new GUI();
     // Set the stage
-    GUI.getMainScene(primaryStage);
+    gui.getMainScene(primaryStage);
     // Show the stage
     primaryStage.show();
   }
