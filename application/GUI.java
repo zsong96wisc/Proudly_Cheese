@@ -19,7 +19,7 @@ import javafx.scene.text.TextBoundsType;
 import javafx.stage.Stage;
 
 public class GUI {
-
+  // 
   private static final int WINDOW_WIDTH = 500;
   private static final int WINDOW_HEIGHT = 300;
   private static final String APP_TITLE = "Proudly Cheese";
@@ -195,8 +195,8 @@ public class GUI {
     Button returnBn = new Button("return");
     double r = 25;
     returnBn.setShape(new Circle(r));
-    returnBn.setMaxSize(2.8 * r, 1.8 * r);
-    returnBn.setMinSize(2.8 * r, 1.8 * r);
+    returnBn.setMaxSize(2.5 * r, 2.5 * r);
+    returnBn.setMinSize(2.5 * r, 2.5 * r);
     returnBn.setCursor(Cursor.HAND);
     returnBn.setStyle("-fx-base: orange;");
     returnBn.setOnAction(e -> {
@@ -258,8 +258,8 @@ public class GUI {
     Button returnButton = new Button("return");
     root.setRight(returnButton);
     returnButton.setShape(new Circle(r));
-    returnButton.setMaxSize(3 * r, 3 * r);
-    returnButton.setMinSize(3 * r, 3 * r);
+    returnButton.setMaxSize(2.5 * r, 2.5 * r);
+    returnButton.setMinSize(2.5 * r, 2.5 * r);
     returnButton.setCursor(Cursor.HAND);
     returnButton.setStyle("-fx-base: orange;");
 
@@ -392,8 +392,8 @@ public class GUI {
 
     Button returnButton = new Button("return");
     returnButton.setShape(new Circle(r));
-    returnButton.setMaxSize(3 * r, 3 * r);
-    returnButton.setMinSize(3 * r, 3 * r);
+    returnButton.setMaxSize(2.5 * r, 2.5 * r);
+    returnButton.setMinSize(2.5 * r, 2.5 * r);
     returnButton.setCursor(Cursor.HAND);
     returnButton.setStyle("-fx-base: orange;");
     returnButton.setOnAction(e -> {
@@ -461,8 +461,8 @@ public class GUI {
     Button buttonReturn = new Button("return");
     double r = 25;
     buttonReturn.setShape(new Circle(r));
-    buttonReturn.setMaxSize(2 * r, 2 * r);
-    buttonReturn.setMinSize(2 * r, 2 * r);
+    buttonReturn.setMaxSize(2.5 * r, 2.5 * r);
+    buttonReturn.setMinSize(2.5 * r, 2.5 * r);
     buttonReturn.setCursor(Cursor.HAND);
     buttonReturn.setStyle("-fx-base: orange;");
     buttonReturn.setOnAction(e -> {
@@ -545,8 +545,8 @@ public class GUI {
     Button buttonReturn = new Button("return");
     double r = 25;
     buttonReturn.setShape(new Circle(r));
-    buttonReturn.setMaxSize(2 * r, 2 * r);
-    buttonReturn.setMinSize(2 * r, 2 * r);
+    buttonReturn.setMaxSize(2.5 * r, 2.5 * r);
+    buttonReturn.setMinSize(2.5 * r, 2.5 * r);
     buttonReturn.setCursor(Cursor.HAND);
     buttonReturn.setStyle("-fx-base: orange;");
     buttonReturn.setOnAction(e -> {
@@ -701,8 +701,7 @@ public class GUI {
     ImageView imageView = new ImageView(image);
     ToggleButton buttonCloud = new ToggleButton("", imageView);
 
-    String array[] = {"2019", "2018", "2017"};
-    ComboBox combo = new ComboBox(FXCollections.observableArrayList(array));
+    TextField textfield = new TextField();
     Text year = new Text();
     year.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 18));
     year.setText("Year : ");
@@ -715,7 +714,7 @@ public class GUI {
     VBox vboxmd = new VBox(100);
 
 
-    hbt.getChildren().addAll(year, combo);
+    hbt.getChildren().addAll(year, textfield);
     hbb.getChildren().addAll(search, clear);
     hbt.setAlignment(Pos.CENTER);
     hbb.setAlignment(Pos.CENTER);
@@ -931,9 +930,7 @@ public class GUI {
     ImageView imageViewCloud = new ImageView(inputCloud);
     ToggleButton buttonCloud = new ToggleButton("", imageViewCloud);
 
-    String[] sampleMonth = {"2019/01", "2019/02", "2019/03"};
-    @SuppressWarnings("rawtypes")
-    ComboBox comboMonth = new ComboBox(FXCollections.observableArrayList(sampleMonth));
+    TextField textfield = new TextField();
     Text monthPrompt = new Text();
     monthPrompt.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 18));
     monthPrompt.setText("Year/Month: ");
@@ -945,7 +942,7 @@ public class GUI {
     VBox centerBox = new VBox(100);
 
 
-    topBox.getChildren().addAll(monthPrompt, comboMonth);
+    topBox.getChildren().addAll(monthPrompt, textfield);
     bottomBox.getChildren().addAll(searchButton, clearButton);
     topBox.setAlignment(Pos.CENTER);
     bottomBox.setAlignment(Pos.CENTER);
@@ -1121,8 +1118,8 @@ public class GUI {
     Button returnButton = new Button("return");
     root.setRight(returnButton);
     returnButton.setShape(new Circle(r));
-    returnButton.setMaxSize(3 * r, 3 * r);
-    returnButton.setMinSize(3 * r, 3 * r);
+    returnButton.setMaxSize(2.5 * r, 2.5 * r);
+    returnButton.setMinSize(2.5 * r, 2.5 * r);
     returnButton.setCursor(Cursor.HAND);
     returnButton.setStyle("-fx-base: orange;");
 
@@ -1246,8 +1243,8 @@ public class GUI {
     Button returnButton = new Button("return");
     root.setRight(returnButton);
     returnButton.setShape(new Circle(r));
-    returnButton.setMaxSize(3 * r, 3 * r);
-    returnButton.setMinSize(3 * r, 3 * r);
+    returnButton.setMaxSize(2.5 * r, 2.5 * r);
+    returnButton.setMinSize(2.5 * r, 2.5 * r);
     returnButton.setCursor(Cursor.HAND);
     returnButton.setStyle("-fx-base: orange;");
 
