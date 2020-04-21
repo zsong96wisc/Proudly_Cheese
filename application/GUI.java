@@ -1,8 +1,8 @@
 /**
  * GUI.java created by aTeam 147 in Proudly_Cheese project
  * 
- * Author: Hairong Yin (hyin55@wisc.edu) (Lec 002), Haonan Shen (hshen37@wisc.edu) (Lec 001), 
- * Xiaoxi Sun (xsun279@wisc.edu) (Lec 002), Zhiwei Song (zsong96@wisc.edu) (Lec 002)
+ * Author: Hairong Yin (hyin55@wisc.edu) (Lec 002), Haonan Shen (hshen37@wisc.edu) (Lec 001), Xiaoxi
+ * Sun (xsun279@wisc.edu) (Lec 002), Zhiwei Song (zsong96@wisc.edu) (Lec 002)
  * 
  * Date: 04/19/2020
  * 
@@ -33,6 +33,7 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 /**
@@ -43,8 +44,8 @@ import javafx.stage.Stage;
 public class GUI {
   // enum variable for different scene
   enum SceneIndex {
-    MAINMENU, 
-    
+    MAINMENU,
+
     ADDDELETECHANGE, ADDDELETERESULT, CHANGERESULT,
 
     FARMREPORT, FARMREPORTRESULT,
@@ -55,10 +56,14 @@ public class GUI {
 
     DATERANGEREPORT, DATERANGEREPORTRESULT
   };
-  
-  ImageView imageViewCheese = null; // ImageView storing the cheese picture
-  ImageView imageViewBrand = null; // ImageView storing the brand picture
-  
+
+  // ImageView storing the cheese picture
+  ImageView imageViewCheese;
+  // ImageView storing the brand picture
+  ImageView imageViewBrand;
+
+  FileChooser fileChooser;
+
   // integer for window's width
   private static final int WINDOW_WIDTH = 500;
   // integer for window's height
@@ -67,61 +72,67 @@ public class GUI {
   private static final String APP_TITLE = "Proudly Cheese";
 
   // Info for the main menu
-  private static final String MAINMENU_INFO = "Please Load Data first. "
-      + "Then select a report type or edit data.";
+  private static final String MAINMENU_INFO =
+      "Please Load Data first. " + "Then select a report type or edit data.";
+
   // Info for the edit scene
-  private static final String ADDDELETECHANGE_INFO = "Add or Delete "
-      + "one piece of data. \n"
-      + "Or Change one piece of data. \n";
+  private static final String ADDDELETECHANGE_INFO =
+      "Add or Delete " + "one piece of data. \n" + "Or Change one piece of data. \n";
+
   // Info for add delete scene
-  private static final String ADDDELETERESULT_INFO = 
+  private static final String ADDDELETERESULT_INFO =
       "Enter Farm ID, Date, Weight to add or delete this piece of data. \n"
-      + "Clear will clear your input so that you can input new information.";
+          + "Clear will clear your input so that you can input new information.";
+
   // Info for change scene
-  private static final String CHANGERESULT_INFO = 
+  private static final String CHANGERESULT_INFO =
       "Enter old Farm ID, Date, Weight and the new ones accordingly to"
-      + "swap change the old record to the new one. \n"
-      + "Clear will clear your input so that you can input new information.";
+          + "swap change the old record to the new one. \n"
+          + "Clear will clear your input so that you can input new information.";
+
   // Info for farm report scene
-  private static final String FARMREPORT_INFO = 
-      "Please enter your Farm ID. Then press Search. \n"
+  private static final String FARMREPORT_INFO = "Please enter your Farm ID. Then press Search. \n"
       + "Clear will clear your input so that you can input new information.";
+
   // Info for farm report result scene
-  private static final String FARMREPORTRESULT_INFO = 
-      "Click Asc/Des to sort based on Date \n"
+  private static final String FARMREPORTRESULT_INFO = "Click Asc/Des to sort based on Date \n"
       + "The upper circle shows the total weights of milk provided by this farm."
       + "The lower circle shows the percentage of the total weight of "
-      + "milk provided by the farm. \n"
-      + "Export will export data shown to the file system."; 
+      + "milk provided by the farm. \n" + "Export will export data shown to the file system.";
+
   // Info for annual report scene
-  private static final String ANNUALREPORT_INFO = 
-      "Please enter the year. Then click Search.\n"
+  private static final String ANNUALREPORT_INFO = "Please enter the year. Then click Search.\n"
       + "Clear will clear your input so that you can input new information";
+
   // Info for annual report result scene
-  private static final String ANNUALREPORTRESULT_INFO = 
+  private static final String ANNUALREPORTRESULT_INFO =
       "Click left Asc/Des to sort based on Farm ID. \n"
-      + "Click right Asc/Des to sort based on total weights.\n"
-      + "Export will export data shown to the file system.";
+          + "Click right Asc/Des to sort based on total weights.\n"
+          + "Export will export data shown to the file system.";
+
   // Info for monthly report scene
-  private static final String MONTHLYREPORT_INFO = 
+  private static final String MONTHLYREPORT_INFO =
       "Please enter the year or the month. Then click Search. \n"
-      + "Clear will clear your input so that you can input new information";
-  //Info for monthly report result scene
-  private static final String MONTHLYREPORTRESULT_INFO = 
+          + "Clear will clear your input so that you can input new information";
+
+  // Info for monthly report result scene
+  private static final String MONTHLYREPORTRESULT_INFO =
       "Click left Asc/Des to sort based on Farm ID. \n"
-      + "Click right Asc/Des to sort based on total weights. \n"
-      + "Export will export data shown to the file system.";
+          + "Click right Asc/Des to sort based on total weights. \n"
+          + "Export will export data shown to the file system.";
+
   // Info for data range report scene
-  private static final String DATERANGEREPORT_INFO = 
+  private static final String DATERANGEREPORT_INFO =
       "Please enter end date and start date accordingly. Then click search.\n"
-      + "Clear will clear your input so that you can input new information";
-  //Info for data range report result scene
-  private static final String DATERANGEREPORTRESULT_INFO = 
+          + "Clear will clear your input so that you can input new information";
+
+  // Info for data range report result scene
+  private static final String DATERANGEREPORTRESULT_INFO =
       "Click left Asc/Des to sort based on Farm ID. \n"
-      + "Click right Asc/Des to sort based on total weights. \n"
-      + "Export will export data shown to the file system.";
-  
-  
+          + "Click right Asc/Des to sort based on total weights. \n"
+          + "Export will export data shown to the file system.";
+
+
   /**
    * Define the main scene of the GUI
    * 
@@ -140,9 +151,9 @@ public class GUI {
     BorderPane root = new BorderPane();
 
     // Create the ImageView Cheese
-    ImageView imageViewCheese = getImageViewCheese();
+    this.imageViewCheese = getImageViewCheese();
     // Create the ImageView Brand
-    ImageView imageViewBrand = getImageViewBrand();
+    getImageViewBrand();
 
     // Create four buttons to direct to various reports
     // Set their sizes
@@ -190,8 +201,18 @@ public class GUI {
       getEditScene(primaryStage);
     });
 
-    // Create a button "Load Data"
+    // Initialize the fileChooser
+    this.fileChooser = new FileChooser();
+    // Add the extension constraint
+    this.fileChooser.getExtensionFilters()
+        .addAll(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+
+    // Create a button "Load Data" and add event handler
     Button ldData = getPolygonButton("Load Data", 30);
+    ldData.setOnAction(e -> {
+      File selectedFile = this.fileChooser.showOpenDialog(primaryStage);
+    });
+
 
     // Add the vertical box to the center of the root pane
     root.setTop(text);
@@ -199,8 +220,8 @@ public class GUI {
     BorderPane.setAlignment(text, Pos.TOP_CENTER);
     // Add objects to VBox
     vbox.getChildren().addAll(buttonFarm, buttonAnnual, buttonMonthly, buttonDate);
-    vboxL.getChildren().addAll(buttonCloud, edData, imageViewBrand);
-    vboxR.getChildren().addAll(imageViewCheese, ldData);
+    vboxL.getChildren().addAll(buttonCloud, edData, this.imageViewBrand);
+    vboxR.getChildren().addAll(this.imageViewCheese, ldData);
     // Add the vertical box to the left of the root pane
     root.setLeft(vboxL);
     // Add the vertical box to the center of the root pane
@@ -228,11 +249,6 @@ public class GUI {
     // Text field for title
     Text text = getTitle("editScene\n");
 
-    // Create the ImageView Cheese
-    ImageView imageViewCheese = getImageViewCheese();
-    // Create the ImageView Brand
-    ImageView imageViewBrand = getImageViewBrand();
-
     // Create a button "Add/Delete Data"
     Button adData = getPolygonButton("Add/Delete Data", 50);
     // Set event handler
@@ -254,8 +270,7 @@ public class GUI {
     });
 
     // Create the ToggleButton buttonCloud
-    ToggleButton buttonCloud = 
-        getbuttonCloud(SceneIndex.ADDDELETECHANGE);
+    ToggleButton buttonCloud = getbuttonCloud(SceneIndex.ADDDELETECHANGE);
 
     // Create various layout managers
     VBox vboxLf = new VBox(120);
@@ -263,9 +278,9 @@ public class GUI {
     VBox vboxRt = new VBox(60);
 
     // Add objects into layouts
-    vboxLf.getChildren().addAll(buttonCloud, imageViewBrand);
+    vboxLf.getChildren().addAll(buttonCloud, this.imageViewBrand);
     md.getChildren().addAll(adData, chData);
-    vboxRt.getChildren().addAll(returnBn, imageViewCheese);
+    vboxRt.getChildren().addAll(returnBn, this.imageViewCheese);
     // Add layouts into root pane
     root.setLeft(vboxLf);
     root.setCenter(md);
@@ -313,23 +328,17 @@ public class GUI {
       getEditScene(primaryStage);
     });
 
-    // Create the ImageView Cheese
-    ImageView imageViewCheese = getImageViewCheese();
-
     // Create VBox layout and add components
     VBox sceneRight = new VBox(20);
-    sceneRight.getChildren().addAll(returnButton, imageViewCheese);
+    sceneRight.getChildren().addAll(returnButton, this.imageViewCheese);
     root.setRight(sceneRight);
 
     // Create the ToggleButton buttonCloud
     ToggleButton buttonCloud = getbuttonCloud(SceneIndex.ADDDELETERESULT);
 
-    // Create the ImageView Brand
-    ImageView imageViewBrand = getImageViewBrand();
-
     // Create VBox layout and add components
     VBox sceneLeft = new VBox(10);
-    sceneLeft.getChildren().addAll(buttonCloud, imageViewBrand);
+    sceneLeft.getChildren().addAll(buttonCloud, this.imageViewBrand);
     root.setLeft(sceneLeft);
 
     // Create functional buttons
@@ -423,23 +432,17 @@ public class GUI {
       getEditScene(primaryStage);
     });
 
-    // Create the ImageView Cheese
-    ImageView imageViewCheese = getImageViewCheese();
-
     // Create VBox layout and add components
     VBox sceneRight = new VBox(20);
-    sceneRight.getChildren().addAll(returnButton, imageViewCheese);
+    sceneRight.getChildren().addAll(returnButton, this.imageViewCheese);
     root.setRight(sceneRight);
 
     // Create the ToggleButton buttonCloud
     ToggleButton buttonCloud = getbuttonCloud(SceneIndex.CHANGERESULT);
 
-    // Create the ImageView Brand
-    ImageView imageViewBrand = getImageViewBrand();
-
     // Create VBox layout and add components
     VBox sceneLeft = new VBox(10);
-    sceneLeft.getChildren().addAll(buttonCloud, imageViewBrand);
+    sceneLeft.getChildren().addAll(buttonCloud, this.imageViewBrand);
     root.setLeft(sceneLeft);
 
     // Add the scene to stage
@@ -465,12 +468,6 @@ public class GUI {
     // Create the ToggleButton buttonCloud
     ToggleButton buttonCloud = getbuttonCloud(SceneIndex.FARMREPORT);
 
-    // Create the ImageView Brand
-    ImageView imageViewBrand = getImageViewBrand();
-
-    // Create the ImageView Cheese
-    ImageView imageViewCheese = getImageViewCheese();
-
     // Create the return button and set the event handler
     Button returnButton = getReturnButton();
     returnButton.setOnAction(e -> {
@@ -485,7 +482,7 @@ public class GUI {
     Button search = getOvalButton("Search", 4, 2);
     search.setStyle("-fx-base: navajowhite;");
     search.setOnAction(e -> {
-        getFarmResultScene(primaryStage);
+      getFarmResultScene(primaryStage);
     });
 
     Button clear = getOvalButton("Clear", 4, 2);
@@ -500,8 +497,8 @@ public class GUI {
     root.setTop(text);
     BorderPane.setAlignment(text, Pos.TOP_CENTER);
     hbox.getChildren().addAll(farmID, inputField);
-    vboxL.getChildren().addAll(buttonCloud, imageViewBrand);
-    vboxR.getChildren().addAll(returnButton, imageViewCheese);
+    vboxL.getChildren().addAll(buttonCloud, this.imageViewBrand);
+    vboxR.getChildren().addAll(returnButton, this.imageViewCheese);
     root.setLeft(vboxL);
     root.setCenter(hbox);
     root.setRight(vboxR);
@@ -533,13 +530,10 @@ public class GUI {
     // Create the ToggleButton buttonCloud
     ToggleButton buttonCloud = getbuttonCloud(SceneIndex.FARMREPORTRESULT);
 
-    // Create the ImageView Brand
-    ImageView imageViewBrand = getImageViewBrand();
-
     // Create the ImageView Cheese
-    ImageView imageViewCheese = getImageViewCheese();
-    imageViewCheese.setFitHeight(50);
-    imageViewCheese.setFitWidth(50);
+    ImageView imageViewCheese2 = getImageViewCheese();
+    imageViewCheese2.setFitHeight(50);
+    imageViewCheese2.setFitWidth(50);
 
     // Create the return button and set the event handler
     Button returnButton = getReturnButton();
@@ -595,16 +589,25 @@ public class GUI {
     HBox hBox = new HBox();
     hBox.getChildren().addAll(vBoxFirstList, vBoxSecondList, vBoxThirdList);
 
-    // Create two buttons
+    // Initialize the fileChooser
+    this.fileChooser = new FileChooser();
+    // Add the extension constraint
+    this.fileChooser.getExtensionFilters()
+        .addAll(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+
+    // Create two buttons and add event handler
     Button farmWeightSortButton = getOvalButton("Asc/Des", 3.2, 2);
     farmWeightSortButton.setStyle("-fx-base: navajowhite;");
 
-    Button ExportButton = getOvalButton("Export", 3.2, 2);
-    ExportButton.setStyle("-fx-base: navajowhite;");
+    Button exportButton = getOvalButton("Export", 3.2, 2);
+    exportButton.setStyle("-fx-base: navajowhite;");
+    exportButton.setOnAction(e -> {
+      File selectedFile = this.fileChooser.showOpenDialog(primaryStage);
+    });
 
     // Add to the layout
     HBox buttonBox = new HBox(100);
-    buttonBox.getChildren().addAll(farmWeightSortButton, ExportButton);
+    buttonBox.getChildren().addAll(farmWeightSortButton, exportButton);
 
     vboxCR.getChildren().addAll(hBox, buttonBox);
 
@@ -612,8 +615,8 @@ public class GUI {
     root.setTop(text);
     BorderPane.setAlignment(text, Pos.TOP_CENTER);
     hbox.getChildren().addAll(vboxCL, vboxCR);
-    vboxL.getChildren().addAll(buttonCloud, imageViewBrand);
-    vboxR.getChildren().addAll(returnButton, imageViewCheese);
+    vboxL.getChildren().addAll(buttonCloud, this.imageViewBrand);
+    vboxR.getChildren().addAll(returnButton, imageViewCheese2);
     root.setLeft(vboxL);
     root.setCenter(hbox);
     root.setRight(vboxR);
@@ -633,12 +636,6 @@ public class GUI {
 
     // Create the ToggleButton buttonCloud
     ToggleButton buttonCloud = getbuttonCloud(SceneIndex.ANNUALREPORT);
-
-    // Create the ImageView Brand
-    ImageView imageViewBrand = getImageViewBrand();
-
-    // Create the ImageView Cheese
-    ImageView imageViewCheese = getImageViewCheese();
 
     // Create the return button and set the event handler
     Button returnBn = getReturnButton();
@@ -677,8 +674,8 @@ public class GUI {
     hbt.setAlignment(Pos.CENTER);
     hbb.setAlignment(Pos.CENTER);
 
-    vboxLf.getChildren().addAll(buttonCloud, imageViewBrand);
-    vboxRt.getChildren().addAll(returnBn, imageViewCheese);
+    vboxLf.getChildren().addAll(buttonCloud, this.imageViewBrand);
+    vboxRt.getChildren().addAll(returnBn, this.imageViewCheese);
     vboxmd.getChildren().addAll(hbt, hbb);
     vboxmd.setAlignment(Pos.CENTER);
 
@@ -705,12 +702,6 @@ public class GUI {
     // Create the ToggleButton buttonCloud
     ToggleButton buttonCloud = getbuttonCloud(SceneIndex.ANNUALREPORTRESULT);
 
-    // Create the ImageView Brand
-    ImageView imageViewBrand = getImageViewBrand();
-
-    // Create the ImageView Cheese
-    ImageView imageViewCheese = getImageViewCheese();
-
     // Create the return button and set the event handler
     Button returnBn = getReturnButton();
     returnBn.setOnAction(e -> {
@@ -730,7 +721,13 @@ public class GUI {
     HBox list = new HBox();
     list.getChildren().addAll(farmIDList, weightList, percentList);
 
-    // Create three buttons
+    // Initialize the fileChooser
+    this.fileChooser = new FileChooser();
+    // Add the extension constraint
+    this.fileChooser.getExtensionFilters()
+        .addAll(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+
+    // Create three buttons and add event handler
     Button farmIDSortButton = getOvalButton("Asc/Des", 3.2, 2);
     farmIDSortButton.setStyle("-fx-base: navajowhite;");
 
@@ -739,6 +736,9 @@ public class GUI {
 
     Button exportButton = getOvalButton("Export", 3.2, 2);
     exportButton.setStyle("-fx-base: gold;");
+    exportButton.setOnAction(e -> {
+      File selectedFile = this.fileChooser.showOpenDialog(primaryStage);
+    });
 
     // Create other layout managers and add components
     HBox sortBox = new HBox(25);
@@ -750,8 +750,8 @@ public class GUI {
     VBox vboxLf = new VBox(130);
     VBox vboxRt = new VBox(25);
 
-    vboxLf.getChildren().addAll(buttonCloud, imageViewBrand);
-    vboxRt.getChildren().addAll(returnBn, imageViewCheese, exportButton);
+    vboxLf.getChildren().addAll(buttonCloud, this.imageViewBrand);
+    vboxRt.getChildren().addAll(returnBn, this.imageViewCheese, exportButton);
 
     // Main layout is Border Pane example (top,left,center,right,bottom)
     BorderPane root = new BorderPane();
@@ -783,12 +783,6 @@ public class GUI {
 
     // Create the ToggleButton buttonCloud
     ToggleButton buttonCloud = getbuttonCloud(SceneIndex.MONTHLYREPORT);
-
-    // Create the ImageView Brand
-    ImageView imageViewBrand = getImageViewBrand();
-
-    // Create the ImageView Cheese
-    ImageView imageViewCheese = getImageViewCheese();
 
     // Create the return button and set the event handler
     Button returnButton = getReturnButton();
@@ -825,8 +819,8 @@ public class GUI {
     topBox.setAlignment(Pos.CENTER);
     bottomBox.setAlignment(Pos.CENTER);
 
-    leftBox.getChildren().addAll(buttonCloud, imageViewBrand);
-    rightBox.getChildren().addAll(returnButton, imageViewCheese);
+    leftBox.getChildren().addAll(buttonCloud, this.imageViewBrand);
+    rightBox.getChildren().addAll(returnButton, this.imageViewCheese);
     centerBox.getChildren().addAll(topBox, bottomBox);
     centerBox.setAlignment(Pos.CENTER);
 
@@ -851,21 +845,24 @@ public class GUI {
     // Create the ToggleButton buttonCloud
     ToggleButton buttonCloud = getbuttonCloud(SceneIndex.MONTHLYREPORTRESULT);
 
-    // Create the ImageView Brand
-    ImageView imageViewBrand = getImageViewBrand();
-
-    // Create the ImageView Cheese
-    ImageView imageViewCheese = getImageViewCheese();
-
     // Create the return button and set the event handler
     Button returnButton = getReturnButton();
     returnButton.setOnAction(e -> {
       getMonthlyReportScene(primaryStage);
     });
 
-    // Create export buttons
+    // Initialize the fileChooser
+    this.fileChooser = new FileChooser();
+    // Add the extension constraint
+    this.fileChooser.getExtensionFilters()
+        .addAll(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+
+    // Create export buttons and add event handler
     Button export = getOvalButton("Export", 3.2, 2);
     export.setStyle("-fx-base: gold;");
+    export.setOnAction(e -> {
+      File selectedFile = this.fileChooser.showOpenDialog(primaryStage);
+    });
 
     // The result to be displayed in the list
     String[][] result = {{"Farm ID", "Farm 123", "Farm 124", "Farm 125"},
@@ -897,8 +894,8 @@ public class GUI {
     VBox vboxLf = new VBox(130);
     VBox vboxRt = new VBox(25);
 
-    vboxLf.getChildren().addAll(buttonCloud, imageViewBrand);
-    vboxRt.getChildren().addAll(returnButton, imageViewCheese, export);
+    vboxLf.getChildren().addAll(buttonCloud, this.imageViewBrand);
+    vboxRt.getChildren().addAll(returnButton, this.imageViewCheese, export);
 
     // Main layout is Border Pane example (top,left,center,right,bottom)
     BorderPane root = new BorderPane();
@@ -947,22 +944,16 @@ public class GUI {
     // Add the button to the root pane
     root.setRight(returnButton);
 
-    // Create the ImageView Cheese
-    ImageView imageViewCheese = getImageViewCheese();
-
     VBox sceneRight = new VBox(20);
-    sceneRight.getChildren().addAll(returnButton, imageViewCheese);
+    sceneRight.getChildren().addAll(returnButton, this.imageViewCheese);
     root.setRight(sceneRight);
 
     // Create the ToggleButton buttonCloud
     ToggleButton buttonCloud = getbuttonCloud(SceneIndex.DATERANGEREPORT);
 
-    // Create the ImageView Brand
-    ImageView imageViewBrand = getImageViewBrand();
-
     // Create VBox layout and add components
     VBox sceneLeft = new VBox(10);
-    sceneLeft.getChildren().addAll(buttonCloud, imageViewBrand);
+    sceneLeft.getChildren().addAll(buttonCloud, this.imageViewBrand);
 
     root.setLeft(sceneLeft);
 
@@ -1035,27 +1026,30 @@ public class GUI {
       getDateReportScene(primaryStage);
     });
 
-    // Create the ImageView Cheese
-    ImageView imageViewCheese = getImageViewCheese();
+    // Initialize the fileChooser
+    this.fileChooser = new FileChooser();
+    // Add the extension constraint
+    this.fileChooser.getExtensionFilters()
+        .addAll(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
 
-    // Create Button for export
+    // Create Button for export and add event handler
     Button exportButton = getOvalButton("Export", 3.2, 2);
     exportButton.setStyle("-fx-base: gold;");
+    exportButton.setOnAction(e -> {
+      File selectedFile = this.fileChooser.showOpenDialog(primaryStage);
+    });
 
     // Create VBox layout and add components
     VBox sceneRight = new VBox(20);
-    sceneRight.getChildren().addAll(returnButton, imageViewCheese, exportButton);
+    sceneRight.getChildren().addAll(returnButton, this.imageViewCheese, exportButton);
     root.setRight(sceneRight);
 
     // Create the ToggleButton buttonCloud
     ToggleButton buttonCloud = getbuttonCloud(SceneIndex.DATERANGEREPORTRESULT);
 
-    // Create the ImageView Brand
-    ImageView imageViewBrand = getImageViewBrand();
-
     // Create VBox layout and add components
     VBox sceneLeft = new VBox(10);
-    sceneLeft.getChildren().addAll(buttonCloud, imageViewBrand);
+    sceneLeft.getChildren().addAll(buttonCloud, this.imageViewBrand);
 
     // Set the main pane
     root.setLeft(sceneLeft);
@@ -1083,49 +1077,45 @@ public class GUI {
   }
 
   /**
-   * Create the ImageView for the Brand picture if there is no cheese picture
-   * loaded. Otherwise return the already loaded cheese picture
+   * Create the ImageView for the Brand picture if there is no cheese picture loaded. Otherwise
+   * return the already loaded cheese picture
    * 
    * @return the ImageView Cheese
    */
   private ImageView getImageViewCheese() {
-    if (imageViewCheese == null) {
-      // Create a file to read image
-      File inputCheese = new File("cheese.png");
-      // Put the file into Image
-      Image imageCheese = new Image(inputCheese.toURI().toString());
-      // Put Image to ImageView
-      imageViewCheese = new ImageView();
-      imageViewCheese.setImage(imageCheese);
-      // Set the size
-      imageViewCheese.setFitHeight(100);
-      imageViewCheese.setFitWidth(100);
-    }
+    // Create a file to read image
+    File inputCheese = new File("cheese.png");
+    // Put the file into Image
+    Image imageCheese = new Image(inputCheese.toURI().toString());
+    // Put Image to ImageView
+    ImageView imageViewCheese2 = new ImageView();
+    imageViewCheese2.setImage(imageCheese);
+    // Set the size
+    imageViewCheese2.setFitHeight(100);
+    imageViewCheese2.setFitWidth(100);
 
-    return imageViewCheese;
+    return imageViewCheese2;
   }
 
   /**
-   * Create the ImageView for the Brand picture if there is no brand picture
-   * loaded. Otherwise return the already loaded brand picture
+   * Create the ImageView for the Brand picture if there is no brand picture loaded. Otherwise
+   * return the already loaded brand picture
    * 
    * @return the ImageView Brand
    */
   private ImageView getImageViewBrand() {
-    if (imageViewBrand == null) {
-      // Create a file to read image
-      File inputBrand = new File("brand.png");
-      // Put the file into Image
-      Image imageBrand = new Image(inputBrand.toURI().toString());
-      // Put Image to ImageView
-      imageViewBrand = new ImageView();
-      imageViewBrand.setImage(imageBrand);
-      // Set the size
-      imageViewBrand.setFitHeight(100);
-      imageViewBrand.setFitWidth(100);
-    }
-    
-    return imageViewBrand;
+    // Create a file to read image
+    File inputBrand = new File("brand.png");
+    // Put the file into Image
+    Image imageBrand = new Image(inputBrand.toURI().toString());
+    // Put Image to ImageView
+    this.imageViewBrand = new ImageView();
+    this.imageViewBrand.setImage(imageBrand);
+    // Set the size
+    this.imageViewBrand.setFitHeight(100);
+    this.imageViewBrand.setFitWidth(100);
+
+    return this.imageViewBrand;
   }
 
   /**
@@ -1145,32 +1135,44 @@ public class GUI {
       alert.setTitle("Instructions");
       alert.showAndWait().filter(response -> response == ButtonType.OK);
     });
-    
+
     return buttonCloud;
   }
-  
+
   /**
    * Given the SceneIndex, return the corresponding instruction string.
    * 
    * @param i - the Scene index
-   * @return a String of instruction 
+   * @return a String of instruction
    */
   private String getSceneInstruction(SceneIndex i) {
-    switch(i) {
-      case MAINMENU: return MAINMENU_INFO;
-      case ADDDELETECHANGE: return ADDDELETECHANGE_INFO;
-      case ADDDELETERESULT: return  ADDDELETERESULT_INFO;
-      case CHANGERESULT: return CHANGERESULT_INFO;
-      case FARMREPORT: return FARMREPORT_INFO;
-      case FARMREPORTRESULT: return FARMREPORTRESULT_INFO;
-      case ANNUALREPORT: return ANNUALREPORT_INFO;
-      case ANNUALREPORTRESULT: return ANNUALREPORTRESULT_INFO;
-      case MONTHLYREPORT: return MONTHLYREPORT_INFO;
-      case MONTHLYREPORTRESULT: return MONTHLYREPORTRESULT_INFO;
-      case DATERANGEREPORT: return DATERANGEREPORT_INFO;
-      case DATERANGEREPORTRESULT: return DATERANGEREPORTRESULT_INFO;
+    switch (i) {
+      case MAINMENU:
+        return MAINMENU_INFO;
+      case ADDDELETECHANGE:
+        return ADDDELETECHANGE_INFO;
+      case ADDDELETERESULT:
+        return ADDDELETERESULT_INFO;
+      case CHANGERESULT:
+        return CHANGERESULT_INFO;
+      case FARMREPORT:
+        return FARMREPORT_INFO;
+      case FARMREPORTRESULT:
+        return FARMREPORTRESULT_INFO;
+      case ANNUALREPORT:
+        return ANNUALREPORT_INFO;
+      case ANNUALREPORTRESULT:
+        return ANNUALREPORTRESULT_INFO;
+      case MONTHLYREPORT:
+        return MONTHLYREPORT_INFO;
+      case MONTHLYREPORTRESULT:
+        return MONTHLYREPORTRESULT_INFO;
+      case DATERANGEREPORT:
+        return DATERANGEREPORT_INFO;
+      case DATERANGEREPORTRESULT:
+        return DATERANGEREPORTRESULT_INFO;
       default:
-        return ""; 
+        return "";
     }
   }
 
