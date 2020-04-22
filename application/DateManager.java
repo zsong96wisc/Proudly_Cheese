@@ -26,6 +26,6 @@ import java.util.TreeSet;
  *
  */
 public class DateManager {
-  TreeSet<RecordsOfDate> rodSet;
-  int totalNumberOfRecords;
+  TreeSet<RecordsOfDate> rodSet; // Storing all of the Records based on date
+  int totalNumberOfRecords; // Storing total number of records
 }
