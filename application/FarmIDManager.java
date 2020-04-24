@@ -25,6 +25,6 @@ import java.util.Hashtable;
  * @author aTeam 147 (2020)
  */
 public class FarmIDManager {
-  Hashtable<String, Farm> hashTable; // map farmID to String
-  int totalNumberOfRecords; // total number of records
+  private Hashtable<String, Farm> hashTable; // map farmID to String
+  private int totalNumberOfRecords; // total number of records
 }

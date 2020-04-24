@@ -30,5 +30,5 @@ public class Farm {
   private int totalWeight; 
   
   //Binary search tree storing Records for this particular farm
-  STADT<Record> bstDate; 
+  private STADT<Record> bstDate; 
 }

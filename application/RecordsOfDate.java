@@ -26,5 +26,7 @@ import java.util.Date;
  */
 public class RecordsOfDate {
   private Date date; // Date of this 
-  STADT<Record> recordBST; // BST for record
+  private STADT<Record> recordBST; // BST for record
+  
+  
 }
