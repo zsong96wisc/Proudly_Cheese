@@ -23,6 +23,6 @@ package application;
  * @author aTeam 147 (2020)
  */
 public class Manager {
-  FarmIDManager farmIDManager; // Manager for Farm by FarmID
-  DateManager dateManager; // Manager for Farm by date
+  private FarmIDManager farmIDManager; // Manager for Farm by FarmID
+  private DateManager dateManager; // Manager for Farm by date
 }
