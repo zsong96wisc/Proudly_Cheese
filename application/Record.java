@@ -18,6 +18,7 @@
 
 package application;
 
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 /**
@@ -98,10 +99,21 @@ public class Record implements Comparable<Record> {
 		int farmIDDiff = farmID.compareTo(r.farmID);
 		if (farmIDDiff != 0)
 			return farmIDDiff;
-		int dateDiff = date.compareTo(r.date);
+		
+        int yearDiff = this.getDate().get(Calendar.YEAR) 
+            - r.getDate().get(Calendar.YEAR);
+        if (yearDiff != 0)
+          return yearDiff;
+        int monthDiff = this.getDate().get(Calendar.MONTH) 
+            - r.getDate().get(Calendar.MONTH);
+        if (monthDiff != 0)
+          return monthDiff;
+        int dateDiff = this.getDate().get(Calendar.DATE) 
+            - r.getDate().get(Calendar.DATE);
 		if (dateDiff != 0)
 			return dateDiff;
-		else
-			return weight - r.weight;
+		
+		// FarmID the same, Date the same
+		return weight - r.weight;
 	}
 }

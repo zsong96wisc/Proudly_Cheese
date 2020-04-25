@@ -42,7 +42,18 @@ public class DateManager {
     this.rodSet = new TreeSet<RecordsOfDate>(new Comparator<RecordsOfDate>() {
       @Override
       public int compare(RecordsOfDate rod1, RecordsOfDate rod2) {
-        return rod1.getDate().compareTo(rod2.getDate());
+        int yearDiff = rod1.getDate().get(Calendar.YEAR) 
+            - rod2.getDate().get(Calendar.YEAR);
+        if (yearDiff != 0)
+          return yearDiff;
+
+        int monthDiff = rod1.getDate().get(Calendar.MONTH) 
+            - rod2.getDate().get(Calendar.MONTH);
+        if (monthDiff != 0)
+          return monthDiff;
+
+        return rod1.getDate().get(Calendar.DATE) 
+            - rod2.getDate().get(Calendar.DATE);
       }
     });
     this.totalNumberOfRecords = 0;
@@ -58,7 +69,7 @@ public class DateManager {
    */
   public void addFarmRecord(Record record) 
       throws IllegalNullKeyException, DuplicateKeyException {
-    
+
     if (record == null) // parameter is null
       throw new IllegalNullKeyException("insert null reference");
     RecordsOfDate tempRecordsOfDate = new RecordsOfDate(record.getDate());
@@ -167,6 +178,7 @@ public class DateManager {
     // Create two instances of ROD as the boundary for search
     RecordsOfDate startROD = new RecordsOfDate(startAndEnd[0]);
     RecordsOfDate endROD = new RecordsOfDate(startAndEnd[1]);
+
     // The search result
     NavigableSet<RecordsOfDate> searchResult =
         rodSet.subSet(startROD, true, endROD, true);
@@ -224,9 +236,10 @@ public class DateManager {
     GregorianCalendar end = new GregorianCalendar();
     start.set(date.get(Calendar.YEAR), 1, 1, 0, 0, 0);
     start.set(Calendar.MONTH, Calendar.JANUARY);
-    
+
     end.set(date.get(Calendar.YEAR), 1, 31, 0, 0, 0);
-    start.set(Calendar.MONTH, Calendar.DECEMBER);
+    end.set(Calendar.MONTH, Calendar.DECEMBER);
+    end.set(Calendar.DATE, 31);
     
     return new GregorianCalendar[] {start, end};
   }
