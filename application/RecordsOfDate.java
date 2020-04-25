@@ -1,8 +1,9 @@
 /**
  * RecordsOfDate.java created by aTeam 147 in Proudly_Cheese project
  * 
- * Author: Hairong Yin (hyin55@wisc.edu) (Lec 002), Haonan Shen (hshen37@wisc.edu) (Lec 001), 
- * Xiaoxi Sun (xsun279@wisc.edu) (Lec 002), Zhiwei Song (zsong96@wisc.edu) (Lec 002)
+ * Author: Hairong Yin (hyin55@wisc.edu) (Lec 002), Haonan Shen
+ * (hshen37@wisc.edu) (Lec 001), Xiaoxi Sun (xsun279@wisc.edu) (Lec 002), Zhiwei
+ * Song (zsong96@wisc.edu) (Lec 002)
  * 
  * Date: 04/19/2020
  * 
@@ -17,7 +18,6 @@
 
 package application;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -27,88 +27,115 @@ import java.util.List;
  * @author aTeam 147 (2020)
  */
 public class RecordsOfDate {
-  private Date date; // Date of this 
-  private STADT<Record> recordBST; // BST for record
-  
-  /**
-   * 
-   * @param date
-   */
-  public RecordsOfDate(Date date) {
-    this.date = date;
-    this.recordBST = new BST<>();
-  }
-  
-  /**
-   * 
-   * @param record
-   */
-  public void insert(Record record) {
-    return;
-  }
-  
-  /**
-   * 
-   * @param record
-   * @return
-   */
-  public boolean remove(Record record) {
-    return false;
-  }
-  
-  /**
-   * 
-   * @param record
-   * @return
-   */
-  public boolean contains(Record record) {
-    return false;
-  }
-  
-  /**
-   * 
-   * @return
-   */
-  public List<Record> getInOrderTraversal() {
-    return new ArrayList<Record>();
-  }
-  
-  /**
-   * 
-   * @param farmID
-   * @return
-   */
-  public List<Record> get(String farmID) {
-    return null;
-  }
-  
-  /**
-   * 
-   * @return
-   */
-  public int getTotalWeight() {
-    return -1;
-  }
-  
-  /**
-   * @return the date
-   */
-  public Date getDate() {
-    return date;
-  }
 
-  /**
-   * @param date the date to set
-   */
-  public void setDate(Date date) {
-    this.date = date;
-  }
-  
-  /**
-   * 
-   * @return
-   */
-  public int numKeys() {
-    return 0;
-  }
+	// Date of this records set
+	private Date date;
+	// BST of record storing all records of this specific date
+	private STADT<Record> recordBST;
+	// int field that stores total weights of the day
+	private int totalWeight;
+
+	/**
+	 * Default constructor initializing fields
+	 * 
+	 * @param date - date that this records set stores
+	 */
+	public RecordsOfDate(Date date) {
+		this.date = date;
+		this.recordBST = new BST<>();
+		this.totalWeight = 0;
+	}
+
+	/**
+	 * This method is used to add new record to the BST
+	 * 
+	 * @param record - record to be stored
+	 * @throws IllegalNullKeyException - when input is null
+	 * @throws DuplicateKeyException   - when input already exists in the BST
+	 */
+	public void insert(Record record)
+			throws IllegalNullKeyException, DuplicateKeyException {
+		if (record == null)
+			throw new IllegalNullKeyException("null Record input");
+		if (recordBST.contains(record))
+			throw new DuplicateKeyException("duplicate Record");
+		recordBST.insert(record);
+		// update total weight
+		totalWeight += record.getWeight();
+	}
+
+	/**
+	 * This method is used to remove a record from the BST
+	 * 
+	 * @param record - record to be removed
+	 * @return true when remove successfully, false otherwise
+	 * @throws IllegalNullKeyException - when input is null
+	 */
+	public boolean remove(Record record) throws IllegalNullKeyException {
+		if (record == null)
+			throw new IllegalNullKeyException("null Record input");
+		boolean removeResult = recordBST.remove(record);
+		// check if remove successfully, if so update total weight
+		if (removeResult)
+			totalWeight -= record.getWeight();
+		return removeResult;
+	}
+
+	/**
+	 * This method is used to check if a record already stored
+	 * 
+	 * @param record - record to be checked
+	 * @return true if exists, false otherwise
+	 * @throws IllegalNullKeyException - when input is null
+	 */
+	public boolean contains(Record record) throws IllegalNullKeyException {
+		if (record == null)
+			throw new IllegalNullKeyException("null Record input");
+		return recordBST.contains(record);
+	}
+
+	/**
+	 * This method is used to list all records stored through in-order traversal
+	 * 
+	 * @return list containing all records stored
+	 */
+	public List<Record> getInOrderTraversal() {
+		return recordBST.getInOrderTraversal();
+	}
+
+	/**
+	 * Getter method for total weight in this day
+	 * 
+	 * @return total weight
+	 */
+	public int getTotalWeight() {
+		return totalWeight;
+	}
+
+	/**
+	 * Getter method for date
+	 * 
+	 * @return the date
+	 */
+	public Date getDate() {
+		return date;
+	}
+
+	/**
+	 * Setter method for date
+	 * 
+	 * @param date the date to set
+	 */
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
+	/**
+	 * Getter method for number of records stored
+	 * 
+	 * @return number of records stored
+	 */
+	public int numKeys() {
+		return recordBST.numKeys();
+	}
 }
