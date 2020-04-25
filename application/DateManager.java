@@ -17,8 +17,11 @@
 
 package application;
 
+import java.util.Calendar;
 import java.util.Comparator;
-import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.NavigableSet;
 import java.util.TreeSet;
 
@@ -26,12 +29,11 @@ import java.util.TreeSet;
  * DateManager - used to store records basd on Date.
  * 
  * @author aTeam 147 (2020)
- *
  */
 public class DateManager {
   private TreeSet<RecordsOfDate> rodSet; // Storing all of the Records based on date
   private int totalNumberOfRecords; // Storing total number of records
-  
+
   /**
    * Default constructor
    */
@@ -47,112 +49,65 @@ public class DateManager {
   }
 
   /**
-   * Insert a RecordsOfDate data structure maintaining records of its 
-   * specified date
+   * Insert a Record instance into the data structure
    * 
-   * @param recordsOfDate - given records of date to be inserted
+   * @param record - given record to be inserted
    * @throws IllegalNullKeyException - when the given parameter is null
    * @throws DuplicateKeyException - when the inserted RecordsOfDate is 
    *    already in the set
    */
-  public void insert(RecordsOfDate recordsOfDate) 
+  public void addFarmRecord(Record record) 
       throws IllegalNullKeyException, DuplicateKeyException {
     
-    if (recordsOfDate == null) // parameter is null
+    if (record == null) // parameter is null
       throw new IllegalNullKeyException("insert null reference");
-    if (rodSet.contains(recordsOfDate)) // there is already such a rod.
-      throw new DuplicateKeyException("duplicate records of Date");
+    RecordsOfDate tempRecordsOfDate = new RecordsOfDate(record.getDate());
+    NavigableSet<RecordsOfDate> searchResult =
+        rodSet.subSet(tempRecordsOfDate, true, tempRecordsOfDate, true);
+
+    if (searchResult.isEmpty()) {// there is already such a rod.
+      tempRecordsOfDate.insert(record);
+      rodSet.add(tempRecordsOfDate);
+    } else { // There is no such RecordsOfDate
+      if (searchResult.first().contains(record)) 
+        // If there is a duplicate record
+        throw new DuplicateKeyException("duplicate records");
+      
+      searchResult.first().insert(record);
+    }
     
-    rodSet.add(recordsOfDate);
-    totalNumberOfRecords += recordsOfDate.numKeys();
+    totalNumberOfRecords += 1;
   }
   
   /**
-   * Remove a RecordsOfDate instance
+   * Remove a Record instance
    * 
-   * @param RecordsOfDate - to be removed
+   * @param record - to be removed
    * @returns true means a successful removal. false means a removal 
    *    failure.
-   * @throws IllegalNullKeyException - if the given rod is null
+   * @throws IllegalNullKeyException - if the given record is null
    */
-  public boolean remove(RecordsOfDate recordsOfDate) 
+  public boolean removeFarmRecord(Record record) 
       throws IllegalNullKeyException {
-    if (recordsOfDate == null)
-      throw new IllegalNullKeyException("null RecordsOfDate input");
+    if (record == null)
+      throw new IllegalNullKeyException("null record input");
     
+    RecordsOfDate tempRecordsOfDate = new RecordsOfDate(record.getDate());
     // The search result
     NavigableSet<RecordsOfDate> searchResult =
-        rodSet.subSet(recordsOfDate, true, recordsOfDate, true);
+        rodSet.subSet(tempRecordsOfDate, true, tempRecordsOfDate, true);
 
-    RecordsOfDate rod = searchResult.first();
-    if (rod == null)
-      // there is no such recordsOfDate
+    if (searchResult.isEmpty()) 
+      // there is no such record
       return false;
 
-    this.totalNumberOfRecords -= rod.numKeys();
-    
-    return rodSet.remove(rod);
-  }
-  
-  /**
-   * remove a RecordsOfDate instance based on date
-   * 
-   * @param date - the given date binded to RecordsOfDate
-   * @returns true means a successful removal. false means a removal 
-   *    failure.
-   * @throws IllegalNullKeyException - if the given data is null
-   */
-  public boolean remove(Date date) throws IllegalNullKeyException {
-    if (date == null)
-      throw new IllegalNullKeyException("null data input");
-    
-    // Need a temporary variable to search for such rod.
-    RecordsOfDate tempRecordOfDate = new RecordsOfDate(date);
-    // The search result
-    NavigableSet<RecordsOfDate> searchResult =
-        rodSet.subSet(tempRecordOfDate, true, tempRecordOfDate, true);
-
-    RecordsOfDate rod = searchResult.first();
-    if (rod == null)
-      // there is no such recordsOfDate
+    if (searchResult.first().remove(record)) {
+      // successful removal
+      this.totalNumberOfRecords -= 1;
+      return true;
+    } else { // unsuccessful removal
       return false;
-
-    this.totalNumberOfRecords -= rod.numKeys();
-    
-    return rodSet.remove(rod);
-  }
-  
-  /**
-   * Determine whether there is a RecordsOfDate instance having the same 
-   * date as what the parameter rod has.
-   * 
-   * @param RecordsOfDate - to be removed
-   * @return true if there is a RecordsOfDate instance having the same date
-   *    as what the parameter rod has
-   * @throws IllegalNullKeyException - if the given parameter is null
-   */
-  public boolean contains(RecordsOfDate recordsOfDate) 
-      throws IllegalNullKeyException {
-    if (recordsOfDate == null)
-      throw new IllegalNullKeyException("null RecordsOfDate input");
-    
-    return rodSet.contains(recordsOfDate);
-  }
-
-  /**
-   * Determine whether there is a RecordsOfDate instance binded to  
-   * date specified as the parameter
-   * 
-   * @param date - binded to RecordsOfDate to be detected
-   * @return true if there is a RecordsOfDate instance having the same Date
-   * @throws IllegalNullKeyException - if the date is null
-   */
-  public boolean contains(Date date) throws IllegalNullKeyException {
-    if (date == null) // if the date is null
-      throw new IllegalNullKeyException("null date input");
-    
-    RecordsOfDate recordsOfDate = new RecordsOfDate(date);
-    return rodSet.contains(recordsOfDate);
+    }
   }
 
   /**
@@ -160,27 +115,73 @@ public class DateManager {
    * the parameter.
    * 
    * @param date - binded to RecordsOfDate to be detected
-   * @return the RecordsOfDate having the same date
+   * @return the RecordsOfDate having the same date. Return null if no 
+   *    such RecordsOfDate is found
    * @throws IllegalNullKeyException - if the date is null
-   * @throws KeyNotFoundException - if there is no such 
-   *    RecordsOfDate instances
    */
-  public RecordsOfDate getRecordsOfDate(Date date) throws IllegalNullKeyException, KeyNotFoundException {
+  public List<Record> getMonthlyReport(GregorianCalendar date) 
+      throws IllegalNullKeyException {
     if (date == null) // if the date is null
       throw new IllegalNullKeyException("null date input");
+
+    // Need start and end of the month
+    GregorianCalendar[] startAndEnd = getMonthStartAndEnd(date);
     
-    // Need a temporary variable to search for such rod.
-    RecordsOfDate tempRecordOfDate = new RecordsOfDate(date);
+    // Create two instances of ROD as the boundary for search
+    RecordsOfDate startROD = new RecordsOfDate(startAndEnd[0]);
+    RecordsOfDate endROD = new RecordsOfDate(startAndEnd[1]);
     // The search result
     NavigableSet<RecordsOfDate> searchResult =
-        rodSet.subSet(tempRecordOfDate, true, tempRecordOfDate, true);
+        rodSet.subSet(startROD, true, endROD, true);
 
-    RecordsOfDate rod = searchResult.first();
+    // test search result
+    if (searchResult.isEmpty()) {
+      return null;
+    } else {
+      // Traverse the search result
+      List<Record> monthlyReport = new LinkedList<Record>();
+      for (RecordsOfDate rod : searchResult) {
+        monthlyReport.addAll(rod.getInOrderTraversal());
+      }
+      return monthlyReport;
+    }
+  }
+  
+  /**
+   * Get the RecordsOfDate instance having the date specified in 
+   * the parameter.
+   * 
+   * @param date - binded to RecordsOfDate to be detected
+   * @return the RecordsOfDate having the same date. Return null if no 
+   *    such RecordsOfDate is found
+   * @throws IllegalNullKeyException - if the date is null
+   */
+  public List<Record> getAnnualReport(GregorianCalendar date) 
+      throws IllegalNullKeyException {
+    if (date == null) // if the date is null
+      throw new IllegalNullKeyException("null date input");
+
+    // Need start and end of the month
+    GregorianCalendar[] startAndEnd = getYearStartAndEnd(date);
     
-    if (rod == null)
-      throw new KeyNotFoundException("No such RecordsOfDate data structure");
-    
-    return rod;
+    // Create two instances of ROD as the boundary for search
+    RecordsOfDate startROD = new RecordsOfDate(startAndEnd[0]);
+    RecordsOfDate endROD = new RecordsOfDate(startAndEnd[1]);
+    // The search result
+    NavigableSet<RecordsOfDate> searchResult =
+        rodSet.subSet(startROD, true, endROD, true);
+
+    // test search result
+    if (searchResult.isEmpty()) {
+      return null;
+    } else {
+      // Traverse the search result
+      List<Record> annualReport = new LinkedList<Record>();
+      for (RecordsOfDate rod : searchResult) {
+        annualReport.addAll(rod.getInOrderTraversal());
+      }
+      return annualReport;
+    }
   }
   
   /**
@@ -210,4 +211,59 @@ public class DateManager {
   public void setTotalNumberOfRecords(int totalNumberOfRecords) {
     this.totalNumberOfRecords = totalNumberOfRecords;
   }
+  
+  /**
+   * Given a date, return the start date of the year and end date of 
+   * the year
+   * 
+   * @param date - the given date
+   * @return GregorianCalendar[] storing start at 0 and end at 1
+   */
+  private GregorianCalendar[] getYearStartAndEnd(GregorianCalendar date) {
+    GregorianCalendar start = new GregorianCalendar();
+    GregorianCalendar end = new GregorianCalendar();
+    start.set(date.get(Calendar.YEAR), 1, 1, 0, 0, 0);
+    start.set(Calendar.MONTH, Calendar.JANUARY);
+    
+    end.set(date.get(Calendar.YEAR), 1, 31, 0, 0, 0);
+    start.set(Calendar.MONTH, Calendar.DECEMBER);
+    
+    return new GregorianCalendar[] {start, end};
+  }
+  
+  /**
+   * Given a date, return the start date of the month and end date of 
+   * the month
+   * 
+   * @param date - the given date
+   * @return GregorianCalendar[] storing start at 0 and end at 1
+   */
+  private GregorianCalendar[] getMonthStartAndEnd(GregorianCalendar date) {
+    GregorianCalendar start = new GregorianCalendar();
+    GregorianCalendar end = new GregorianCalendar();
+    start.set(date.get(Calendar.YEAR), date.get(Calendar.MONTH), 1, 0, 0, 0);
+    
+    end.set(date.get(Calendar.YEAR), date.get(Calendar.MONTH), 
+        getNumberOfDaysInMonth(date), 0, 0, 0);
+    
+    return new GregorianCalendar[] {start, end};
+  }
+
+  /**
+   * Given a year and a month, return the number of days in a month
+   * 
+   * @param date - given date
+   * @return the number of days in a month
+   */
+  private static int getNumberOfDaysInMonth(GregorianCalendar date) {
+    Calendar lastDay = Calendar.getInstance();
+    lastDay.set(Calendar.YEAR, date.get(Calendar.YEAR));
+    lastDay.set(Calendar.MONTH, date.get(Calendar.MONTH));
+    lastDay.set(Calendar.DATE, 1);
+    lastDay.roll(Calendar.DATE, -1);
+    int maxDate = lastDay.get(Calendar.DATE);
+
+    return maxDate;
+  }
+
 }

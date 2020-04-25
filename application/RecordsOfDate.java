@@ -18,7 +18,7 @@
 
 package application;
 
-import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -28,114 +28,114 @@ import java.util.List;
  */
 public class RecordsOfDate {
 
-	// Date of this records set
-	private Date date;
-	// BST of record storing all records of this specific date
-	private STADT<Record> recordBST;
-	// int field that stores total weights of the day
-	private int totalWeight;
+  // Date of this records set
+  private GregorianCalendar g;
+  // BST of record storing all records of this specific date
+  private STADT<Record> recordBST;
+  // int field that stores total weights of the day
+  private int totalWeight;
 
-	/**
-	 * Default constructor initializing fields
-	 * 
-	 * @param date - date that this records set stores
-	 */
-	public RecordsOfDate(Date date) {
-		this.date = date;
-		this.recordBST = new BST<>();
-		this.totalWeight = 0;
-	}
+  /**
+   * Constructor initializing fields
+   * 
+   * @param date - date that this records set stores
+   */
+  public RecordsOfDate(GregorianCalendar g) {
+    this.g = g;
+    this.recordBST = new BST<>();
+    this.totalWeight = 0;
+  }
 
-	/**
-	 * This method is used to add new record to the BST
-	 * 
-	 * @param record - record to be stored
-	 * @throws IllegalNullKeyException - when input is null
-	 * @throws DuplicateKeyException   - when input already exists in the BST
-	 */
-	public void insert(Record record)
-			throws IllegalNullKeyException, DuplicateKeyException {
-		if (record == null)
-			throw new IllegalNullKeyException("null Record input");
-		if (recordBST.contains(record))
-			throw new DuplicateKeyException("duplicate Record");
-		recordBST.insert(record);
-		// update total weight
-		totalWeight += record.getWeight();
-	}
+  /**
+   * This method is used to add new record to the BST
+   * 
+   * @param record - record to be stored
+   * @throws IllegalNullKeyException - when input is null
+   * @throws DuplicateKeyException   - when input already exists in the BST
+   */
+  public void insert(Record record)
+      throws IllegalNullKeyException, DuplicateKeyException {
+    if (record == null)
+      throw new IllegalNullKeyException("null Record input");
+    if (recordBST.contains(record))
+      throw new DuplicateKeyException("duplicate Record");
+    recordBST.insert(record);
+    // update total weight
+    totalWeight += record.getWeight();
+  }
 
-	/**
-	 * This method is used to remove a record from the BST
-	 * 
-	 * @param record - record to be removed
-	 * @return true when remove successfully, false otherwise
-	 * @throws IllegalNullKeyException - when input is null
-	 */
-	public boolean remove(Record record) throws IllegalNullKeyException {
-		if (record == null)
-			throw new IllegalNullKeyException("null Record input");
-		boolean removeResult = recordBST.remove(record);
-		// check if remove successfully, if so update total weight
-		if (removeResult)
-			totalWeight -= record.getWeight();
-		return removeResult;
-	}
+  /**
+   * This method is used to remove a record from the BST
+   * 
+   * @param record - record to be removed
+   * @return true when remove successfully, false otherwise
+   * @throws IllegalNullKeyException - when input is null
+   */
+  public boolean remove(Record record) throws IllegalNullKeyException {
+    if (record == null)
+      throw new IllegalNullKeyException("null Record input");
+    boolean removeResult = recordBST.remove(record);
+    // check if remove successfully, if so update total weight
+    if (removeResult)
+      totalWeight -= record.getWeight();
+    return removeResult;
+  }
 
-	/**
-	 * This method is used to check if a record already stored
-	 * 
-	 * @param record - record to be checked
-	 * @return true if exists, false otherwise
-	 * @throws IllegalNullKeyException - when input is null
-	 */
-	public boolean contains(Record record) throws IllegalNullKeyException {
-		if (record == null)
-			throw new IllegalNullKeyException("null Record input");
-		return recordBST.contains(record);
-	}
+  /**
+   * This method is used to check if a record already stored
+   * 
+   * @param record - record to be checked
+   * @return true if exists, false otherwise
+   * @throws IllegalNullKeyException - when input is null
+   */
+  public boolean contains(Record record) throws IllegalNullKeyException {
+    if (record == null)
+      throw new IllegalNullKeyException("null Record input");
+    return recordBST.contains(record);
+  }
 
-	/**
-	 * This method is used to list all records stored through in-order traversal
-	 * 
-	 * @return list containing all records stored
-	 */
-	public List<Record> getInOrderTraversal() {
-		return recordBST.getInOrderTraversal();
-	}
+  /**
+   * This method is used to list all records stored through in-order traversal
+   * 
+   * @return list containing all records stored
+   */
+  public List<Record> getInOrderTraversal() {
+    return recordBST.getInOrderTraversal();
+  }
 
-	/**
-	 * Getter method for total weight in this day
-	 * 
-	 * @return total weight
-	 */
-	public int getTotalWeight() {
-		return totalWeight;
-	}
+  /**
+   * Getter method for total weight in this day
+   * 
+   * @return total weight
+   */
+  public int getTotalWeight() {
+    return totalWeight;
+  }
 
-	/**
-	 * Getter method for date
-	 * 
-	 * @return the date
-	 */
-	public Date getDate() {
-		return date;
-	}
+  /**
+   * Getter method for date
+   * 
+   * @return the date
+   */
+  public GregorianCalendar getDate() {
+    return g;
+  }
 
-	/**
-	 * Setter method for date
-	 * 
-	 * @param date the date to set
-	 */
-	public void setDate(Date date) {
-		this.date = date;
-	}
+  /**
+   * Setter method for date
+   * 
+   * @param date the date to set
+   */
+  public void setDate(GregorianCalendar g) {
+    this.g = g;
+  }
 
-	/**
-	 * Getter method for number of records stored
-	 * 
-	 * @return number of records stored
-	 */
-	public int numKeys() {
-		return recordBST.numKeys();
-	}
+  /**
+   * Getter method for number of records stored
+   * 
+   * @return number of records stored
+   */
+  public int numKeys() {
+    return recordBST.numKeys();
+  }
 }

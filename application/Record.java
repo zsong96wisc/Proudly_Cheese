@@ -18,7 +18,7 @@
 
 package application;
 
-import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * Record - Each instance stores one piece of data
@@ -27,7 +27,7 @@ import java.util.Date;
  *
  */
 public class Record implements Comparable<Record> {
-	private Date date; // date of the record
+	private GregorianCalendar date; // date of the record
 	private String farmID; // denotes the farm of this record
 	private int weight; // the weight of milk provided by the farm specified in ID
 
@@ -38,7 +38,7 @@ public class Record implements Comparable<Record> {
 	 * @param farmID - denotes the farm of this record
 	 * @param weight - the weight of milk provided by the farm specified in ID
 	 */
-	public Record(Date date, String farmID, int weight) {
+	public Record(GregorianCalendar date, String farmID, int weight) {
 		this.date = date;
 		this.farmID = farmID;
 		this.weight = weight;
@@ -47,14 +47,14 @@ public class Record implements Comparable<Record> {
 	/**
 	 * @return the date
 	 */
-	public Date getDate() {
+	public GregorianCalendar getDate() {
 		return date;
 	}
 
 	/**
 	 * @param date the date to set
 	 */
-	public void setDate(Date date) {
+	public void setDate(GregorianCalendar date) {
 		this.date = date;
 	}
 
@@ -103,6 +103,5 @@ public class Record implements Comparable<Record> {
 			return dateDiff;
 		else
 			return weight - r.weight;
-
 	}
 }
