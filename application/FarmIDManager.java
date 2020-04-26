@@ -50,10 +50,9 @@ public class FarmIDManager {
    * @return The In order traversal of the matched farm
    * 
    * @throws IllegalNullKeyException - if key argument is null
-   * @throws KeyNotFoundException    - if key is not found in this Hash Table
    */
   public List<Record> getFarmRecords(String farmID)
-      throws IllegalNullKeyException, KeyNotFoundException {
+      throws IllegalNullKeyException {
     // Check whether the input is null or not
     // If true, throw IllegalNullKeyException
     if (farmID == null) {
@@ -63,7 +62,7 @@ public class FarmIDManager {
     // Check whether the farmID presents in the hashTable
     // If not, throw KeyNotFoundException
     if (!this.hashTable.containsKey(farmID)) {
-      throw new KeyNotFoundException("The farm can not found");
+      return null;
     }
 
     // Return the in order traversal of the particular farm
@@ -183,5 +182,23 @@ public class FarmIDManager {
       }
     }
     return result;
+  }
+  
+  /**
+   * Retrieve the number of records in the hash table
+   * 
+   * @return the number of records
+   */
+  public int getTotalNumberOfRecords() {
+    return this.totalNumberOfRecords;
+  }
+  
+  /**
+   * Retrieve the number of farms in the hash table
+   * 
+   * @return the number of farms
+   */
+  public int getNumberOfFarms() {
+    return this.hashTable.size();
   }
 }
