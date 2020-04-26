@@ -197,6 +197,36 @@ public class DateManager {
   }
   
   /**
+   * Get date range report based on start date and end date
+   * 
+   * @param start - date
+   * @param end - date
+   * @return Records in a List
+   */
+  public List<Record> getDateRangeReport(GregorianCalendar start, 
+      GregorianCalendar end){
+ // Create two instances of ROD as the boundary for search
+    RecordsOfDate startROD = new RecordsOfDate(start);
+    RecordsOfDate endROD = new RecordsOfDate(end);
+
+    // The search result
+    NavigableSet<RecordsOfDate> searchResult =
+        rodSet.subSet(startROD, true, endROD, true);
+
+    // test search result
+    if (searchResult.isEmpty()) {
+      return null;
+    } else {
+      // Traverse the search result
+      List<Record> annualReport = new LinkedList<Record>();
+      for (RecordsOfDate rod : searchResult) {
+        annualReport.addAll(rod.getInOrderTraversal());
+      }
+      return annualReport;
+    }
+  }
+  
+  /**
    * @return the rodSet
    */
   public TreeSet<RecordsOfDate> getRodSet() {
