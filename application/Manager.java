@@ -170,4 +170,22 @@ public class Manager {
     }
     return false;
   }
+
+  /**
+   * This method is used to add records to storage after loading from file
+   * 
+   * @param recordList - list of records read from the file
+   * 
+   * @throws IllegalNullKeyException - if key argument is null
+   * @throws DuplicateKeyException   - if the key is duplicated
+   */
+  public void importList(List<Record> recordList)
+      throws IllegalNullKeyException, DuplicateKeyException {
+    // add each of record in the list to storage
+    // remove record from list after insertion
+    for (Record record : recordList) {
+      addRecords(record);
+      recordList.remove(record);
+    }
+  }
 }
