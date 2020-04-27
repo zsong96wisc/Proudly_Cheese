@@ -458,9 +458,11 @@ public class GUI {
     // Main layout is Border Pane example (top,left,center,right,bottom)
     BorderPane root = new BorderPane();
     // Define layout managers
-    HBox hbox = new HBox(20);
+    HBox hboxUp = new HBox(20);
+    HBox hboxDown = new HBox(35);
     VBox vboxL = new VBox(60);
     VBox vboxR = new VBox(20);
+    VBox vboxC = new VBox(20);
 
     // Text field for title
     Text text = getTitle("Farm Report\n");
@@ -476,7 +478,9 @@ public class GUI {
 
     // Create a Label and TextField
     Label farmID = new Label("FarmID: ");
-    TextField inputField = getInputTextField("FarmID", 110, 10);
+    TextField inputFarmID = getInputTextField("FarmID", 110, 10);
+    Label year = new Label("Year: ");
+    TextField inputYear = getInputTextField("Year", 110, 10);
 
     // Create the Button and set event Handler
     Button search = getOvalButton("Search", 4, 2);
@@ -496,11 +500,13 @@ public class GUI {
     // Set the main pane
     root.setTop(text);
     BorderPane.setAlignment(text, Pos.TOP_CENTER);
-    hbox.getChildren().addAll(farmID, inputField);
+    hboxUp.getChildren().addAll(farmID, inputFarmID);
+    hboxDown.getChildren().addAll(year, inputYear);
+    vboxC.getChildren().addAll(hboxUp, hboxDown);
     vboxL.getChildren().addAll(buttonCloud, this.imageViewBrand);
     vboxR.getChildren().addAll(returnButton, this.imageViewCheese);
     root.setLeft(vboxL);
-    root.setCenter(hbox);
+    root.setCenter(vboxC);
     root.setRight(vboxR);
     root.setBottom(sceneBottom);
     BorderPane.setAlignment(sceneBottom, Pos.BOTTOM_CENTER);

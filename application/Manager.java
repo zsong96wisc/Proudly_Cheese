@@ -17,7 +17,11 @@
 
 package application;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.GregorianCalendar;
+import java.util.Hashtable;
 import java.util.List;
 
 /**
@@ -30,6 +34,9 @@ public class Manager {
   private FarmIDManager farmIDManager;
   // Manager for Farm by date
   private DateManager dateManager;
+
+  String[] day = new String[] {"Jan", "Feb", "Mar", "Apr", "May", "June", "Jul", "Aug", "Sep",
+      "Oct", "Nov", "Dec"};
 
   /**
    * Constructor - create the Manager objects
@@ -49,8 +56,29 @@ public class Manager {
    * 
    * @throws IllegalNullKeyException - if key argument is null
    */
-  public List<Record> getFarmReport(String farmID) throws IllegalNullKeyException {
-    return farmIDManager.getFarmRecords(farmID);
+  public String[][] getFarmReport(String farmID, GregorianCalendar date)
+      throws IllegalNullKeyException {
+    if (date == null) // if the date is null
+      throw new IllegalNullKeyException("null date input");
+    if (farmID == null)
+      throw new IllegalNullKeyException("null farmID input");
+
+    String[][] result = new String[12][3];
+    long sum = 0;
+
+    for (int i = 0; i < 12; i++) {
+      result[i][0] = day[i];
+      date.set(Calendar.MONTH, i);
+      long weight = dateManager.getFarmMonthlyWeight(farmID, date);
+      sum += weight;
+      result[i][1] = Long.toString(weight);
+    }
+
+    for (int i = 0; i < 12; i++) {
+      result[i][2] = Double.toString(1.0 * Long.parseLong(result[i][1]) / sum);
+    }
+
+    return result;
   }
 
   /**
@@ -62,8 +90,35 @@ public class Manager {
    * 
    * @throws IllegalNullKeyException - if key argument is null
    */
-  public List<Record> getMonthlyReport(GregorianCalendar date) throws IllegalNullKeyException {
-    return dateManager.getMonthlyReport(date);
+  public ArrayList<ArrayList<String>> getMonthlyReport(GregorianCalendar date)
+      throws IllegalNullKeyException {
+    List<Record> records = dateManager.getMonthlyReport(date);
+    Hashtable<String, Long> monthlyRecords = new Hashtable<String, Long>();
+    long sumOfWeights = 0;
+    // Traverse all of the records to and their total weight
+    for (Record r : records) {
+      sumOfWeights += r.getWeight();
+      if (monthlyRecords.contains(r.getFarmID()))
+        monthlyRecords.put(r.getFarmID(), monthlyRecords.get(r.getFarmID()) + r.getWeight());
+      else
+        monthlyRecords.put(r.getFarmID(), Long.valueOf(r.getWeight()));
+    }
+
+    ArrayList<ArrayList<String>> reportOfMonth = new ArrayList<ArrayList<String>>();
+    // Get statistics of monthly report
+    for (String s : monthlyRecords.keySet()) {
+      ArrayList<String> tempList = new ArrayList<String>();
+      tempList.add(s);
+      tempList.add(monthlyRecords.get(s).toString());
+      tempList.add(String.valueOf((1.0 * monthlyRecords.get(s) / sumOfWeights)));
+      reportOfMonth.add(tempList);
+    }
+
+    Collections.sort(reportOfMonth, (a, b) -> {
+      return a.get(0).compareTo(b.get(0));
+    });
+
+    return reportOfMonth;
   }
 
   /**
@@ -75,8 +130,35 @@ public class Manager {
    * 
    * @throws IllegalNullKeyException - if key argument is null
    */
-  public List<Record> getAnnualReport(GregorianCalendar date) throws IllegalNullKeyException {
-    return dateManager.getAnnualReport(date);
+  public ArrayList<ArrayList<String>> getAnnualReport(GregorianCalendar date)
+      throws IllegalNullKeyException {
+    List<Record> records = dateManager.getAnnualReport(date);
+    Hashtable<String, Long> yearlyRecords = new Hashtable<String, Long>();
+    long sumOfWeights = 0;
+    // Traverse all of the records to get all FarmID and their total weight
+    for (Record r : records) {
+      sumOfWeights += r.getWeight();
+      if (yearlyRecords.contains(r.getFarmID()))
+        yearlyRecords.put(r.getFarmID(), yearlyRecords.get(r.getFarmID()) + r.getWeight());
+      else
+        yearlyRecords.put(r.getFarmID(), Long.valueOf(r.getWeight()));
+    }
+
+    ArrayList<ArrayList<String>> reportOfYear = new ArrayList<ArrayList<String>>();
+    // Get statistics of yearly report
+    for (String s : yearlyRecords.keySet()) {
+      ArrayList<String> tempList = new ArrayList<String>();
+      tempList.add(s);
+      tempList.add(yearlyRecords.get(s).toString());
+      tempList.add(String.valueOf((1.0 * yearlyRecords.get(s) / sumOfWeights)));
+      reportOfYear.add(tempList);
+    }
+
+    Collections.sort(reportOfYear, (a, b) -> {
+      return a.get(0).compareTo(b.get(0));
+    });
+
+    return reportOfYear;
   }
 
   /**
@@ -88,9 +170,35 @@ public class Manager {
    * 
    * @throws IllegalNullKeyException - if key argument is null
    */
-  public List<Record> getDateReport(GregorianCalendar start, GregorianCalendar end)
+  public ArrayList<ArrayList<String>> getDateReport(GregorianCalendar start, GregorianCalendar end)
       throws IllegalNullKeyException {
-    return dateManager.getDateRangeReport(start, end);
+    List<Record> records = dateManager.getDateRangeReport(start, end);
+    Hashtable<String, Long> rangeRecords = new Hashtable<String, Long>();
+    long sumOfWeights = 0;
+    // Traverse all of the records to get all FarmID and their total weight
+    for (Record r : records) {
+      sumOfWeights += r.getWeight();
+      if (rangeRecords.contains(r.getFarmID()))
+        rangeRecords.put(r.getFarmID(), rangeRecords.get(r.getFarmID()) + r.getWeight());
+      else
+        rangeRecords.put(r.getFarmID(), Long.valueOf(r.getWeight()));
+    }
+
+    ArrayList<ArrayList<String>> reportOfRange = new ArrayList<ArrayList<String>>();
+    // Get statistics of yearly report
+    for (String s : rangeRecords.keySet()) {
+      ArrayList<String> tempList = new ArrayList<String>();
+      tempList.add(s);
+      tempList.add(rangeRecords.get(s).toString());
+      tempList.add(String.valueOf((1.0 * rangeRecords.get(s) / sumOfWeights)));
+      reportOfRange.add(tempList);
+    }
+
+    Collections.sort(reportOfRange, (a, b) -> {
+      return a.get(0).compareTo(b.get(0));
+    });
+
+    return reportOfRange;
   }
 
   /**

@@ -17,7 +17,12 @@
 
 package application;
 
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.List;
+import java.util.NavigableSet;
+import java.util.TreeSet;
 
 /**
  * Farm - used to store information of a particular farm
@@ -30,10 +35,10 @@ public class Farm {
   private String farmID;
 
   // denotes the total milk weight provided by this farm
-  private int totalWeight;
+  private long totalWeight;
 
-  // Binary search tree storing Records for this particular farm
-  private STADT<Record> bstDate;
+  // treeset storing Records for this particular farm
+  private TreeSet<Record> farmRecords;
 
   /**
    * Default constructor
@@ -44,7 +49,7 @@ public class Farm {
     // Initialize all the variables
     this.farmID = farmID;
     this.totalWeight = 0;
-    this.bstDate = new BST<Record>();
+    this.farmRecords = new TreeSet<Record>();
   }
 
   /**
@@ -53,9 +58,36 @@ public class Farm {
    * @return list containing all records stored
    */
   public List<Record> getInOrderTraversal() {
-    return bstDate.getInOrderTraversal();
+    Iterator<Record> itr = farmRecords.iterator();
+    List<Record> list = new ArrayList<Record>();
+    while (itr.hasNext()) {
+      list.add(itr.next());
+    }
+    return list;
   }
 
+  /**
+   * Get total weight of milk in records in a given date range.
+   * 
+   * @param start - date
+   * @param end - date
+   * @return weight Sum
+   */
+  public long getTotalWeightInRange(GregorianCalendar start, GregorianCalendar end) {
+    Record startRecord = new Record(start, this.farmID, Integer.MIN_VALUE);
+    Record endRecord = new Record(end, this.farmID, Integer.MAX_VALUE);
+    long weightSum = 0;
+    NavigableSet<Record> searchResult = farmRecords.subSet(startRecord,
+        true, endRecord, true);
+    
+    for (Record r : searchResult) {
+      weightSum += r.getWeight();
+    }
+    
+    return weightSum;
+  }
+  
+  
   /**
    * Insert a Record data structure maintaining records of its specified date
    * 
@@ -65,21 +97,16 @@ public class Farm {
    * @throws DuplicateKeyException   - when the inserted Record is already in the set
    */
   public void insert(Record key) throws IllegalNullKeyException, DuplicateKeyException {
-    // Check whether the input is null or not
-    // If true, throw IllegalNullKeyException
-    if (key == null)
+
+    // TODO Auto-generated method stub
+    if (farmRecords == null)
       throw new IllegalNullKeyException("null Record input");
-
-    // Check whether the farmID presents in the hashTable
-    // If not, throw DuplicateKeyException
-    if (bstDate.contains(key))
+    if (farmRecords.contains(key))
       throw new DuplicateKeyException("duplicate Record");
-
-    // Insert the key into the BST
-    bstDate.insert(key);
-
+    farmRecords.add(key);
     // update total weight
     totalWeight += key.getWeight();
+
   }
 
   /**
@@ -97,7 +124,7 @@ public class Farm {
       throw new IllegalNullKeyException("null Record input");
 
     // Remove the record from the BST
-    boolean removeResult = bstDate.remove(key);
+    boolean removeResult = farmRecords.remove(key);
 
     // check if remove successfully, if so update total weight
     if (removeResult)
@@ -107,7 +134,7 @@ public class Farm {
   }
 
   /**
-   * Determine whether there is a Record instance having the same date as in the BST tree bstDate.
+   * Determine whether there is a Record instance having the same date as in the treeset bstDate.
    * 
    * @param RecordsOfDate - to be removed
    * 
@@ -121,27 +148,24 @@ public class Farm {
     // If true, throw IllegalNullKeyException
     if (key == null)
       throw new IllegalNullKeyException("null Record input");
-    
-    return bstDate.contains(key);
-  }
 
+    return farmRecords.contains(key);
+  }
 
   /**
    * Getter method for total weight in this day
    * 
    * @return total weight
    */
-  public int getTotalWeight() {
+  public long getTotalWeight() {
     return totalWeight;
   }
 
-
   /**
-   * Getter method for number of records stored
-   * 
-   * @return number of records stored
+   * @return number of records of this farm
    */
   public int numKeys() {
-    return bstDate.numKeys();
+    return farmRecords.size();
   }
+  
 }

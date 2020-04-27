@@ -30,7 +30,7 @@ import java.util.GregorianCalendar;
 public class Record implements Comparable<Record> {
 	private GregorianCalendar date; // date of the record
 	private String farmID; // denotes the farm of this record
-	private int weight; // the weight of milk provided by the farm specified in ID
+	private long weight; // the weight of milk provided by the farm specified in ID
 
 	/**
 	 * Constructor of the record
@@ -39,7 +39,7 @@ public class Record implements Comparable<Record> {
 	 * @param farmID - denotes the farm of this record
 	 * @param weight - the weight of milk provided by the farm specified in ID
 	 */
-	public Record(GregorianCalendar date, String farmID, int weight) {
+	public Record(GregorianCalendar date, String farmID, long weight) {
 		this.date = date;
 		this.farmID = farmID;
 		this.weight = weight;
@@ -76,14 +76,14 @@ public class Record implements Comparable<Record> {
 	/**
 	 * @return the weight
 	 */
-	public int getWeight() {
+	public long getWeight() {
 		return weight;
 	}
 
 	/**
 	 * @param weight the weight to set
 	 */
-	public void setWeight(int weight) {
+	public void setWeight(long weight) {
 		this.weight = weight;
 	}
 
@@ -114,6 +114,6 @@ public class Record implements Comparable<Record> {
 			return dateDiff;
 		
 		// FarmID the same, Date the same
-		return weight - r.weight;
+		return (int)(weight - r.weight);
 	}
 }

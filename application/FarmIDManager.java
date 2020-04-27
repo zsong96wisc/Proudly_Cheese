@@ -17,6 +17,7 @@
 
 package application;
 
+import java.util.GregorianCalendar;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -51,8 +52,7 @@ public class FarmIDManager {
    * 
    * @throws IllegalNullKeyException - if key argument is null
    */
-  public List<Record> getFarmRecords(String farmID)
-      throws IllegalNullKeyException {
+  public List<Record> getFarmRecords(String farmID) throws IllegalNullKeyException {
     // Check whether the input is null or not
     // If true, throw IllegalNullKeyException
     if (farmID == null) {
@@ -69,12 +69,25 @@ public class FarmIDManager {
     return this.hashTable.get(farmID).getInOrderTraversal();
   }
 
+  public int getFarmRecords(String farmID, GregorianCalendar start,
+      GregorianCalendar end) throws IllegalNullKeyException {
+    if (farmID == null) {
+      throw new IllegalNullKeyException("The input param is null");
+    }
+    
+    if (!this.hashTable.containsKey(farmID)) {
+      return 0;
+    }
+    
+    return 0;
+  }
+
   /**
    * Check whether a certain Farm with farmID is inside the Hash table
    * 
    * @param farmID - the farmID to be searched
    * 
-   * @return - whether the farm with farmID is in the Hash table 
+   * @return - whether the farm with farmID is in the Hash table
    * 
    * @throws IllegalNullKeyException - if key argument is null
    */
@@ -91,10 +104,10 @@ public class FarmIDManager {
   /**
    * Insert the Farm record into the hash Table
    * 
-   * @param record - the record to be inserted 
+   * @param record - the record to be inserted
    * 
    * @throws IllegalNullKeyException - if key argument is null
-   * @throws DuplicateKeyException - if the key is duplicated
+   * @throws DuplicateKeyException   - if the key is duplicated
    */
   public void addFarmRecord(Record record) throws IllegalNullKeyException, DuplicateKeyException {
     // Check whether the input is null or not
@@ -104,11 +117,11 @@ public class FarmIDManager {
     }
 
     // Check whether the farm with respected to the record is in the hash Table
-    // If not, create a new Farm object and insert into the Hash Table 
+    // If not, create a new Farm object and insert into the Hash Table
     if (!contains(record.getFarmID())) {
       this.hashTable.put(record.getFarmID(), new Farm(record.getFarmID()));
     }
-    
+
     // Insert the record into the Farm object
     this.hashTable.get(record.getFarmID()).insert(record);
     // Increment the count
@@ -118,7 +131,7 @@ public class FarmIDManager {
   /**
    * Delete the Farm record into the hash Table
    * 
-   * @param record - the record to be removed 
+   * @param record - the record to be removed
    * 
    * @return whether the record is successfully removed or not
    * 
@@ -132,7 +145,7 @@ public class FarmIDManager {
     }
 
     // Check whether the farm with respected to the record is in the hash Table
-    // If not, return false 
+    // If not, return false
     if (!contains(record.getFarmID())) {
       return false;
     }
@@ -145,7 +158,7 @@ public class FarmIDManager {
       // Else, remove the record from the farm
       this.hashTable.get(record.getFarmID()).remove(record);
     }
-    
+
     // Decrement the count
     this.totalNumberOfRecords--;
     return true;
@@ -154,13 +167,13 @@ public class FarmIDManager {
   /**
    * Change the Farm record from the hash Table
    * 
-   * @param oldRecord - the record to be removed 
+   * @param oldRecord - the record to be removed
    * @param newRecord - the record to be inserted
-   *  
+   * 
    * @return whether the record is successfully changed or not
    * 
    * @throws IllegalNullKeyException - if key argument is null
-   * @throws DuplicateKeyException - if the key is duplicated
+   * @throws DuplicateKeyException   - if the key is duplicated
    */
   public boolean changeFarmRecord(Record oldRecord, Record newRecord)
       throws IllegalNullKeyException, DuplicateKeyException {
@@ -169,7 +182,7 @@ public class FarmIDManager {
     if (oldRecord == null || newRecord == null) {
       throw new IllegalNullKeyException("The input param is null");
     }
-    
+
     // Remove the record from the table and store the result
     boolean result = removeFarmRecord(oldRecord);
     // If there is a record successfully removed, add the new record
@@ -183,7 +196,7 @@ public class FarmIDManager {
     }
     return result;
   }
-  
+
   /**
    * Retrieve the number of records in the hash table
    * 
@@ -192,7 +205,7 @@ public class FarmIDManager {
   public int getTotalNumberOfRecords() {
     return this.totalNumberOfRecords;
   }
-  
+
   /**
    * Retrieve the number of farms in the hash table
    * 

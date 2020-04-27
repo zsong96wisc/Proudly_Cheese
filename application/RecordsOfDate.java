@@ -1,9 +1,8 @@
 /**
  * RecordsOfDate.java created by aTeam 147 in Proudly_Cheese project
  * 
- * Author: Hairong Yin (hyin55@wisc.edu) (Lec 002), Haonan Shen
- * (hshen37@wisc.edu) (Lec 001), Xiaoxi Sun (xsun279@wisc.edu) (Lec 002), Zhiwei
- * Song (zsong96@wisc.edu) (Lec 002)
+ * Author: Hairong Yin (hyin55@wisc.edu) (Lec 002), Haonan Shen (hshen37@wisc.edu) (Lec 001), Xiaoxi
+ * Sun (xsun279@wisc.edu) (Lec 002), Zhiwei Song (zsong96@wisc.edu) (Lec 002)
  * 
  * Date: 04/19/2020
  * 
@@ -19,7 +18,10 @@
 package application;
 
 import java.util.GregorianCalendar;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.TreeSet;
 
 /**
  * RecordsOfDate - used to store Records based on Date
@@ -30,20 +32,23 @@ public class RecordsOfDate {
 
   // Date of this records set
   private GregorianCalendar g;
-  // BST of record storing all records of this specific date
-  private STADT<Record> recordBST;
+  // tree set of records storing all records of this specific date
+  private TreeSet<Record> recordSet;
   // int field that stores total weights of the day
   private int totalWeight;
+  // int field storing total record numbers
+  private int numKeys;
 
   /**
    * Constructor initializing fields
    * 
-   * @param date - date that this records set stores
+   * @param g - date that this records set stores
    */
   public RecordsOfDate(GregorianCalendar g) {
     this.g = g;
-    this.recordBST = new BST<>();
+    this.recordSet = new TreeSet<Record>();
     this.totalWeight = 0;
+    this.numKeys = 0;
   }
 
   /**
@@ -53,15 +58,15 @@ public class RecordsOfDate {
    * @throws IllegalNullKeyException - when input is null
    * @throws DuplicateKeyException   - when input already exists in the BST
    */
-  public void insert(Record record)
-      throws IllegalNullKeyException, DuplicateKeyException {
+  public void insert(Record record) throws IllegalNullKeyException, DuplicateKeyException {
     if (record == null)
       throw new IllegalNullKeyException("null Record input");
-    if (recordBST.contains(record))
+    if (recordSet.contains(record))
       throw new DuplicateKeyException("duplicate Record");
-    recordBST.insert(record);
-    // update total weight
+    recordSet.add(record);
+    // update total weight and number
     totalWeight += record.getWeight();
+    numKeys++;
   }
 
   /**
@@ -74,10 +79,12 @@ public class RecordsOfDate {
   public boolean remove(Record record) throws IllegalNullKeyException {
     if (record == null)
       throw new IllegalNullKeyException("null Record input");
-    boolean removeResult = recordBST.remove(record);
-    // check if remove successfully, if so update total weight
-    if (removeResult)
+    boolean removeResult = recordSet.remove(record);
+    // check if remove successfully, if so update total weight and number
+    if (removeResult) {
       totalWeight -= record.getWeight();
+      numKeys--;
+    }
     return removeResult;
   }
 
@@ -91,16 +98,16 @@ public class RecordsOfDate {
   public boolean contains(Record record) throws IllegalNullKeyException {
     if (record == null)
       throw new IllegalNullKeyException("null Record input");
-    return recordBST.contains(record);
+    return recordSet.contains(record);
   }
 
   /**
-   * This method is used to list all records stored through in-order traversal
+   * Getter method for record set
    * 
-   * @return list containing all records stored
+   * @return tree set of records stored
    */
-  public List<Record> getInOrderTraversal() {
-    return recordBST.getInOrderTraversal();
+  public TreeSet<Record> getRecordSet() {
+    return recordSet;
   }
 
   /**
@@ -122,6 +129,21 @@ public class RecordsOfDate {
   }
 
   /**
+   * This method is used to get all records stored by using iterator
+   * 
+   * @return list of records stored
+   */
+  public List<Record> getTraversal() {
+    Iterator<Record> setIterator = recordSet.iterator();
+    List<Record> result = new LinkedList<Record>();
+    while (setIterator.hasNext()) {
+      Record element = (Record) setIterator.next();
+      result.add(element);
+    }
+    return result;
+  }
+
+  /**
    * Setter method for date
    * 
    * @param date the date to set
@@ -136,6 +158,6 @@ public class RecordsOfDate {
    * @return number of records stored
    */
   public int numKeys() {
-    return recordBST.numKeys();
+    return numKeys;
   }
 }
