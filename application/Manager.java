@@ -49,8 +49,7 @@ public class Manager {
    * 
    * @throws IllegalNullKeyException - if key argument is null
    */
-  public List<Record> getFarmReport(String farmID)
-      throws IllegalNullKeyException {
+  public List<Record> getFarmReport(String farmID) throws IllegalNullKeyException {
     return farmIDManager.getFarmRecords(farmID);
   }
 
@@ -89,8 +88,9 @@ public class Manager {
    * 
    * @throws IllegalNullKeyException - if key argument is null
    */
-  public List<Record> getDateReport(GregorianCalendar date) throws IllegalNullKeyException {
-    return null;
+  public List<Record> getDateReport(GregorianCalendar start, GregorianCalendar end)
+      throws IllegalNullKeyException {
+    return dateManager.getDateRangeReport(start, end);
   }
 
   /**
@@ -121,7 +121,7 @@ public class Manager {
    * @param r - the record to be added
    * 
    * @throws IllegalNullKeyException - if key argument is null
-   * @throws DuplicateKeyException - if the key is duplicated
+   * @throws DuplicateKeyException   - if the key is duplicated
    */
   public void addRecords(Record r) throws IllegalNullKeyException, DuplicateKeyException {
     farmIDManager.addFarmRecord(r);
@@ -157,14 +157,15 @@ public class Manager {
    * @return whether the record is successfully changed or not
    * 
    * @throws IllegalNullKeyException - if key argument is null
-   * @throws DuplicateKeyException - if the key is duplicated
+   * @throws DuplicateKeyException   - if the key is duplicated
    */
   public boolean changeRecords(Record oldRecord, Record newRecord)
       throws IllegalNullKeyException, DuplicateKeyException {
+    // get the result of the change operation
     boolean result1 = farmIDManager.changeFarmRecord(oldRecord, newRecord);
-    // boolean result2 = dateManager.changeFarmRecord(oldRecord, newRecord);
+    boolean result2 = dateManager.changeFarmRecord(oldRecord, newRecord);
     // Check the two results
-    if (result1) {
+    if (result1 && result2) {
       return true;
     }
     return false;

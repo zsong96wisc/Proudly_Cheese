@@ -167,7 +167,7 @@ public class FarmIDManager {
     // Check whether the input is null or not
     // If true, throw IllegalNullKeyException
     if (oldRecord == null || newRecord == null) {
-      return false;
+      throw new IllegalNullKeyException("The input param is null");
     }
     
     // Remove the record from the table and store the result
