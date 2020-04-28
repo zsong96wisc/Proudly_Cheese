@@ -300,11 +300,9 @@ public class Manager {
    */
   public void importList(List<Record> recordList)
       throws IllegalNullKeyException, DuplicateKeyException {
-    // add each of record in the list to storage
-    // remove record from list after insertion
+    // add each of record in the list to storage   
     for (Record record : recordList) {
       addRecords(record);
-      recordList.remove(record);
     }
   }
 
