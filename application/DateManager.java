@@ -42,15 +42,30 @@ public class DateManager {
     // TreeSet will sort records of date set based on its date
     this.rodSet = new TreeSet<RecordsOfDate>(new Comparator<RecordsOfDate>() {
       @Override
+      /**
+       * override the compare method
+       * 
+       * @param rod1 - the first RecordsOfDate to be compared
+       * @param rod2 - the second RecordsOfDate to be compared
+       * 
+       * @return the result of comparison
+       * 
+       * @override Override method in Comparable
+       */
       public int compare(RecordsOfDate rod1, RecordsOfDate rod2) {
+        // Get the difference in Year
         int yearDiff = rod1.getDate().get(Calendar.YEAR) - rod2.getDate().get(Calendar.YEAR);
+        // Check the difference
         if (yearDiff != 0)
           return yearDiff;
 
+        // Get the difference in Month
         int monthDiff = rod1.getDate().get(Calendar.MONTH) - rod2.getDate().get(Calendar.MONTH);
+        // Check the difference
         if (monthDiff != 0)
           return monthDiff;
 
+        // Return the difference in date
         return rod1.getDate().get(Calendar.DATE) - rod2.getDate().get(Calendar.DATE);
       }
     });
@@ -63,7 +78,9 @@ public class DateManager {
    * 
    * @param oldRecord - the record to be removed
    * @param newRecord - the record to be inserted
+   * 
    * @return whether the record is successfully changed or not
+   * 
    * @throws IllegalNullKeyException - if key argument is null
    * @throws DuplicateKeyException   - if the key is duplicated
    */
@@ -113,6 +130,7 @@ public class DateManager {
       searchResult.first().insert(record);
     }
 
+    // Increment the count
     totalNumberOfRecords += 1;
   }
 
@@ -120,10 +138,13 @@ public class DateManager {
    * Remove a Record instance
    * 
    * @param record - to be removed
+   * 
    * @returns true means a successful removal. false means a removal failure.
+   * 
    * @throws IllegalNullKeyException - if the given record is null
    */
   public boolean removeFarmRecord(Record record) throws IllegalNullKeyException {
+    // Check the parameter
     if (record == null)
       throw new IllegalNullKeyException("null record input");
 
@@ -149,7 +170,9 @@ public class DateManager {
    * Get the RecordsOfDate instance having the date specified in the parameter.
    * 
    * @param date - binded to RecordsOfDate to be detected
+   * 
    * @return the RecordsOfDate having the same date. Return null if no such RecordsOfDate is found
+   * 
    * @throws IllegalNullKeyException - if the date is null
    */
   public List<Record> getMonthlyReport(GregorianCalendar date) throws IllegalNullKeyException {
@@ -182,7 +205,9 @@ public class DateManager {
    * Get the RecordsOfDate instance having the date specified in the parameter.
    * 
    * @param date - binded to RecordsOfDate to be detected
+   * 
    * @return the RecordsOfDate having the same date. Return null if no such RecordsOfDate is found
+   * 
    * @throws IllegalNullKeyException - if the date is null
    */
   public List<Record> getAnnualReport(GregorianCalendar date) throws IllegalNullKeyException {
@@ -217,6 +242,7 @@ public class DateManager {
    * 
    * @param start - date
    * @param end   - date
+   * 
    * @return Records in a List
    */
   public List<Record> getDateRangeReport(GregorianCalendar start, GregorianCalendar end) {
@@ -240,10 +266,22 @@ public class DateManager {
     }
   }
 
+  /**
+   * Retrieve the total weight of a certain farm in a month
+   * 
+   * @param farmID - the farm to be search
+   * @param date - the month to be searched
+   * 
+   * @return - total weight of that farm
+   * 
+   * @throws IllegalNullKeyException - if the date is null
+   */
   public long getFarmMonthlyWeight(String farmID, GregorianCalendar date)
       throws IllegalNullKeyException {
-    if (date == null) // if the date is null
+    // if the date is null
+    if (date == null) 
       throw new IllegalNullKeyException("null date input");
+    // if the farmID is null
     if (farmID == null)
       throw new IllegalNullKeyException("null farmID input");
 
@@ -262,10 +300,13 @@ public class DateManager {
       // Traverse the search result
       long totolWeight = 0;
       for (RecordsOfDate rod : searchResult) {
+        // Create the MAX and MIN record 
         Record startRecord = new Record(rod.getDate(), farmID, 0);
         Record endRecord = new Record(rod.getDate(), farmID, Long.MAX_VALUE);
+        // Retrieve the subset
         NavigableSet<Record> searchedResult =
             rod.getRecordSet().subSet(startRecord, true, endRecord, true);
+        // Loop through the set to get the weight
         for (Record record : searchedResult) {
           totolWeight += record.getWeight();
         }
@@ -306,9 +347,11 @@ public class DateManager {
    * Given a date, return the start date of the year and end date of the year
    * 
    * @param date - the given date
+   * 
    * @return GregorianCalendar[] storing start at 0 and end at 1
    */
   private GregorianCalendar[] getYearStartAndEnd(GregorianCalendar date) {
+    // Create two instances of the start and end of a year
     GregorianCalendar start = new GregorianCalendar();
     GregorianCalendar end = new GregorianCalendar();
     start.set(date.get(Calendar.YEAR), 1, 1, 0, 0, 0);
@@ -318,6 +361,7 @@ public class DateManager {
     end.set(Calendar.MONTH, Calendar.DECEMBER);
     end.set(Calendar.DATE, 31);
 
+    // Store in an array and return
     return new GregorianCalendar[] {start, end};
   }
 
@@ -325,9 +369,11 @@ public class DateManager {
    * Given a date, return the start date of the month and end date of the month
    * 
    * @param date - the given date
+   * 
    * @return GregorianCalendar[] storing start at 0 and end at 1
    */
   private GregorianCalendar[] getMonthStartAndEnd(GregorianCalendar date) {
+    // Create two instances of the start and end of a month
     GregorianCalendar start = new GregorianCalendar();
     GregorianCalendar end = new GregorianCalendar();
     start.set(date.get(Calendar.YEAR), date.get(Calendar.MONTH), 1, 0, 0, 0);
@@ -335,6 +381,7 @@ public class DateManager {
     end.set(date.get(Calendar.YEAR), date.get(Calendar.MONTH), getNumberOfDaysInMonth(date), 0, 0,
         0);
 
+    // Store in an array and return
     return new GregorianCalendar[] {start, end};
   }
 
@@ -342,9 +389,11 @@ public class DateManager {
    * Given a year and a month, return the number of days in a month
    * 
    * @param date - given date
+   * 
    * @return the number of days in a month
    */
   private static int getNumberOfDaysInMonth(GregorianCalendar date) {
+    // Retrieve the number of days in a month
     Calendar lastDay = Calendar.getInstance();
     lastDay.set(Calendar.YEAR, date.get(Calendar.YEAR));
     lastDay.set(Calendar.MONTH, date.get(Calendar.MONTH));

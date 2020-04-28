@@ -17,7 +17,6 @@
 
 package application;
 
-import java.util.GregorianCalendar;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -67,19 +66,6 @@ public class FarmIDManager {
 
     // Return the in order traversal of the particular farm
     return this.hashTable.get(farmID).getInOrderTraversal();
-  }
-
-  public int getFarmRecords(String farmID, GregorianCalendar start,
-      GregorianCalendar end) throws IllegalNullKeyException {
-    if (farmID == null) {
-      throw new IllegalNullKeyException("The input param is null");
-    }
-    
-    if (!this.hashTable.containsKey(farmID)) {
-      return 0;
-    }
-    
-    return 0;
   }
 
   /**

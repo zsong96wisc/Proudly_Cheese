@@ -58,8 +58,10 @@ public class Manager {
    */
   public String[][] getFarmReport(String farmID, GregorianCalendar date)
       throws IllegalNullKeyException {
-    if (date == null) // if the date is null
+    // if the date is null
+    if (date == null) 
       throw new IllegalNullKeyException("null date input");
+    // if the farmID is null
     if (farmID == null)
       throw new IllegalNullKeyException("null farmID input");
 
@@ -92,6 +94,7 @@ public class Manager {
    */
   public ArrayList<ArrayList<String>> getMonthlyReport(GregorianCalendar date)
       throws IllegalNullKeyException {
+    // 
     List<Record> records = dateManager.getMonthlyReport(date);
     Hashtable<String, Long> monthlyRecords = new Hashtable<String, Long>();
     long sumOfWeights = 0;
