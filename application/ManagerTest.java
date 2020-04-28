@@ -62,10 +62,7 @@ class ManagerTest {
       Record record = new Record(date, "Farm 001", 13);
       m.addRecords(record);
       
-      date = new GregorianCalendar(2013, 0, 1, 0, 0, 0);
-      
       String[][] report = m.getFarmReport("Farm 001", date);
-      System.out.println(report[0][2]);
       assert report[0][1].equals("13");
       assert report[0][2].equals("1.0");
       
