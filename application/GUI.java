@@ -698,26 +698,6 @@ public class GUI {
     // Define a label
     Label title = new Label("\nTOTAL MILK\n WEIGHT");
 
-    // Create two circles to display the result
-    Circle circle1 = new Circle(40.0);
-    circle1.setFill(Color.rgb(255, 255, 0, 0.7));
-    circle1.setStroke(Color.BLACK);
-    Text amount = new Text("36743");
-    text.setBoundsType(TextBoundsType.VISUAL);
-    StackPane stack = new StackPane();
-    stack.getChildren().addAll(circle1, amount);
-
-    Circle circle2 = new Circle(40.0);
-    circle2.setFill(Color.rgb(255, 255, 0, 0.7));
-    circle2.setStroke(Color.BLACK);
-    Text percent = new Text("65%");
-    percent.setBoundsType(TextBoundsType.VISUAL);
-    StackPane stack2 = new StackPane();
-    stack2.getChildren().addAll(circle2, percent);
-
-    // Add the components to the VBox
-    vboxCL.getChildren().addAll(title, stack, stack2);
-
     // The result to be displayed in the list
     String[][] result = new String[3][];
     try {
@@ -728,6 +708,26 @@ public class GUI {
     } catch (IllegalNullKeyException e1) {
       displayWarningMessage(WarningIndex.ILLEGALNULLKEYEXCEPTION);
     }
+
+    // Create two circles to display the result
+    Circle circle1 = new Circle(40.0);
+    circle1.setFill(Color.rgb(255, 255, 0, 0.7));
+    circle1.setStroke(Color.BLACK);
+    Text amount = new Text(result[0][1]);
+    text.setBoundsType(TextBoundsType.VISUAL);
+    StackPane stack = new StackPane();
+    stack.getChildren().addAll(circle1, amount);
+
+    Circle circle2 = new Circle(40.0);
+    circle2.setFill(Color.rgb(255, 255, 0, 0.7));
+    circle2.setStroke(Color.BLACK);
+    Text percent = new Text(result[0][2]);
+    percent.setBoundsType(TextBoundsType.VISUAL);
+    StackPane stack2 = new StackPane();
+    stack2.getChildren().addAll(circle2, percent);
+
+    // Add the components to the VBox
+    vboxCL.getChildren().addAll(title, stack, stack2);
 
     // Create Labels and VBoxs layout
     Label farmDateLabel = new Label("Date");
@@ -877,16 +877,25 @@ public class GUI {
       getMainScene(primaryStage);
     });
 
+    ArrayList<ArrayList<String>> reportOfYear = new ArrayList<ArrayList<String>>();
     try {
       GregorianCalendar date = new GregorianCalendar(year, 1, 1, 0, 0, 0);
-      ArrayList<ArrayList<String>> reportOfYear = manager.getAnnualReport(date);
+      reportOfYear = manager.getAnnualReport(date);
     } catch (IllegalNullKeyException e1) {
       displayWarningMessage(WarningIndex.ILLEGALNULLKEYEXCEPTION);
     }
 
-    // The result to be displayed in the list
-    String[][] result = {{"Farm ID", "Farm 123", "Farm 124", "Farm 125"},
-        {"Total Weight", "2367", "463", "346"}, {"Percent", "74.8%", "14.6%", "10.9%"}};
+    if (reportOfYear.size() == 0) {
+      displayWarningMessage(WarningIndex.ILLEGALARGUMENTEXCEPTION);
+    }
+
+    String result[][] = new String[reportOfYear.size()][reportOfYear.get(0).size()];
+
+    for (int i = 0; i < reportOfYear.size(); i++) {
+      for (int j = 0; j < reportOfYear.get(0).size(); j++) {
+        result[i][j] = reportOfYear.get(i).get(j);
+      }
+    }
 
     // Create three ListViews
     ListView<String> farmIDList = getListView(result[0], 100, 150);

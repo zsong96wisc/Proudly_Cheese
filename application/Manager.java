@@ -65,7 +65,7 @@ public class Manager {
    */
   public String[][] getFarmReport(String farmID, GregorianCalendar date)
       throws IllegalNullKeyException {
-    // if the date is null
+    // if the date is null 
     if (date == null)
       throw new IllegalNullKeyException("null date input");
     // if the farmID is null
@@ -77,8 +77,9 @@ public class Manager {
 
     for (int i = 0; i < 12; i++) {
       result[i][0] = day[i];
-      date.set(Calendar.MONTH, i);
-      long weight = dateManager.getFarmMonthlyWeight(farmID, date);
+      GregorianCalendar newMonth = new GregorianCalendar(date.get(Calendar.YEAR), 0, 1, 0, 0, 0);
+      newMonth.set(Calendar.MONTH, i);
+      long weight = dateManager.getFarmMonthlyWeight(farmID, newMonth);
       sum += weight;
       result[i][1] = Long.toString(weight);
     }
