@@ -190,7 +190,7 @@ public class DateManager {
 
     // test search result
     if (searchResult.isEmpty()) {
-      return null;
+      return new LinkedList<Record>();
     } else {
       // Traverse the search result
       List<Record> monthlyReport = new LinkedList<Record>();
@@ -226,7 +226,7 @@ public class DateManager {
 
     // test search result
     if (searchResult.isEmpty()) {
-      return null;
+      return new LinkedList<Record>();
     } else {
       // Traverse the search result
       List<Record> annualReport = new LinkedList<Record>();
@@ -255,7 +255,7 @@ public class DateManager {
 
     // test search result
     if (searchResult.isEmpty()) {
-      return null;
+      return new LinkedList<Record>();
     } else {
       // Traverse the search result
       List<Record> annualReport = new LinkedList<Record>();
