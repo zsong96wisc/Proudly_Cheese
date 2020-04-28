@@ -43,7 +43,10 @@ public class Record implements Comparable<Record> {
    */
   public Record(GregorianCalendar date, String farmID, long weight) {
     // Initialize all the variables with parameters
-    this.date = date;
+    this.date = (GregorianCalendar) GregorianCalendar.getInstance();
+    this.date.set(date.get(GregorianCalendar.YEAR), 
+        date.get(GregorianCalendar.MONTH), 
+        date.get(GregorianCalendar.DATE), 0, 0, 0);
     this.farmID = farmID;
     this.weight = weight;
   }

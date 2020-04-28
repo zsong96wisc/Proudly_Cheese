@@ -395,5 +395,4 @@ public class Manager {
       IllegalArgumentException, IllegalRecordException, ParseException {
     return this.fileManager.inputRecord(farmID, date, weight);
   }
-
 }

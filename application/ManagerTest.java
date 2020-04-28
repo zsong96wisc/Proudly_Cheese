@@ -290,4 +290,154 @@ class ManagerTest {
     }
   }
   
+  /**
+   * Test getNumberOfRecords() and getNumberOfFarms() 
+   * return correct total numbers
+   */
+  @Test
+  public void test008_get_numbers() {
+    try {
+      for (int i = 0; i < 2; i++) {
+        // Insert record into 2 years and each month
+        for (int j = 0; j < 12; j++) {
+          GregorianCalendar date =
+              new GregorianCalendar(2011 + i, 0, j + 1, 0, 0, 0);
+          date.setLenient(false);
+          m.addRecords(new Record(date, "Farm 001", i + 1));
+          m.addRecords(new Record(date, "Farm 002", 2*(i + 1)));
+          m.addRecords(new Record(date, "Farm 003", 3*(i + 1)));
+        }
+      }
+      assert m.getNumberOfFarms() == 3;
+      assert m.getNumberOfRecords() == 72;
+    } catch (Exception e) {
+      fail("Unkonw Exception Thrown");
+    }
+  }
+  
+  /**
+   * Test removeRecords() can successfully remove the specified record;
+   */
+  @Test
+  public void test009_remove_records() {
+    try {
+      for (int i = 0; i < 2; i++) {
+        // Insert record into 2 years and each month
+        for (int j = 0; j < 12; j++) {
+          GregorianCalendar date =
+              new GregorianCalendar(2011 + i, 0, j + 1, 0, 0, 0);
+          date.setLenient(false);
+          m.addRecords(new Record(date, "Farm 001", i + 1));
+          m.addRecords(new Record(date, "Farm 002", 2*(i + 1)));
+          m.addRecords(new Record(date, "Farm 003", 3*(i + 1)));
+        }
+      }
+      
+      for (int i = 0; i < 2; i++) {
+        // Insert record into 2 years and each month
+        for (int j = 0; j < 12; j++) {
+          GregorianCalendar date =
+              new GregorianCalendar(2011 + i, 0, j + 1, 0, 0, 0);
+          date.setLenient(false);
+          
+          // All removal should succeed
+          assert m.removeRecords(new Record(date, "Farm 001", i + 1));
+          assert m.removeRecords(new Record(date, "Farm 002", 2*(i + 1)));
+          assert m.removeRecords(new Record(date, "Farm 003", 3*(i + 1)));
+        }
+        assert m.getNumberOfRecords() == (1-i)*36;
+      }
+      assert m.getNumberOfFarms() == 0;
+      
+      for (int i = 0; i < 2; i++) {
+        // Insert record into 2 years and each month
+        for (int j = 0; j < 12; j++) {
+          GregorianCalendar date =
+              new GregorianCalendar(2011 + i, 0, j + 1, 0, 0, 0);
+          date.setLenient(false);
+          
+          // All removal should fail
+          assert !m.removeRecords(new Record(date, "Farm 001", i + 1));
+          assert !m.removeRecords(new Record(date, "Farm 002", 2*(i + 1)));
+          assert !m.removeRecords(new Record(date, "Farm 003", 3*(i + 1)));
+        }
+        
+      }
+      
+    } catch (Exception e) {
+      fail("Unkonw Exception Thrown");
+    }
+  }
+  
+  /**
+   * Test removeRecords() throws exceptions as specified
+   */
+  @Test
+  public void test010_remove_records_throw_exceptions() {
+    try {
+      m.removeRecords(null);
+      fail("removeRecords should throw IllegalNullKeyException");
+    } catch(IllegalNullKeyException e) {
+      // Expected
+    } catch (Exception e) {
+      fail("Unkonw Exception Thrown");
+    }
+  }
+  
+  /**
+   * Test addRecords() throws exceptions as specified;
+   */
+  @Test
+  public void test011_add_records_throw_exceptions() {
+    try {
+      try { // throw IllegalNullKeyException
+        m.addRecords(null);
+      } catch (IllegalNullKeyException e) {
+        // expected
+      }
+      assert m.getNumberOfFarms() == 0;
+      assert m.getNumberOfRecords() == 0;
+      for (int i = 0; i < 2; i++) {
+        // Insert record into 2 years and each month
+        for (int j = 0; j < 12; j++) {
+          GregorianCalendar date =
+              new GregorianCalendar(2011 + i, 0, j + 1, 0, 0, 0);
+          date.setLenient(false);
+          m.addRecords(new Record(date, "Farm 001", i + 1));
+          m.addRecords(new Record(date, "Farm 002", 2*(i + 1)));
+          m.addRecords(new Record(date, "Farm 003", 3*(i + 1)));
+        }
+      }
+      // Do the same procedures as the above. Each time there 
+      // would be an DuplicateKeyException thrown
+      for (int i = 0; i < 2; i++) {
+        // Insert record into 2 years and each month
+        for (int j = 0; j < 12; j++) {
+          GregorianCalendar date =
+              new GregorianCalendar(2011 + i, 0, j + 1, 0, 0, 0);
+          date.setLenient(false);
+          try {
+            m.addRecords(new Record(date, "Farm 001", i + 1));
+          } catch (DuplicateKeyException e) {
+            // Expected
+          }
+          try {
+            m.addRecords(new Record(date, "Farm 002", 2*(i + 1)));
+          } catch (DuplicateKeyException e) {
+            // Expected
+          }
+          try {
+            m.addRecords(new Record(date, "Farm 003", 3*(i + 1)));
+          } catch (DuplicateKeyException e) {
+            // Expected
+          }
+        }
+      }
+      // Numbers should not change
+      assert m.getNumberOfFarms() == 3;
+      assert m.getNumberOfRecords() == 72;
+    } catch (Exception e) {
+      fail("Unkonw Exception Thrown");
+    }
+  }
 }
