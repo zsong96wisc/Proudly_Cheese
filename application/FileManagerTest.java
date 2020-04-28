@@ -72,11 +72,17 @@ public class FileManagerTest {
 		}
 	}
 
+	/**
+	 * Test if correctly import valid file
+	 */
 	@Test
 	public void test002_importFile_valid() throws Exception {
 		List<Record> test = fm.importFile(new File("correctSample.csv"));
 	}
 
+	/**
+	 * Test the correct exception is thrown when missing date
+	 */
 	@Test
 	public void test003_importFile_missingDate() {
 		try {
@@ -88,6 +94,9 @@ public class FileManagerTest {
 		fail("ParseException is not thrown as expected.");
 	}
 
+	/**
+	 * Test the correct exception is thrown when missing weight
+	 */
 	@Test
 	public void test004_importFile_missingWeight() {
 		try {
@@ -99,6 +108,9 @@ public class FileManagerTest {
 		fail("NumberFormatException is not thrown as expected.");
 	}
 
+	/**
+	 * Test the correct exception is thrown when weight invalid
+	 */
 	@Test
 	public void test005_importFile_invalidWeight() {
 		try {
@@ -110,6 +122,9 @@ public class FileManagerTest {
 		fail("NumberFormatException is not thrown as expected.");
 	}
 
+	/**
+	 * Test the correct exception is thrown when invalid date
+	 */
 	@Test
 	public void test006_importFile_invalidDate() {
 		try {
@@ -121,6 +136,9 @@ public class FileManagerTest {
 		fail("ParseException is not thrown as expected.");
 	}
 
+	/**
+	 * Test the correct exception is thrown when export to non-existing file
+	 */
 	@Test
 	public void test007_exportFile_invalid() throws Exception {
 		List<Record> test = fm.importFile(new File("correctSample.csv"));
@@ -131,12 +149,18 @@ public class FileManagerTest {
 		}
 	}
 
+	/**
+	 * Test if export correctly
+	 */
 	@Test
 	public void test008_exportFile_valid_Jan() throws Exception {
 		List<Record> test = fm.importFile(new File("correctSample.csv"));
 		fm.exportFile(test, new File("exportTester"));
 	}
 
+	/**
+	 * Test if export correctly
+	 */
 	@Test
 	public void test009_exportFile_valid_Sept() throws Exception {
 		List<Record> test = fm.importFile(new File("correctSampleSept.csv"));
