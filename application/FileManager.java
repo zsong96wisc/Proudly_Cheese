@@ -87,7 +87,7 @@ public class FileManager {
 
     GregorianCalendar cal;
     // Parse String to date
-    DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
+    DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
     Date date = df.parse(recordInStrings[0]);
     cal = (GregorianCalendar) GregorianCalendar.getInstance();
     cal.setTime(date);
@@ -112,7 +112,8 @@ public class FileManager {
     for (Record record : list) {
       // Write the records into the file
       writer.print(record.getDate().get(Calendar.YEAR) + "-");
-      writer.print(record.getDate().get(Calendar.MONTH) + "-");
+      int actualMonth = record.getDate().get(Calendar.MONTH) + 1;
+      writer.print(actualMonth + "-");
       writer.print(record.getDate().get(Calendar.DATE) + ",");
       writer.print(record.getFarmID() + ",");
       writer.println(record.getWeight());
