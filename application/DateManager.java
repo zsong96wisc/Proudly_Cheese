@@ -111,11 +111,19 @@ public class DateManager {
    * @throws IllegalNullKeyException - when the given parameter is null
    * @throws DuplicateKeyException   - when the inserted RecordsOfDate is already in the set
    */
-  public void addFarmRecord(Record record) throws IllegalNullKeyException, DuplicateKeyException {
-
+  public void addFarmRecord(Record record) 
+      throws IllegalNullKeyException, DuplicateKeyException {
     if (record == null) // parameter is null
       throw new IllegalNullKeyException("insert null reference");
-    RecordsOfDate tempRecordsOfDate = new RecordsOfDate(record.getDate());
+    
+    // Date belongs to Records of Date
+    GregorianCalendar rodDate = 
+        (GregorianCalendar) GregorianCalendar.getInstance();
+    rodDate.set(record.getDate().get(GregorianCalendar.YEAR), 
+        record.getDate().get(GregorianCalendar.MONTH), 
+        record.getDate().get(GregorianCalendar.DATE), 0, 0, 0);
+    
+    RecordsOfDate tempRecordsOfDate = new RecordsOfDate(rodDate);
     NavigableSet<RecordsOfDate> searchResult =
         rodSet.subSet(tempRecordsOfDate, true, tempRecordsOfDate, true);
 
@@ -147,8 +155,14 @@ public class DateManager {
     // Check the parameter
     if (record == null)
       throw new IllegalNullKeyException("null record input");
-
-    RecordsOfDate tempRecordsOfDate = new RecordsOfDate(record.getDate());
+    // Date belongs to Records of Date
+    GregorianCalendar rodDate = 
+        (GregorianCalendar) GregorianCalendar.getInstance();
+    rodDate.set(record.getDate().get(GregorianCalendar.YEAR), 
+        record.getDate().get(GregorianCalendar.MONTH), 
+        record.getDate().get(GregorianCalendar.DATE), 0, 0, 0);
+    
+    RecordsOfDate tempRecordsOfDate = new RecordsOfDate(rodDate);
     // The search result
     NavigableSet<RecordsOfDate> searchResult =
         rodSet.subSet(tempRecordsOfDate, true, tempRecordsOfDate, true);
