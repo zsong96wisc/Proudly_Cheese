@@ -28,11 +28,11 @@ import java.util.GregorianCalendar;
  */
 public class Record implements Comparable<Record> {
   // date of the record
-  private GregorianCalendar date;
+  private final GregorianCalendar date;
   // denotes the farm of this record
-  private String farmID;
+  private final String farmID;
   // the weight of milk provided by the farm specified in ID
-  private long weight;
+  private final long weight;
 
   /**
    * Constructor of the record
@@ -56,13 +56,6 @@ public class Record implements Comparable<Record> {
   }
 
   /**
-   * @param date the date to set
-   */
-  public void setDate(GregorianCalendar date) {
-    this.date = date;
-  }
-
-  /**
    * @return the farmID
    */
   public String getFarmID() {
@@ -70,24 +63,10 @@ public class Record implements Comparable<Record> {
   }
 
   /**
-   * @param farmID the farmID to set
-   */
-  public void setFarmID(String farmID) {
-    this.farmID = farmID;
-  }
-
-  /**
    * @return the weight
    */
   public long getWeight() {
     return weight;
-  }
-
-  /**
-   * @param weight the weight to set
-   */
-  public void setWeight(long weight) {
-    this.weight = weight;
   }
 
   /**

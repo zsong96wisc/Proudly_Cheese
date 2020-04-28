@@ -111,7 +111,7 @@ class ManagerTest {
 
   /**
    * Test getMonthlyReport() will return a correct report
-   * of a given month for only one farm added
+   * of a given month for multiple farms added
    */
   @Test
   public void test003_get_monthly_report_for_multiple_farm() {
@@ -147,4 +147,147 @@ class ManagerTest {
       fail("Unkonw Exception Thrown");
     }
   }
+  
+  /**
+   * Test getAnnualReport() will return a correct report
+   * of a given year for only one farm added
+   */
+  @Test
+  public void test004_get_annual_report_for_one_farm() {
+    try {
+      for (int i = 0; i < 2; i++) {
+        // Insert record into 2 years and each month at day
+        for (int j = 0; j < 12; j++) {
+          GregorianCalendar date = new GregorianCalendar(2011+i, 0, j+1, 0, 0, 0);
+          date.setLenient(false);
+          m.addRecords(new Record(date, "Farm 001", i + 1));
+        }
+      }
+      
+      // Get records of each month. It should only consists of 
+      // Farm 001's record and the weight should be i + 1
+      for (int i = 0; i < 2; i++) {
+        GregorianCalendar date = new GregorianCalendar(2011 + i, 0, 1, 0, 0, 0);
+        ArrayList<ArrayList<String>> report = m.getAnnualReport(date);
+        // For year 2011 and 2012
+        assert report.get(0).get(0).equals("Farm 001");
+        assert report.get(0).get(1).equals(Integer.toString(12 * (i + 1)));
+        assert report.get(0).get(2).equals("1.0");
+      }
+    } catch (Exception e) {
+      fail("Unkonw Exception Thrown");
+    }
+  }
+  
+  /**
+   * Test getAnnualReport() will return a correct report
+   * of a given year for multiple farms added
+   */
+  @Test
+  public void test005_get_annual_report_for_multiple_farm() {
+    try {
+      for (int i = 0; i < 2; i++) {
+        // Insert record into 2 years and each month
+        for (int j = 0; j < 12; j++) {
+          GregorianCalendar date =
+              new GregorianCalendar(2011 + i, 0, j + 1, 0, 0, 0);
+          date.setLenient(false);
+          m.addRecords(new Record(date, "Farm 001", i + 1));
+          m.addRecords(new Record(date, "Farm 002", 2*(i + 1)));
+          m.addRecords(new Record(date, "Farm 003", 3*(i + 1)));
+        }
+      }
+
+      // Get records of each month. It should only consists of
+      // Farm 001's record and the weight should be i + 1
+      for (int i = 0; i < 2; i++) {
+        GregorianCalendar date = new GregorianCalendar(2011 + i, 0, 1, 0, 0, 0);
+        date.setLenient(false);
+        ArrayList<ArrayList<String>> report = m.getMonthlyReport(date);
+
+        // Each farm
+        for (int k = 0; k < report.size(); k++) {
+          report.get(k).get(0).equals("Farm 00" + k); // Three Farm
+          report.get(k).get(1).equals(Integer.toString(i + 1));
+          report.get(k).get(2).equals(Double.toString(1.0/6*(k+1)));
+        }
+      }
+    } catch (Exception e) {
+      fail("Unkonw Exception Thrown");
+    }
+  }
+  
+  /**
+   * Test getDateReport() will return a correct report
+   * of a given year for only one farm added
+   */
+  @Test
+  public void test006_get_date_report_for_one_farm() {
+    try {
+      for (int i = 0; i < 2; i++) {
+        // Insert record into 2 years and each month at day
+        for (int j = 0; j < 12; j++) {
+          GregorianCalendar date = new GregorianCalendar(2011+i, 0, j+1, 0, 0, 0);
+          date.setLenient(false);
+          m.addRecords(new Record(date, "Farm 001", i + 1));
+        }
+      }
+      
+      // Create date instances for search
+      GregorianCalendar start = new GregorianCalendar(2011, 0, 1, 0, 0, 0);
+      GregorianCalendar end = new GregorianCalendar(2012, 11, 31, 0, 0, 0);
+      
+      // Get all of the records in two years
+      ArrayList<ArrayList<String>> report = m.getDateReport(start, end);
+      
+      // Only have one farm - Farm 001
+      assert report.get(0).get(0).equals("Farm 001");
+      // Total weight is 12 + 24
+      assert report.get(0).get(1).equals("36");
+      // Percentage should be 1.0
+      assert report.get(0).get(2).equals("1.0");
+      
+    } catch (Exception e) {
+      fail("Unkonw Exception Thrown");
+    }
+  }
+  
+  /**
+   * Test getDateReport() will return a correct report
+   * of a given year for multiple farms added
+   */
+  @Test
+  public void test007_get_date_report_for_one_farm() {
+    try {
+      for (int i = 0; i < 2; i++) {
+        // Insert record into 2 years and each month
+        for (int j = 0; j < 12; j++) {
+          GregorianCalendar date =
+              new GregorianCalendar(2011 + i, 0, j + 1, 0, 0, 0);
+          date.setLenient(false);
+          m.addRecords(new Record(date, "Farm 001", i + 1));
+          m.addRecords(new Record(date, "Farm 002", 2*(i + 1)));
+          m.addRecords(new Record(date, "Farm 003", 3*(i + 1)));
+        }
+      }
+
+      // Get records of each month. It should only consists of
+      // Farm 001's record and the weight should be i + 1
+      for (int i = 0; i < 2; i++) {
+        GregorianCalendar date = new GregorianCalendar(2011 + i, 0, 1, 0, 0, 0);
+        date.setLenient(false);
+        ArrayList<ArrayList<String>> report = m.getMonthlyReport(date);
+
+        // Each farm
+        for (int k = 0; k < report.size(); k++) {
+          report.get(k).get(0).equals("Farm 00" + k); // Three Farm
+          report.get(k).get(1).equals(Integer.toString(i + 1));
+          report.get(k).get(2).equals(Double.toString(1.0/6*(k+1)));
+        }
+      }
+    } catch (Exception e) {
+      fail("Unkonw Exception Thrown");
+    }
+  }
+  
 }

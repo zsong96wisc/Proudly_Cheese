@@ -31,7 +31,7 @@ import java.util.TreeSet;
 public class RecordsOfDate {
 
   // Date of this records set
-  private GregorianCalendar g;
+  private final GregorianCalendar g;
   // tree set of records storing all records of this specific date
   private TreeSet<Record> recordSet;
   // int field that stores total weights of the day
@@ -45,8 +45,10 @@ public class RecordsOfDate {
    * @param g - date that this records set stores
    */
   public RecordsOfDate(GregorianCalendar g) {
+    this.g = (GregorianCalendar) GregorianCalendar.getInstance();
     // Initialize all the variables
-    this.g = g;
+    this.g.set(g.get(GregorianCalendar.YEAR), 
+        g.get(GregorianCalendar.MONTH), g.get(GregorianCalendar.DATE), 0, 0, 0);
     this.recordSet = new TreeSet<Record>();
     this.totalWeight = 0;
     this.numKeys = 0;
@@ -163,15 +165,6 @@ public class RecordsOfDate {
       result.add(element);
     }
     return result;
-  }
-
-  /**
-   * Setter method for date
-   * 
-   * @param date the date to set
-   */
-  public void setDate(GregorianCalendar g) {
-    this.g = g;
   }
 
   /**

@@ -32,7 +32,7 @@ import java.util.TreeSet;
  */
 public class Farm {
   // denotes a particular farm
-  private String farmID;
+  private final String farmID;
 
   // denotes the total milk weight provided by this farm
   private long totalWeight;
