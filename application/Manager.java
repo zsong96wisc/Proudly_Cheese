@@ -34,6 +34,8 @@ public class Manager {
   private FarmIDManager farmIDManager;
   // Manager for Farm by date
   private DateManager dateManager;
+  // Manager for Input files
+  private FileManager fileManager;
 
   String[] day = new String[] {"Jan", "Feb", "Mar", "Apr", "May", "June", "Jul", "Aug", "Sep",
       "Oct", "Nov", "Dec"};
@@ -45,6 +47,7 @@ public class Manager {
     // Initialize all the instance variables
     this.farmIDManager = new FarmIDManager();
     this.dateManager = new DateManager();
+    this.fileManager = new FileManager();
   }
 
   /**

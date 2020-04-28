@@ -61,8 +61,10 @@ public class GUI {
   ImageView imageViewCheese;
   // ImageView storing the brand picture
   ImageView imageViewBrand;
-
+  // FileChooser to choose files
   FileChooser fileChooser;
+  // Manager to manage records
+  Manager manager;
 
   // integer for window's width
   private static final int WINDOW_WIDTH = 500;
@@ -139,6 +141,9 @@ public class GUI {
    * @param primaryStage - the stage that displays the scene
    */
   public void getMainScene(Stage primaryStage) {
+    // Initialize the manager instance
+    this.manager = new Manager();
+    
     // Three VBox layout management in the BroadPane
     VBox vbox = new VBox(20);
     VBox vboxL = new VBox(5);
@@ -211,6 +216,7 @@ public class GUI {
     Button ldData = getPolygonButton("Load Data", 30);
     ldData.setOnAction(e -> {
       File selectedFile = this.fileChooser.showOpenDialog(primaryStage);
+      
     });
 
 
