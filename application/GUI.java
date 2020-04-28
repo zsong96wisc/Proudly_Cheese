@@ -18,6 +18,11 @@
 package application;
 
 import java.io.File;
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.List;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
@@ -55,6 +60,14 @@ public class GUI {
     MONTHLYREPORT, MONTHLYREPORTRESULT,
 
     DATERANGEREPORT, DATERANGEREPORTRESULT
+  };
+
+  enum WarningIndex {
+    IOEXCEPTION, ILLEGALRECORDEXCEPTION, NUMBERFORMATEXCEPTION, ILLEGALARGUMENTEXCEPTION,
+
+    PARSEEXCEPTION, FILENOTFOUNDEXCEPTION, DUPLICATEKEYEXCEPTION, ILLEGALNULLKEYEXCEPTION,
+
+    KEYNOTFOUNDEXCEPTION
   };
 
   // ImageView storing the cheese picture
@@ -134,6 +147,40 @@ public class GUI {
           + "Click right Asc/Des to sort based on total weights. \n"
           + "Export will export data shown to the file system.";
 
+  // Warning for IOException
+  private static final String IOEXCEPTION_INFO = "File did not load successfully";
+
+  // Warning for IllegalRecordException
+  private static final String ILLEGALRECORDEXCEPTION_INFO =
+      "The input record format is not correct.\n" + "Please check the record format.";
+
+  // Warning for NUMBERFORMATEXCEPTION
+  private static final String NUMBERFORMATEXCEPTION_INFO =
+      "The input representing weight cannot be interpreted as an integer.\n"
+          + "Please check the weight format.";
+
+  // Warning for IllEGALARUGMENTEXCEPTION
+  private static final String ILLEGALARGUMENTEXCEPTION_INFO =
+      "There is lack of information in the input.\n" + "Please check the information.";
+
+  // Warning for PARSEEXCEPTION
+  private static final String PARSEEXCEPTION_INFO =
+      "The input representing date cannot be interpreted.\n" + "Please check the date format.";
+
+  // Warning for FILENOTFOUNDEXCEPTION
+  private static final String FILENOTFOUNDEXCEPTION_INFO = "The file can not be found.";
+
+  // Warning for DUPLICATEKEYEXCEPTION
+  private static final String DUPLICATEKEYEXCEPTION_INFO =
+      "The input already existed.\n" + "Please try other inputs.";
+
+  // Warning for IllegalNullKeyEXCEPTION
+  private static final String ILLEGALNULLKEYEXCEPTION_INFO =
+      "The input has a null key.\n" + "Please check your inputs.";
+
+  // Warning for KEYNOTFOUNDEXCEPTION
+  private static final String KEYNOTFOUNDEXCEPTION_INFO =
+      "The key can not be found.\n" + "Please check the data.";
 
   /**
    * Define the main scene of the GUI
@@ -143,7 +190,7 @@ public class GUI {
   public void getMainScene(Stage primaryStage) {
     // Initialize the manager instance
     this.manager = new Manager();
-    
+
     // Three VBox layout management in the BroadPane
     VBox vbox = new VBox(20);
     VBox vboxL = new VBox(5);
@@ -216,9 +263,25 @@ public class GUI {
     Button ldData = getPolygonButton("Load Data", 30);
     ldData.setOnAction(e -> {
       File selectedFile = this.fileChooser.showOpenDialog(primaryStage);
-      
+      try {
+        List<Record> list = this.manager.importFile(selectedFile);
+        this.manager.importList(list);
+      } catch (NumberFormatException e1) {
+        displayWarningMessage(WarningIndex.NUMBERFORMATEXCEPTION);
+      } catch (IllegalArgumentException e1) {
+        displayWarningMessage(WarningIndex.ILLEGALARGUMENTEXCEPTION);
+      } catch (IOException e1) {
+        displayWarningMessage(WarningIndex.IOEXCEPTION);
+      } catch (IllegalRecordException e1) {
+        displayWarningMessage(WarningIndex.ILLEGALRECORDEXCEPTION);
+      } catch (ParseException e1) {
+        displayWarningMessage(WarningIndex.PARSEEXCEPTION);
+      } catch (IllegalNullKeyException e1) {
+        displayWarningMessage(WarningIndex.ILLEGALNULLKEYEXCEPTION);
+      } catch (DuplicateKeyException e1) {
+        displayWarningMessage(WarningIndex.DUPLICATEKEYEXCEPTION);
+      }
     });
-
 
     // Add the vertical box to the center of the root pane
     root.setTop(text);
@@ -253,7 +316,7 @@ public class GUI {
     BorderPane root = new BorderPane();
 
     // Text field for title
-    Text text = getTitle("editScene\n");
+    Text text = getTitle("Edit Scene\n");
 
     // Create a button "Add/Delete Data"
     Button adData = getPolygonButton("Add/Delete Data", 50);
@@ -308,7 +371,7 @@ public class GUI {
     BorderPane root = new BorderPane();
 
     // Text field for title
-    Text text = getTitle("AddDeleteScene\n");
+    Text text = getTitle("Add Delete Scene\n");
 
     // Set the Text into the pane
     root.setTop(text);
@@ -363,6 +426,50 @@ public class GUI {
     bottomBox.setAlignment(Pos.CENTER);
     root.setBottom(bottomBox);
 
+    add.setOnAction(e -> {
+      try {
+        Record record = manager.inputRecord(farmIDTextField.getText(), dateTextField.getText(),
+            weightTextField.getText());
+        manager.addRecords(record);
+      } catch (IllegalRecordException e1) {
+        displayWarningMessage(WarningIndex.ILLEGALRECORDEXCEPTION);
+      } catch (NumberFormatException e2) {
+        displayWarningMessage(WarningIndex.NUMBERFORMATEXCEPTION);
+      } catch (IllegalArgumentException e3) {
+        displayWarningMessage(WarningIndex.ILLEGALARGUMENTEXCEPTION);
+      } catch (ParseException e4) {
+        displayWarningMessage(WarningIndex.PARSEEXCEPTION);
+      } catch (IllegalNullKeyException e5) {
+        displayWarningMessage(WarningIndex.ILLEGALNULLKEYEXCEPTION);
+      } catch (DuplicateKeyException e6) {
+        displayWarningMessage(WarningIndex.DUPLICATEKEYEXCEPTION);
+      }
+    });
+
+    delete.setOnAction(e -> {
+      try {
+        Record record = manager.inputRecord(farmIDTextField.getText(), dateTextField.getText(),
+            weightTextField.getText());
+        manager.removeRecords(record);
+      } catch (IllegalRecordException e1) {
+        displayWarningMessage(WarningIndex.ILLEGALRECORDEXCEPTION);
+      } catch (NumberFormatException e2) {
+        displayWarningMessage(WarningIndex.NUMBERFORMATEXCEPTION);
+      } catch (IllegalArgumentException e3) {
+        displayWarningMessage(WarningIndex.ILLEGALARGUMENTEXCEPTION);
+      } catch (ParseException e4) {
+        displayWarningMessage(WarningIndex.PARSEEXCEPTION);
+      } catch (IllegalNullKeyException e5) {
+        displayWarningMessage(WarningIndex.ILLEGALNULLKEYEXCEPTION);
+      }
+    });
+
+    clear.setOnAction(e -> {
+      farmIDTextField.clear();
+      dateTextField.clear();
+      weightTextField.clear();
+    });
+
     // Add the scene to stage
     primaryStage.setScene(new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT));
   }
@@ -377,7 +484,7 @@ public class GUI {
     BorderPane root = new BorderPane();
 
     // Text field for title
-    Text text = getTitle("AddDeleteScene\n");
+    Text text = getTitle("Change Scene\n");
 
     // Set the Text into the pane
     root.setTop(text);
@@ -451,6 +558,37 @@ public class GUI {
     sceneLeft.getChildren().addAll(buttonCloud, this.imageViewBrand);
     root.setLeft(sceneLeft);
 
+    change.setOnAction(e -> {
+      try {
+        Record oldRecord =
+            manager.inputRecord(oldFarmID.getText(), oldDate.getText(), oldWeight.getText());
+        Record newRecord =
+            manager.inputRecord(newFarmID.getText(), newDate.getText(), newWeight.getText());
+        manager.changeRecords(oldRecord, newRecord);
+      } catch (IllegalNullKeyException e1) {
+        displayWarningMessage(WarningIndex.ILLEGALNULLKEYEXCEPTION);
+      } catch (DuplicateKeyException e1) {
+        displayWarningMessage(WarningIndex.DUPLICATEKEYEXCEPTION);
+      } catch (NumberFormatException e1) {
+        displayWarningMessage(WarningIndex.NUMBERFORMATEXCEPTION);
+      } catch (IllegalArgumentException e1) {
+        displayWarningMessage(WarningIndex.ILLEGALARGUMENTEXCEPTION);
+      } catch (IllegalRecordException e1) {
+        displayWarningMessage(WarningIndex.ILLEGALRECORDEXCEPTION);
+      } catch (ParseException e1) {
+        displayWarningMessage(WarningIndex.PARSEEXCEPTION);
+      }
+    });
+
+    clear.setOnAction(e -> {
+      newFarmID.clear();
+      newDate.clear();
+      newWeight.clear();
+      oldFarmID.clear();
+      oldDate.clear();
+      oldWeight.clear();
+    });
+
     // Add the scene to stage
     primaryStage.setScene(new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT));
   }
@@ -492,11 +630,15 @@ public class GUI {
     Button search = getOvalButton("Search", 4, 2);
     search.setStyle("-fx-base: navajowhite;");
     search.setOnAction(e -> {
-      getFarmResultScene(primaryStage);
+      getFarmResultScene(primaryStage, inputFarmID.getText(), inputYear.getText());
     });
 
     Button clear = getOvalButton("Clear", 4, 2);
     clear.setStyle("-fx-base: gold;");
+    clear.setOnAction(e -> {
+      inputFarmID.clear();
+      inputYear.clear();
+    });
 
     // Create HBox layout and add components
     HBox sceneBottom = new HBox(20);
@@ -526,7 +668,7 @@ public class GUI {
    * 
    * @param primaryStage - the stage that displays the scene
    */
-  public void getFarmResultScene(Stage primaryStage) {
+  public void getFarmResultScene(Stage primaryStage, String farmID, String year) {
     // Main layout is Border Pane example (top,left,center,right,bottom)
     BorderPane root = new BorderPane();
     // Define layout managers
@@ -577,7 +719,15 @@ public class GUI {
     vboxCL.getChildren().addAll(title, stack, stack2);
 
     // The result to be displayed in the list
-    String[][] result = {{"Mon", "Tue", "Wed"}, {"4567", "5322", "234"}, {"12.4%", "15%", "2%"}};
+    String[][] result = new String[3][];
+    try {
+      result = manager.getFarmReport(farmID,
+          new GregorianCalendar(Integer.valueOf(year), 1, 1, 0, 0, 0));
+    } catch (NumberFormatException e1) {
+      displayWarningMessage(WarningIndex.NUMBERFORMATEXCEPTION);
+    } catch (IllegalNullKeyException e1) {
+      displayWarningMessage(WarningIndex.ILLEGALNULLKEYEXCEPTION);
+    }
 
     // Create Labels and VBoxs layout
     Label farmDateLabel = new Label("Date");
@@ -658,9 +808,7 @@ public class GUI {
     // Create two buttons and set event handler
     Button search = getOvalButton("Search", 3.2, 2);
     search.setStyle("-fx-base: navajowhite;");
-    search.setOnAction(e -> {
-      getAnnualResultScene(primaryStage);
-    });
+
 
     Button clear = getOvalButton("Clear", 3.2, 2);
     clear.setStyle("-fx-base: gold;");
@@ -670,6 +818,10 @@ public class GUI {
     Text year = new Text();
     year.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 18));
     year.setText("Year : ");
+
+    clear.setOnAction(e -> {
+      textfield.clear();
+    });
 
     // Main layout is Border Pane example (top,left,center,right,bottom)
     BorderPane root = new BorderPane();
@@ -698,6 +850,10 @@ public class GUI {
     root.setTop(text);
     BorderPane.setAlignment(text, Pos.TOP_CENTER);
 
+    search.setOnAction(e -> {
+      getAnnualResultScene(primaryStage, Integer.parseInt(textfield.getText()));
+    });
+
     // Add the scene to stage
     primaryStage.setScene(new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT));
   }
@@ -707,7 +863,8 @@ public class GUI {
    * 
    * @param primaryStage - the stage that displays the scene
    */
-  public void getAnnualResultScene(Stage primaryStage) {
+  public void getAnnualResultScene(Stage primaryStage, int year) {
+
     // Text field for title
     Text text = getTitle("Annual Result Scene\n");
 
@@ -719,6 +876,13 @@ public class GUI {
     returnBn.setOnAction(e -> {
       getMainScene(primaryStage);
     });
+
+    try {
+      GregorianCalendar date = new GregorianCalendar(year, 1, 1, 0, 0, 0);
+      ArrayList<ArrayList<String>> reportOfYear = manager.getAnnualReport(date);
+    } catch (IllegalNullKeyException e1) {
+      displayWarningMessage(WarningIndex.ILLEGALNULLKEYEXCEPTION);
+    }
 
     // The result to be displayed in the list
     String[][] result = {{"Farm ID", "Farm 123", "Farm 124", "Farm 125"},
@@ -1186,6 +1350,50 @@ public class GUI {
       default:
         return "";
     }
+  }
+
+  /**
+   * Given the WarningIndex, return the corresponding warning string.
+   * 
+   * @param i - the warning index
+   * @return a String of warning message
+   */
+  private String getExceptionWarning(WarningIndex i) {
+    switch (i) {
+      case IOEXCEPTION:
+        return IOEXCEPTION_INFO;
+      case ILLEGALRECORDEXCEPTION:
+        return ILLEGALRECORDEXCEPTION_INFO;
+      case NUMBERFORMATEXCEPTION:
+        return NUMBERFORMATEXCEPTION_INFO;
+      case ILLEGALARGUMENTEXCEPTION:
+        return ILLEGALARGUMENTEXCEPTION_INFO;
+      case PARSEEXCEPTION:
+        return PARSEEXCEPTION_INFO;
+      case FILENOTFOUNDEXCEPTION:
+        return FILENOTFOUNDEXCEPTION_INFO;
+      case DUPLICATEKEYEXCEPTION:
+        return DUPLICATEKEYEXCEPTION_INFO;
+      case ILLEGALNULLKEYEXCEPTION:
+        return ILLEGALNULLKEYEXCEPTION_INFO;
+      case KEYNOTFOUNDEXCEPTION:
+        return KEYNOTFOUNDEXCEPTION_INFO;
+      default:
+        return "";
+    }
+  }
+
+  /**
+   * Display the Warning Message
+   * 
+   * @param i - the index of the message
+   */
+  private void displayWarningMessage(WarningIndex i) {
+    // Create an alert
+    Alert alert = new Alert(AlertType.WARNING, getExceptionWarning(i));
+    // Set the title
+    alert.setTitle("Warning");
+    alert.showAndWait().filter(response -> response == ButtonType.OK);
   }
 
   /**

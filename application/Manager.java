@@ -17,6 +17,10 @@
 
 package application;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -62,7 +66,7 @@ public class Manager {
   public String[][] getFarmReport(String farmID, GregorianCalendar date)
       throws IllegalNullKeyException {
     // if the date is null
-    if (date == null) 
+    if (date == null)
       throw new IllegalNullKeyException("null date input");
     // if the farmID is null
     if (farmID == null)
@@ -97,14 +101,14 @@ public class Manager {
    */
   public ArrayList<ArrayList<String>> getMonthlyReport(GregorianCalendar date)
       throws IllegalNullKeyException {
-    // 
+    //
     List<Record> records = dateManager.getMonthlyReport(date);
     Hashtable<String, Long> monthlyRecords = new Hashtable<String, Long>();
     long sumOfWeights = 0;
     // Traverse all of the records to and their total weight
     for (Record r : records) {
       sumOfWeights += r.getWeight();
-      if (monthlyRecords.contains(r.getFarmID()))
+      if (monthlyRecords.containsKey(r.getFarmID()))
         monthlyRecords.put(r.getFarmID(), monthlyRecords.get(r.getFarmID()) + r.getWeight());
       else
         monthlyRecords.put(r.getFarmID(), Long.valueOf(r.getWeight()));
@@ -144,7 +148,7 @@ public class Manager {
     // Traverse all of the records to get all FarmID and their total weight
     for (Record r : records) {
       sumOfWeights += r.getWeight();
-      if (yearlyRecords.contains(r.getFarmID()))
+      if (yearlyRecords.containsKey(r.getFarmID()))
         yearlyRecords.put(r.getFarmID(), yearlyRecords.get(r.getFarmID()) + r.getWeight());
       else
         yearlyRecords.put(r.getFarmID(), Long.valueOf(r.getWeight()));
@@ -184,7 +188,7 @@ public class Manager {
     // Traverse all of the records to get all FarmID and their total weight
     for (Record r : records) {
       sumOfWeights += r.getWeight();
-      if (rangeRecords.contains(r.getFarmID()))
+      if (rangeRecords.containsKey(r.getFarmID()))
         rangeRecords.put(r.getFarmID(), rangeRecords.get(r.getFarmID()) + r.getWeight());
       else
         rangeRecords.put(r.getFarmID(), Long.valueOf(r.getWeight()));
@@ -302,4 +306,54 @@ public class Manager {
       recordList.remove(record);
     }
   }
+
+  /**
+   * This method is used to import the new file, and return a list of records
+   * 
+   * @param file - input file
+   * 
+   * @throws IOException              - the exception that may be thrown
+   * @throws IllegalRecordException   - when the record format is wrong
+   * @throws ParseException           - if the String representing date cannot be interpreted
+   * @throws IllegalArgumentException - if there is lack of information in this String
+   * @throws NumberFormatException    - if the String representing weight cannot be interpreted as
+   *                                  an integer
+   */
+  public List<Record> importFile(File file) throws NumberFormatException, IllegalArgumentException,
+      IOException, IllegalRecordException, ParseException {
+    return this.fileManager.importFile(file);
+  }
+
+  /**
+   * Export different reports to the file system in csv format
+   * 
+   * @param list - the list of record to be exported
+   * @param file - the file to be exported to
+   * 
+   * @throws FileNotFoundException - if the exported file cannot be found
+   */
+  public void exportFile(List<Record> list, File file) throws FileNotFoundException {
+    this.fileManager.exportFile(list, file);
+  }
+
+  /**
+   * Input record to from the user input
+   * 
+   * @param farmID - the farmID input
+   * @param date   - the date input
+   * @param weight - the weight input
+   * 
+   * @return the record if successful
+   * 
+   * @throws IllegalRecordException   - if the weight is negative
+   * @throws IllegalArgumentException - if there is lack of information in this String
+   * @throws NumberFormatException    - if the String representing weight cannot be interpreted as
+   *                                  an integer
+   * @throws ParseException           - if the String representing date cannot be interpreted
+   */
+  public Record inputRecord(String farmID, String date, String weight) throws NumberFormatException,
+      IllegalArgumentException, IllegalRecordException, ParseException {
+    return this.fileManager.inputRecord(farmID, date, weight);
+  }
+
 }

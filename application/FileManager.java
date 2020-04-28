@@ -33,6 +33,7 @@ public class FileManager {
       NumberFormatException, IllegalArgumentException, ParseException {
     BufferedReader reader;
     reader = new BufferedReader(new FileReader(file));
+    reader.readLine();
     String line = reader.readLine();
     List<Record> list = new LinkedList<Record>();
 
@@ -65,6 +66,12 @@ public class FileManager {
       ParseException, IllegalArgumentException {
     // Split String
     String[] recordInStrings = input.split(",");
+    
+    // Check the input 
+    if(recordInStrings == null || (!(recordInStrings.length == 3))) {
+      throw new IllegalArgumentException("The input is missing some parts");
+    }
+    
     // Get the integer weight and farmID String
     String farmID = recordInStrings[1];
     int weight = Integer.valueOf(recordInStrings[2]);
@@ -112,5 +119,29 @@ public class FileManager {
     }
     // close the print writer
     writer.close();
+  }
+
+  /**
+   * Input record to from the user input
+   * 
+   * @param farmID - the farmID input
+   * @param date   - the date input
+   * @param weight - the weight input
+   * 
+   * @return the record if successful
+   * 
+   * @throws IllegalRecordException   - if the weight is negative
+   * @throws IllegalArgumentException - if there is lack of information in this String
+   * @throws NumberFormatException    - if the String representing weight cannot be interpreted as
+   *                                  an integer
+   * @throws ParseException           - if the String representing date cannot be interpreted
+   */
+  public Record inputRecord(String farmID, String date, String weight) throws NumberFormatException,
+      IllegalArgumentException, IllegalRecordException, ParseException {
+    // Convert the String together
+    String input = date + "," + farmID + "," + weight;
+    // Run the converter
+    Record record = converter(input);
+    return record;
   }
 }
