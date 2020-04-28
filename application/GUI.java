@@ -62,6 +62,7 @@ public class GUI {
     DATERANGEREPORT, DATERANGEREPORTRESULT
   };
 
+  // enum variable for different excpetion warning
   enum WarningIndex {
     IOEXCEPTION, ILLEGALRECORDEXCEPTION, NUMBERFORMATEXCEPTION, ILLEGALARGUMENTEXCEPTION,
 
@@ -85,6 +86,9 @@ public class GUI {
   private static final int WINDOW_HEIGHT = 300;
   // String for window's title
   private static final String APP_TITLE = "Proudly Cheese";
+  // A String array to store the possible user choice when loading
+  private final String[] loadFunction =
+      new String[] {"Append to the existing data", "Add as a new set of data"};
 
   // Info for the main menu
   private static final String MAINMENU_INFO =
@@ -262,11 +266,33 @@ public class GUI {
     // Create a button "Load Data" and add event handler
     Button ldData = getPolygonButton("Load Data", 30);
     ldData.setOnAction(e -> {
+      // Create a Choice Dialog to let the user choice
+      ChoiceDialog<String> choiceDialog = new ChoiceDialog<String>(loadFunction[0], loadFunction);
+      // Set the header text
+      choiceDialog.setHeaderText("Functions of Loading data");
+      // Set content text
+      choiceDialog.setContentText("please select the way to load data");
+      // Wait the user choice
+      choiceDialog.showAndWait();
+      // Store the respond
+      String choice = choiceDialog.getSelectedItem();
+
+      // Open the fileChooser
       File selectedFile = this.fileChooser.showOpenDialog(primaryStage);
       try {
+        // import the file and get the list of records
         List<Record> list = this.manager.importFile(selectedFile);
-        this.manager.importList(list);
+        // import the list to the internal system
+        this.manager.importList(list, choice);
+
+        // Create an alert
+        Alert alert = new Alert(AlertType.INFORMATION, "Successfully load data");
+        // Set the title
+        alert.setTitle("Information");
+        alert.showAndWait().filter(response -> response == ButtonType.OK);
+
       } catch (NumberFormatException e1) {
+        // display the warning message
         displayWarningMessage(WarningIndex.NUMBERFORMATEXCEPTION);
       } catch (IllegalArgumentException e1) {
         displayWarningMessage(WarningIndex.ILLEGALARGUMENTEXCEPTION);
@@ -428,10 +454,13 @@ public class GUI {
 
     add.setOnAction(e -> {
       try {
+        // input the user input and retrieve the record
         Record record = manager.inputRecord(farmIDTextField.getText(), dateTextField.getText(),
             weightTextField.getText());
+        // add the records to the internal system
         manager.addRecords(record);
       } catch (IllegalRecordException e1) {
+        // Display warning messages
         displayWarningMessage(WarningIndex.ILLEGALRECORDEXCEPTION);
       } catch (NumberFormatException e2) {
         displayWarningMessage(WarningIndex.NUMBERFORMATEXCEPTION);
@@ -448,10 +477,13 @@ public class GUI {
 
     delete.setOnAction(e -> {
       try {
+        // input the user input and retrieve the record
         Record record = manager.inputRecord(farmIDTextField.getText(), dateTextField.getText(),
             weightTextField.getText());
+        // remove the records from the internal system
         manager.removeRecords(record);
       } catch (IllegalRecordException e1) {
+        // Display warning messages
         displayWarningMessage(WarningIndex.ILLEGALRECORDEXCEPTION);
       } catch (NumberFormatException e2) {
         displayWarningMessage(WarningIndex.NUMBERFORMATEXCEPTION);
@@ -464,7 +496,9 @@ public class GUI {
       }
     });
 
+    // Set the event handler
     clear.setOnAction(e -> {
+      // Clear all the TextFields
       farmIDTextField.clear();
       dateTextField.clear();
       weightTextField.clear();
@@ -560,12 +594,15 @@ public class GUI {
 
     change.setOnAction(e -> {
       try {
+        // input the user input and retrieve the record
         Record oldRecord =
             manager.inputRecord(oldFarmID.getText(), oldDate.getText(), oldWeight.getText());
         Record newRecord =
             manager.inputRecord(newFarmID.getText(), newDate.getText(), newWeight.getText());
+        // Change the records from the internal system
         manager.changeRecords(oldRecord, newRecord);
       } catch (IllegalNullKeyException e1) {
+        // Display the warning message
         displayWarningMessage(WarningIndex.ILLEGALNULLKEYEXCEPTION);
       } catch (DuplicateKeyException e1) {
         displayWarningMessage(WarningIndex.DUPLICATEKEYEXCEPTION);
@@ -580,7 +617,9 @@ public class GUI {
       }
     });
 
+    // Set the event handler
     clear.setOnAction(e -> {
+      // Clear all the TextFields
       newFarmID.clear();
       newDate.clear();
       newWeight.clear();
@@ -636,6 +675,7 @@ public class GUI {
     Button clear = getOvalButton("Clear", 4, 2);
     clear.setStyle("-fx-base: gold;");
     clear.setOnAction(e -> {
+      // Clear all the TextFields
       inputFarmID.clear();
       inputYear.clear();
     });
@@ -699,21 +739,35 @@ public class GUI {
     Label title = new Label("\nTOTAL MILK\n WEIGHT");
 
     // The result to be displayed in the list
-    String[][] result = new String[3][];
+    String[][] result = new String[12][3];
     try {
+      // Retrieve the result
       result = manager.getFarmReport(farmID,
           new GregorianCalendar(Integer.valueOf(year), 1, 1, 0, 0, 0));
     } catch (NumberFormatException e1) {
+      // Display the warning message
       displayWarningMessage(WarningIndex.NUMBERFORMATEXCEPTION);
     } catch (IllegalNullKeyException e1) {
       displayWarningMessage(WarningIndex.ILLEGALNULLKEYEXCEPTION);
+    }
+
+    // Create three String arrays to store results for ListView
+    String[] month = new String[12];
+    String[] weight = new String[12];
+    String[] percentage = new String[12];
+
+    // Add the result to the arrays
+    for (int i = 0; i < 12; i++) {
+      month[i] = result[i][0];
+      weight[i] = result[i][1];
+      percentage[i] = result[i][2];
     }
 
     // Create two circles to display the result
     Circle circle1 = new Circle(40.0);
     circle1.setFill(Color.rgb(255, 255, 0, 0.7));
     circle1.setStroke(Color.BLACK);
-    Text amount = new Text(result[0][1]);
+    Text amount = new Text(weight[0]);
     text.setBoundsType(TextBoundsType.VISUAL);
     StackPane stack = new StackPane();
     stack.getChildren().addAll(circle1, amount);
@@ -721,7 +775,7 @@ public class GUI {
     Circle circle2 = new Circle(40.0);
     circle2.setFill(Color.rgb(255, 255, 0, 0.7));
     circle2.setStroke(Color.BLACK);
-    Text percent = new Text(result[0][2]);
+    Text percent = new Text(percentage[0]);
     percent.setBoundsType(TextBoundsType.VISUAL);
     StackPane stack2 = new StackPane();
     stack2.getChildren().addAll(circle2, percent);
@@ -738,9 +792,25 @@ public class GUI {
     VBox vBoxThirdList = new VBox();
 
     // Create three ListViews
-    ListView<String> farmDateList = getListView(result[0], 100, 200);
-    ListView<String> totalWeightList = getListView(result[1], 100, 200);
-    ListView<String> percentList = getListView(result[2], 100, 200);
+    ListView<String> farmDateList = getListView(month, 100, 200);
+    ListView<String> totalWeightList = getListView(weight, 100, 200);
+    ListView<String> percentList = getListView(percentage, 100, 200);
+
+    // Set the event handler
+    totalWeightList.setOnMouseClicked(e -> {
+      // When mouse is clicked, update the label in the circle
+      amount.setText(totalWeightList.getSelectionModel().getSelectedItem());
+      percent.setText(
+          percentList.getItems().get((totalWeightList.getSelectionModel().getSelectedIndex())));
+    });
+
+    // Set the event handler
+    percentList.setOnMouseClicked(e -> {
+      // When mouse is clicked, update the label in the circle
+      percent.setText(percentList.getSelectionModel().getSelectedItem());
+      amount.setText(
+          totalWeightList.getItems().get((percentList.getSelectionModel().getSelectedIndex())));
+    });
 
     // Add them to the VBox
     vBoxFirstList.getChildren().addAll(farmDateLabel, farmDateList);

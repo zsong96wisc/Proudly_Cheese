@@ -73,7 +73,6 @@ public class DateManager {
   }
 
   /**
-   * 
    * Change the Farm record from the storage
    * 
    * @param oldRecord - the record to be removed
@@ -108,6 +107,7 @@ public class DateManager {
    * Insert a Record instance into the data structure
    * 
    * @param record - given record to be inserted
+   * 
    * @throws IllegalNullKeyException - when the given parameter is null
    * @throws DuplicateKeyException   - when the inserted RecordsOfDate is already in the set
    */
@@ -123,14 +123,19 @@ public class DateManager {
         record.getDate().get(GregorianCalendar.MONTH), 
         record.getDate().get(GregorianCalendar.DATE), 0, 0, 0);
     
+    // Create a new RecordsOfDate instance
     RecordsOfDate tempRecordsOfDate = new RecordsOfDate(rodDate);
+    
+    // Search and store in a subset
     NavigableSet<RecordsOfDate> searchResult =
         rodSet.subSet(tempRecordsOfDate, true, tempRecordsOfDate, true);
 
-    if (searchResult.isEmpty()) {// there is already such a rod.
+    // there is already such a rod.
+    if (searchResult.isEmpty()) {
       tempRecordsOfDate.insert(record);
       rodSet.add(tempRecordsOfDate);
-    } else { // There is no such RecordsOfDate
+    } else { 
+      // There is no such RecordsOfDate
       if (searchResult.first().contains(record))
         // If there is a duplicate record
         throw new DuplicateKeyException("duplicate records");
@@ -254,8 +259,8 @@ public class DateManager {
   /**
    * Get date range report based on start date and end date
    * 
-   * @param start - date
-   * @param end   - date
+   * @param start - the start date
+   * @param end   - the start date
    * 
    * @return Records in a List
    */

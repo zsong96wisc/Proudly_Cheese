@@ -40,9 +40,12 @@ public class Manager {
   private DateManager dateManager;
   // Manager for Input files
   private FileManager fileManager;
-
-  String[] day = new String[] {"Jan", "Feb", "Mar", "Apr", "May", "June", "Jul", "Aug", "Sep",
-      "Oct", "Nov", "Dec"};
+  // A final String array to store the month information
+  private final String[] DAY = new String[] {"Jan", "Feb", "Mar", "Apr", "May", "June", "Jul",
+      "Aug", "Sep", "Oct", "Nov", "Dec"};
+  // A String array to store the possible user choice when loading
+  private final String[] loadFunction =
+      new String[] {"Append to the existing data", "Add as a new set of data"};
 
   /**
    * Constructor - create the Manager objects
@@ -65,29 +68,37 @@ public class Manager {
    */
   public String[][] getFarmReport(String farmID, GregorianCalendar date)
       throws IllegalNullKeyException {
-    // if the date is null 
+    // if the date is null
     if (date == null)
       throw new IllegalNullKeyException("null date input");
     // if the farmID is null
     if (farmID == null)
       throw new IllegalNullKeyException("null farmID input");
 
+    // Create a 2D String array to store the result
     String[][] result = new String[12][3];
+    // Initialize a sum to store the total weight for a particular farm in one month
     long sum = 0;
 
+    // Loop through the 12 months
     for (int i = 0; i < 12; i++) {
-      result[i][0] = day[i];
+      // Set the info in the first column
+      result[i][0] = DAY[i];
+      // Create a new GregorianCalendar to represent a new month
       GregorianCalendar newMonth = new GregorianCalendar(date.get(Calendar.YEAR), 0, 1, 0, 0, 0);
       newMonth.set(Calendar.MONTH, i);
+      // Retrieve the total weight
       long weight = dateManager.getFarmMonthlyWeight(farmID, newMonth);
+      // Add to the sum
       sum += weight;
+      // Store in the second column
       result[i][1] = Long.toString(weight);
     }
 
+    // Compute the percentage
     for (int i = 0; i < 12; i++) {
       result[i][2] = Double.toString(1.0 * Long.parseLong(result[i][1]) / sum);
     }
-
     return result;
   }
 
@@ -102,10 +113,13 @@ public class Manager {
    */
   public ArrayList<ArrayList<String>> getMonthlyReport(GregorianCalendar date)
       throws IllegalNullKeyException {
-    //
+    // Retrieve the record list
     List<Record> records = dateManager.getMonthlyReport(date);
+    // Create a Hash table to store records
     Hashtable<String, Long> monthlyRecords = new Hashtable<String, Long>();
+    // Initialize a sum to store the total weight for a particular farm in one month
     long sumOfWeights = 0;
+
     // Traverse all of the records to and their total weight
     for (Record r : records) {
       sumOfWeights += r.getWeight();
@@ -115,7 +129,9 @@ public class Manager {
         monthlyRecords.put(r.getFarmID(), Long.valueOf(r.getWeight()));
     }
 
+    // An ArrayList to store the result
     ArrayList<ArrayList<String>> reportOfMonth = new ArrayList<ArrayList<String>>();
+
     // Get statistics of monthly report
     for (String s : monthlyRecords.keySet()) {
       ArrayList<String> tempList = new ArrayList<String>();
@@ -125,10 +141,10 @@ public class Manager {
       reportOfMonth.add(tempList);
     }
 
+    // Sort the ArrayList
     Collections.sort(reportOfMonth, (a, b) -> {
       return a.get(0).compareTo(b.get(0));
     });
-
     return reportOfMonth;
   }
 
@@ -143,9 +159,13 @@ public class Manager {
    */
   public ArrayList<ArrayList<String>> getAnnualReport(GregorianCalendar date)
       throws IllegalNullKeyException {
+    // Retrieve the record list
     List<Record> records = dateManager.getAnnualReport(date);
+    // Create a Hash table to store records
     Hashtable<String, Long> yearlyRecords = new Hashtable<String, Long>();
+    // Initialize a sum to store the total weight for a particular farm in one year
     long sumOfWeights = 0;
+
     // Traverse all of the records to get all FarmID and their total weight
     for (Record r : records) {
       sumOfWeights += r.getWeight();
@@ -155,7 +175,9 @@ public class Manager {
         yearlyRecords.put(r.getFarmID(), Long.valueOf(r.getWeight()));
     }
 
+    // An ArrayList to store the result
     ArrayList<ArrayList<String>> reportOfYear = new ArrayList<ArrayList<String>>();
+
     // Get statistics of yearly report
     for (String s : yearlyRecords.keySet()) {
       ArrayList<String> tempList = new ArrayList<String>();
@@ -165,10 +187,10 @@ public class Manager {
       reportOfYear.add(tempList);
     }
 
+    // Sort the ArrayList
     Collections.sort(reportOfYear, (a, b) -> {
       return a.get(0).compareTo(b.get(0));
     });
-
     return reportOfYear;
   }
 
@@ -183,9 +205,13 @@ public class Manager {
    */
   public ArrayList<ArrayList<String>> getDateReport(GregorianCalendar start, GregorianCalendar end)
       throws IllegalNullKeyException {
+    // Retrieve the record list
     List<Record> records = dateManager.getDateRangeReport(start, end);
+    // Create a Hash table to store records
     Hashtable<String, Long> rangeRecords = new Hashtable<String, Long>();
+    // Initialize a sum to store the total weight for a particular farm in date range
     long sumOfWeights = 0;
+
     // Traverse all of the records to get all FarmID and their total weight
     for (Record r : records) {
       sumOfWeights += r.getWeight();
@@ -195,8 +221,10 @@ public class Manager {
         rangeRecords.put(r.getFarmID(), Long.valueOf(r.getWeight()));
     }
 
+    // An ArrayList to store the result
     ArrayList<ArrayList<String>> reportOfRange = new ArrayList<ArrayList<String>>();
-    // Get statistics of yearly report
+
+    // Get statistics of date range report
     for (String s : rangeRecords.keySet()) {
       ArrayList<String> tempList = new ArrayList<String>();
       tempList.add(s);
@@ -205,10 +233,10 @@ public class Manager {
       reportOfRange.add(tempList);
     }
 
+    // Sort the ArrayList
     Collections.sort(reportOfRange, (a, b) -> {
       return a.get(0).compareTo(b.get(0));
     });
-
     return reportOfRange;
   }
 
@@ -294,13 +322,26 @@ public class Manager {
    * This method is used to add records to storage after loading from file
    * 
    * @param recordList - list of records read from the file
+   * @param choice     - the user choice when loading data
    * 
    * @throws IllegalNullKeyException - if key argument is null
    * @throws DuplicateKeyException   - if the key is duplicated
    */
-  public void importList(List<Record> recordList)
+  public void importList(List<Record> recordList, String choice)
       throws IllegalNullKeyException, DuplicateKeyException {
-    // add each of record in the list to storage   
+    // Check the input parameter
+    if (recordList == null || choice == null) {
+      return;
+    }
+
+    // Check the user choice
+    if (choice.equals(this.loadFunction[1])) {
+      // Reset the Manager
+      this.farmIDManager = new FarmIDManager();
+      this.dateManager = new DateManager();
+    }
+
+    // add each of record in the list to storage
     for (Record record : recordList) {
       addRecords(record);
     }

@@ -1,3 +1,20 @@
+/**
+ * FileManager.java created by aTeam 147 in Proudly_Cheese project
+ * 
+ * Author: Hairong Yin (hyin55@wisc.edu) (Lec 002), Haonan Shen (hshen37@wisc.edu) (Lec 001), Xiaoxi
+ * Sun (xsun279@wisc.edu) (Lec 002), Zhiwei Song (zsong96@wisc.edu) (Lec 002)
+ * 
+ * Date: 04/19/2020
+ * 
+ * Course: CS400 Semester: Spring 2020
+ * 
+ * List Collaborators:None
+ * 
+ * Other Credits: None
+ * 
+ * Known Bugs: None
+ */
+
 package application;
 
 import java.io.BufferedReader;
@@ -15,8 +32,12 @@ import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * FileManager - used to manage to read and export csv files as well as reading records
+ * 
+ * @author aTeam 147 (2020)
+ */
 public class FileManager {
-
   /**
    * This method is used to import the new file, and return a list of records
    * 
@@ -31,10 +52,21 @@ public class FileManager {
    */
   public List<Record> importFile(File file) throws IOException, IllegalRecordException,
       NumberFormatException, IllegalArgumentException, ParseException {
+    // Check the input parameter
+    if (file == null) {
+      return new LinkedList<Record>();
+    }
+
+    // Create a BufferedReader variable
     BufferedReader reader;
+    // Initialize it with a FileReader
     reader = new BufferedReader(new FileReader(file));
+    // Skip the first line
     reader.readLine();
+
+    // Store the second line
     String line = reader.readLine();
+    // Create a list to store record
     List<Record> list = new LinkedList<Record>();
 
     // when the lines are not all read, continue adding to the list
@@ -66,12 +98,12 @@ public class FileManager {
       ParseException, IllegalArgumentException {
     // Split String
     String[] recordInStrings = input.split(",");
-    
-    // Check the input 
-    if(recordInStrings == null || (!(recordInStrings.length == 3))) {
-      throw new IllegalArgumentException("The input is missing some parts");
+
+    // Check the input, if info is missing, throw IllegalArgumentException
+    if (recordInStrings == null || (!(recordInStrings.length == 3))) {
+      throw new IllegalArgumentException("Data misses information");
     }
-    
+
     // Get the integer weight and farmID String
     String farmID = recordInStrings[1];
     int weight = Integer.valueOf(recordInStrings[2]);
@@ -79,10 +111,6 @@ public class FileManager {
     if (weight < 0) {
       // invalid weight
       throw new IllegalRecordException("weight is negative");
-    }
-
-    if (recordInStrings.length != 3) { // Detect invalid length
-      throw new IllegalArgumentException("Data misses information");
     }
 
     GregorianCalendar cal;
@@ -104,6 +132,11 @@ public class FileManager {
    * @throws FileNotFoundException - if the exported file cannot be found
    */
   public void exportFile(List<Record> list, File file) throws FileNotFoundException {
+    // Check the input parameter
+    if (file == null) {
+      throw new FileNotFoundException("The export file cannot be found");
+    }
+
     // Create a PrintWriter
     PrintWriter writer = new PrintWriter(file);
     // Write the first line to the file

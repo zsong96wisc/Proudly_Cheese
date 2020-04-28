@@ -37,7 +37,7 @@ public class Farm {
   // denotes the total milk weight provided by this farm
   private long totalWeight;
 
-  // treeset storing Records for this particular farm
+  // tree set storing Records for this particular farm
   private TreeSet<Record> farmRecords;
 
   /**
@@ -58,8 +58,13 @@ public class Farm {
    * @return list containing all records stored
    */
   public List<Record> getInOrderTraversal() {
+    // Create the iterator to iterate through the list
     Iterator<Record> itr = farmRecords.iterator();
+
+    // Create a list to store results
     List<Record> list = new ArrayList<Record>();
+
+    // Loop to retrieve records
     while (itr.hasNext()) {
       list.add(itr.next());
     }
@@ -69,25 +74,31 @@ public class Farm {
   /**
    * Get total weight of milk in records in a given date range.
    * 
-   * @param start - date
-   * @param end - date
-   * @return weight Sum
+   * @param start - the start date
+   * @param end   - the start date
+   * 
+   * @return the sum of the weight
    */
   public long getTotalWeightInRange(GregorianCalendar start, GregorianCalendar end) {
-    Record startRecord = new Record(start, this.farmID, Integer.MIN_VALUE);
-    Record endRecord = new Record(end, this.farmID, Integer.MAX_VALUE);
+    // Create two record with start date and end date
+    Record startRecord = new Record(start, this.farmID, Long.MIN_VALUE);
+    Record endRecord = new Record(end, this.farmID, Long.MAX_VALUE);
+
+    // Integer to store total weight
     long weightSum = 0;
-    NavigableSet<Record> searchResult = farmRecords.subSet(startRecord,
-        true, endRecord, true);
-    
+
+    // Retrieve the certain subset
+    NavigableSet<Record> searchResult = farmRecords.subSet(startRecord, true, endRecord, true);
+
+    // loop through the subset and add to the sum weight
     for (Record r : searchResult) {
       weightSum += r.getWeight();
     }
-    
+
     return weightSum;
   }
-  
-  
+
+
   /**
    * Insert a Record data structure maintaining records of its specified date
    * 
@@ -97,13 +108,17 @@ public class Farm {
    * @throws DuplicateKeyException   - when the inserted Record is already in the set
    */
   public void insert(Record key) throws IllegalNullKeyException, DuplicateKeyException {
-
-    // TODO Auto-generated method stub
-    if (farmRecords == null)
+    // Check whether the input parameter is null
+    if (key == null)
       throw new IllegalNullKeyException("null Record input");
+
+    // Check whether the record is duplicated
     if (farmRecords.contains(key))
       throw new DuplicateKeyException("duplicate Record");
+
+    // Add the record to the tree set
     farmRecords.add(key);
+
     // update total weight
     totalWeight += key.getWeight();
 
@@ -167,5 +182,5 @@ public class Farm {
   public int numKeys() {
     return farmRecords.size();
   }
-  
+
 }

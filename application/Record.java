@@ -27,9 +27,12 @@ import java.util.GregorianCalendar;
  *
  */
 public class Record implements Comparable<Record> {
-  private GregorianCalendar date; // date of the record
-  private String farmID; // denotes the farm of this record
-  private long weight; // the weight of milk provided by the farm specified in ID
+  // date of the record
+  private GregorianCalendar date;
+  // denotes the farm of this record
+  private String farmID;
+  // the weight of milk provided by the farm specified in ID
+  private long weight;
 
   /**
    * Constructor of the record
@@ -39,6 +42,7 @@ public class Record implements Comparable<Record> {
    * @param weight - the weight of milk provided by the farm specified in ID
    */
   public Record(GregorianCalendar date, String farmID, long weight) {
+    // Initialize all the variables with parameters
     this.date = date;
     this.farmID = farmID;
     this.weight = weight;
@@ -90,22 +94,35 @@ public class Record implements Comparable<Record> {
    * Compare method. Compare priority is: farmID, date, and weight.
    * 
    * @param Record r - the record to be compared with
+   * 
    * @return a int value denote compare result. If greater than 0, this > r. If equal to 0, this =
    *         r. If less than 0, this < r.
+   * 
+   * @override method in Comparable interface
    */
   @Override
   public int compareTo(Record r) {
+    // Store the result of ID difference
     int farmIDDiff = farmID.compareTo(r.farmID);
+    // Check the difference
     if (farmIDDiff != 0)
       return farmIDDiff;
 
+    // Store the result of year difference
     int yearDiff = this.getDate().get(Calendar.YEAR) - r.getDate().get(Calendar.YEAR);
+    // Check the difference
     if (yearDiff != 0)
       return yearDiff;
+
+    // Store the result of month difference
     int monthDiff = this.getDate().get(Calendar.MONTH) - r.getDate().get(Calendar.MONTH);
+    // Check the difference
     if (monthDiff != 0)
       return monthDiff;
+
+    // Store the result of date difference
     int dateDiff = this.getDate().get(Calendar.DATE) - r.getDate().get(Calendar.DATE);
+    // Check the difference
     if (dateDiff != 0)
       return dateDiff;
 

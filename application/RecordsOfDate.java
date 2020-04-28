@@ -45,6 +45,7 @@ public class RecordsOfDate {
    * @param g - date that this records set stores
    */
   public RecordsOfDate(GregorianCalendar g) {
+    // Initialize all the variables
     this.g = g;
     this.recordSet = new TreeSet<Record>();
     this.totalWeight = 0;
@@ -55,15 +56,22 @@ public class RecordsOfDate {
    * This method is used to add new record to the BST
    * 
    * @param record - record to be stored
+   * 
    * @throws IllegalNullKeyException - when input is null
    * @throws DuplicateKeyException   - when input already exists in the BST
    */
   public void insert(Record record) throws IllegalNullKeyException, DuplicateKeyException {
+    // Check whether the input parameter is null
     if (record == null)
       throw new IllegalNullKeyException("null Record input");
+
+    // Check whether the record is duplicated
     if (recordSet.contains(record))
       throw new DuplicateKeyException("duplicate Record");
+
+    // Add the record to the tree set
     recordSet.add(record);
+
     // update total weight and number
     totalWeight += record.getWeight();
     numKeys++;
@@ -73,13 +81,19 @@ public class RecordsOfDate {
    * This method is used to remove a record from the BST
    * 
    * @param record - record to be removed
+   * 
    * @return true when remove successfully, false otherwise
+   * 
    * @throws IllegalNullKeyException - when input is null
    */
   public boolean remove(Record record) throws IllegalNullKeyException {
+    // Check whether the input parameter is null
     if (record == null)
       throw new IllegalNullKeyException("null Record input");
+
+    // Remove the record from the set
     boolean removeResult = recordSet.remove(record);
+
     // check if remove successfully, if so update total weight and number
     if (removeResult) {
       totalWeight -= record.getWeight();
@@ -92,10 +106,13 @@ public class RecordsOfDate {
    * This method is used to check if a record already stored
    * 
    * @param record - record to be checked
+   * 
    * @return true if exists, false otherwise
+   * 
    * @throws IllegalNullKeyException - when input is null
    */
   public boolean contains(Record record) throws IllegalNullKeyException {
+    // Check whether the input parameter is null
     if (record == null)
       throw new IllegalNullKeyException("null Record input");
     return recordSet.contains(record);
@@ -134,8 +151,13 @@ public class RecordsOfDate {
    * @return list of records stored
    */
   public List<Record> getTraversal() {
+    // Create the iterator to iterate through the list
     Iterator<Record> setIterator = recordSet.iterator();
+
+    // Create a list to store results
     List<Record> result = new LinkedList<Record>();
+
+    // Loop to retrieve records
     while (setIterator.hasNext()) {
       Record element = (Record) setIterator.next();
       result.add(element);
