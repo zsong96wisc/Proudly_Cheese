@@ -476,6 +476,17 @@ public class GUI {
             weightTextField.getText());
         // add the records to the internal system
         manager.addRecords(record);
+        
+        // Create an alert
+        Alert alert = new Alert(AlertType.INFORMATION, "Successfully add record");
+        // Set the title
+        alert.setTitle("Information");
+        alert.showAndWait().filter(response -> response == ButtonType.OK);
+        
+        farmIDTextField.clear();
+        dateTextField.clear();
+        weightTextField.clear();
+        
       } catch (IllegalRecordException e1) {
         // Display warning messages
         displayWarningMessage(WarningIndex.ILLEGALRECORDEXCEPTION);
@@ -499,6 +510,17 @@ public class GUI {
             weightTextField.getText());
         // remove the records from the internal system
         manager.removeRecords(record);
+        
+        // Create an alert
+        Alert alert = new Alert(AlertType.INFORMATION, "Successfully delete record");
+        // Set the title
+        alert.setTitle("Information");
+        alert.showAndWait().filter(response -> response == ButtonType.OK);
+        
+        farmIDTextField.clear();
+        dateTextField.clear();
+        weightTextField.clear();
+        
       } catch (IllegalRecordException e1) {
         // Display warning messages
         displayWarningMessage(WarningIndex.ILLEGALRECORDEXCEPTION);
@@ -618,6 +640,20 @@ public class GUI {
             manager.inputRecord(newFarmID.getText(), newDate.getText(), newWeight.getText());
         // Change the records from the internal system
         manager.changeRecords(oldRecord, newRecord);
+        
+        // Create an alert
+        Alert alert = new Alert(AlertType.INFORMATION, "Successfully change record");
+        // Set the title
+        alert.setTitle("Information");
+        alert.showAndWait().filter(response -> response == ButtonType.OK);
+        
+        newFarmID.clear();
+        newDate.clear();
+        newWeight.clear();
+        oldFarmID.clear();
+        oldDate.clear();
+        oldWeight.clear();
+        
       } catch (IllegalNullKeyException e1) {
         // Display the warning message
         displayWarningMessage(WarningIndex.ILLEGALNULLKEYEXCEPTION);

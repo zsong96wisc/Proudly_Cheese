@@ -124,7 +124,7 @@ public class FileManager {
   }
 
   /**
-   * Export farm reports to the file system in csv format
+   * Export reports to the file system in csv format
    * 
    * @param list - the list of record to be exported
    * @param file - the file to be exported to
