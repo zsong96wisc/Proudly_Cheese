@@ -1488,7 +1488,7 @@ public class GUI {
 
     // Create VBox layout and add components
     VBox vBox = new VBox(20);
-    vBox.getChildren().addAll(endDateField, startDateField);
+    vBox.getChildren().addAll(startDateField, endDateField);
     root.setTop(text);
     BorderPane.setAlignment(text, Pos.TOP_CENTER);
 
