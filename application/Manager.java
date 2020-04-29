@@ -20,6 +20,7 @@ package application;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -95,10 +96,12 @@ public class Manager {
       result[i][1] = Long.toString(weight);
     }
 
+    // Formating Double values
+    DecimalFormat df = new DecimalFormat("#.00");
     // Compute the percentage
     for (int i = 0; i < 12; i++) {
-      if (!(sum == 0)) {
-        result[i][2] = Double.toString(1.0 * Long.parseLong(result[i][1]) / sum);
+      if (!(sum == 0) && !(Long.parseLong(result[i][1]) == 0)) {
+        result[i][2] = df.format(100.0 * Long.parseLong(result[i][1]) / sum) + "%";
       } else {
         result[i][2] = "0%";
       }
@@ -136,12 +139,19 @@ public class Manager {
     // An ArrayList to store the result
     ArrayList<ArrayList<String>> reportOfMonth = new ArrayList<ArrayList<String>>();
 
+    // Formating Double values
+    DecimalFormat df = new DecimalFormat("#.00");
+
     // Get statistics of monthly report
     for (String s : monthlyRecords.keySet()) {
       ArrayList<String> tempList = new ArrayList<String>();
       tempList.add(s);
       tempList.add(monthlyRecords.get(s).toString());
-      tempList.add(String.valueOf((1.0 * monthlyRecords.get(s) / sumOfWeights)));
+      if (!(sumOfWeights == 0) && !(monthlyRecords.get(s) == 0)) {
+        tempList.add(df.format((100.0 * monthlyRecords.get(s) / sumOfWeights)) + "%");
+      } else {
+        tempList.add("0%");
+      }
       reportOfMonth.add(tempList);
     }
 
@@ -182,12 +192,19 @@ public class Manager {
     // An ArrayList to store the result
     ArrayList<ArrayList<String>> reportOfYear = new ArrayList<ArrayList<String>>();
 
+    // Formating Double values
+    DecimalFormat df = new DecimalFormat("#.00");
+
     // Get statistics of yearly report
     for (String s : yearlyRecords.keySet()) {
       ArrayList<String> tempList = new ArrayList<String>();
       tempList.add(s);
       tempList.add(yearlyRecords.get(s).toString());
-      tempList.add(String.valueOf((1.0 * yearlyRecords.get(s) / sumOfWeights)));
+      if (!(sumOfWeights == 0) && !(yearlyRecords.get(s) == 0)) {
+        tempList.add(df.format((100.0 * yearlyRecords.get(s) / sumOfWeights)) + "%");
+      } else {
+        tempList.add("0%");
+      }
       reportOfYear.add(tempList);
     }
 
@@ -228,12 +245,19 @@ public class Manager {
     // An ArrayList to store the result
     ArrayList<ArrayList<String>> reportOfRange = new ArrayList<ArrayList<String>>();
 
+    // Formating Double values
+    DecimalFormat df = new DecimalFormat("#.00");
+
     // Get statistics of date range report
     for (String s : rangeRecords.keySet()) {
       ArrayList<String> tempList = new ArrayList<String>();
       tempList.add(s);
       tempList.add(rangeRecords.get(s).toString());
-      tempList.add(String.valueOf((1.0 * rangeRecords.get(s) / sumOfWeights)));
+      if (!(sumOfWeights == 0) && !(rangeRecords.get(s) == 0)) {
+        tempList.add(df.format((100.0 * rangeRecords.get(s) / sumOfWeights)) + "%");
+      } else {
+        tempList.add("0%");
+      }
       reportOfRange.add(tempList);
     }
 
@@ -312,6 +336,10 @@ public class Manager {
    */
   public boolean changeRecords(Record oldRecord, Record newRecord)
       throws IllegalNullKeyException, DuplicateKeyException {
+    if (oldRecord == null || newRecord == null) {
+      throw new IllegalNullKeyException("The input is null");
+    }
+
     if (oldRecord.compareTo(newRecord) == 0) // Record is the same
       return true;
 
