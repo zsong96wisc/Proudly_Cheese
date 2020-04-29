@@ -116,17 +116,17 @@ public class GUI {
   // Info for add delete scene
   private static final String ADDDELETERESULT_INFO =
       "Enter Farm ID, Date, Weight to add or delete this piece of data. \n"
-          + "Clear will clear your input so that you can input new information.";
+          + "Clear will clear your input so that you can input new \ninformation.";
 
   // Info for change scene
   private static final String CHANGERESULT_INFO =
       "Enter old Farm ID, Date, Weight and the new ones accordingly to"
-          + "swap change the old record to the new one. \n"
-          + "Clear will clear your input so that you can input new information.";
+          + " swap change the old record to the new one. \n"
+          + "Clear will clear your input so that you can input new \ninformation.";
 
   // Info for farm report scene
   private static final String FARMREPORT_INFO = "Please enter your Farm ID. Then press Search. \n"
-      + "Clear will clear your input so that you can input new information.";
+      + "Clear will clear your input so that you can input new \ninformation.";
 
   // Info for farm report result scene
   private static final String FARMREPORTRESULT_INFO = "Click Asc/Des to sort based on Date \n"
@@ -136,7 +136,7 @@ public class GUI {
 
   // Info for annual report scene
   private static final String ANNUALREPORT_INFO = "Please enter the year. Then click Search.\n"
-      + "Clear will clear your input so that you can input new information";
+      + "Clear will clear your input so that you can input new \ninformation";
 
   // Info for annual report result scene
   private static final String ANNUALREPORTRESULT_INFO =
@@ -147,7 +147,7 @@ public class GUI {
   // Info for monthly report scene
   private static final String MONTHLYREPORT_INFO =
       "Please enter the year or the month. Then click Search. \n"
-          + "Clear will clear your input so that you can input new information";
+          + "Clear will clear your input so that you can input new \ninformation";
 
   // Info for monthly report result scene
   private static final String MONTHLYREPORTRESULT_INFO =
@@ -158,7 +158,7 @@ public class GUI {
   // Info for data range report scene
   private static final String DATERANGEREPORT_INFO =
       "Please enter end date and start date accordingly. Then click search.\n"
-          + "Clear will clear your input so that you can input new information";
+          + "Clear will clear your input so that you can input new \ninformation";
 
   // Info for data range report result scene
   private static final String DATERANGEREPORTRESULT_INFO =
@@ -207,9 +207,11 @@ public class GUI {
    * @param primaryStage - the stage that displays the scene
    */
   public void getMainScene(Stage primaryStage) {
-    // Initialize the manager instance
-    this.manager = new Manager();
-
+    if (manager == null) {
+      // Initialize the manager instance
+      this.manager = new Manager();
+    }
+    
     // Three VBox layout management in the BroadPane
     VBox vbox = new VBox(20);
     VBox vboxL = new VBox(5);
@@ -476,17 +478,17 @@ public class GUI {
             weightTextField.getText());
         // add the records to the internal system
         manager.addRecords(record);
-        
+
         // Create an alert
         Alert alert = new Alert(AlertType.INFORMATION, "Successfully add record");
         // Set the title
         alert.setTitle("Information");
         alert.showAndWait().filter(response -> response == ButtonType.OK);
-        
+
         farmIDTextField.clear();
         dateTextField.clear();
         weightTextField.clear();
-        
+
       } catch (IllegalRecordException e1) {
         // Display warning messages
         displayWarningMessage(WarningIndex.ILLEGALRECORDEXCEPTION);
@@ -510,17 +512,17 @@ public class GUI {
             weightTextField.getText());
         // remove the records from the internal system
         manager.removeRecords(record);
-        
+
         // Create an alert
         Alert alert = new Alert(AlertType.INFORMATION, "Successfully delete record");
         // Set the title
         alert.setTitle("Information");
         alert.showAndWait().filter(response -> response == ButtonType.OK);
-        
+
         farmIDTextField.clear();
         dateTextField.clear();
         weightTextField.clear();
-        
+
       } catch (IllegalRecordException e1) {
         // Display warning messages
         displayWarningMessage(WarningIndex.ILLEGALRECORDEXCEPTION);
@@ -640,20 +642,20 @@ public class GUI {
             manager.inputRecord(newFarmID.getText(), newDate.getText(), newWeight.getText());
         // Change the records from the internal system
         manager.changeRecords(oldRecord, newRecord);
-        
+
         // Create an alert
         Alert alert = new Alert(AlertType.INFORMATION, "Successfully change record");
         // Set the title
         alert.setTitle("Information");
         alert.showAndWait().filter(response -> response == ButtonType.OK);
-        
+
         newFarmID.clear();
         newDate.clear();
         newWeight.clear();
         oldFarmID.clear();
         oldDate.clear();
         oldWeight.clear();
-        
+
       } catch (IllegalNullKeyException e1) {
         // Display the warning message
         displayWarningMessage(WarningIndex.ILLEGALNULLKEYEXCEPTION);
@@ -1122,10 +1124,10 @@ public class GUI {
     result.add(weight);
     result.add(percent);
 
-//    // Create three ListViews
-//    ListView<String> farmIDList = getListView(result.get(0), 100, 150);
-//    ListView<String> weightList = getListView(result.get(1), 100, 150);
-//    ListView<String> percentList = getListView(result.get(2), 100, 150);
+    // // Create three ListViews
+    // ListView<String> farmIDList = getListView(result.get(0), 100, 150);
+    // ListView<String> weightList = getListView(result.get(1), 100, 150);
+    // ListView<String> percentList = getListView(result.get(2), 100, 150);
 
 
 
@@ -2023,27 +2025,27 @@ public class GUI {
     return textField;
   }
 
-//  /**
-//   * Create the ListView
-//   * 
-//   * @param result - the array of data
-//   * @param length - the length of the field
-//   * @param height - the height of the field
-//   * 
-//   * @return the ListView<String>
-//   */
-//  private ListView<String> getListView(ArrayList<String> result, int length, int height) {
-//    // Create a new listView
-//    ListView<String> listView = new ListView<String>();
-//
-//    // Add data to the list
-//    for (int i = 0; i < result.size(); i++) {
-//      listView.getItems().add(result.get(i));
-//    }
-//
-//    // Set the size
-//    listView.setMaxSize(length, height);
-//    return listView;
-//  }
+  // /**
+  // * Create the ListView
+  // *
+  // * @param result - the array of data
+  // * @param length - the length of the field
+  // * @param height - the height of the field
+  // *
+  // * @return the ListView<String>
+  // */
+  // private ListView<String> getListView(ArrayList<String> result, int length, int height) {
+  // // Create a new listView
+  // ListView<String> listView = new ListView<String>();
+  //
+  // // Add data to the list
+  // for (int i = 0; i < result.size(); i++) {
+  // listView.getItems().add(result.get(i));
+  // }
+  //
+  // // Set the size
+  // listView.setMaxSize(length, height);
+  // return listView;
+  // }
 
 }
