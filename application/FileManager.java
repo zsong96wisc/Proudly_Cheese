@@ -26,6 +26,7 @@ import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -131,7 +132,8 @@ public class FileManager {
    * 
    * @throws FileNotFoundException - if the exported file cannot be found
    */
-  public void exportFarmReport(String[][] result, File file) throws FileNotFoundException {
+  public void exportReport(ArrayList<ArrayList<String>> result, File file, int index)
+      throws FileNotFoundException {
     // Check the input parameter
     if (file == null) {
       throw new FileNotFoundException("The export file cannot be found");
@@ -140,13 +142,17 @@ public class FileManager {
     // Create a PrintWriter
     PrintWriter writer = new PrintWriter(file);
     // Write the first line to the file
-    writer.println("month,weight,percent");
+    if (index == 0) {
+      writer.println("month,weight,percent");
+    } else if (index == 1) {
+      writer.println("farmID,weight,percent");
+    }
     // Loop through the list
-    for (int i = 0; i < result.length; i++) {
+    for (int i = 0; i < result.size(); i++) {
       // Write the records into the file
-      writer.print(result[i][0] + ",");
-      writer.print(result[i][1] + ",");
-      writer.println(result[i][2]);
+      writer.print(result.get(i).get(0) + ",");
+      writer.print(result.get(i).get(1) + ",");
+      writer.println(result.get(i).get(2));
     }
     // close the print writer
     writer.close();

@@ -85,7 +85,7 @@ public class Manager {
     // Loop through the 12 months
     for (int i = 0; i < 12; i++) {
       result.add(new ArrayList<String>());
-      for(int j = 0; j < 3; j++) {
+      for (int j = 0; j < 3; j++) {
         result.get(i).add(new String());
       }
       // Set the info in the first column
@@ -108,7 +108,7 @@ public class Manager {
       if (!(sum == 0) && !(Long.parseLong(result.get(i).get(1)) == 0)) {
         result.get(i).set(2, df.format(100.0 * Long.parseLong(result.get(i).get(1)) / sum) + "%");
       } else {
-        result.get(i).set(2,"0.00%");
+        result.get(i).set(2, "0.00%");
       }
     }
     return result;
@@ -412,8 +412,9 @@ public class Manager {
    * 
    * @throws FileNotFoundException - if the exported file cannot be found
    */
-  public void exportFarmReport(String[][] result, File file) throws FileNotFoundException {
-    this.fileManager.exportFarmReport(result, file);
+  public void exportReport(ArrayList<ArrayList<String>> result, File file, int index)
+      throws FileNotFoundException {
+    this.fileManager.exportReport(result, file, index);
   }
 
   /**
