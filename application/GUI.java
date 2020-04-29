@@ -28,6 +28,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Optional;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -211,7 +212,7 @@ public class GUI {
       // Initialize the manager instance
       this.manager = new Manager();
     }
-    
+
     // Three VBox layout management in the BroadPane
     VBox vbox = new VBox(20);
     VBox vboxL = new VBox(5);
@@ -290,41 +291,43 @@ public class GUI {
       // Set content text
       choiceDialog.setContentText("please select the way to load data");
       // Wait the user choice
-      choiceDialog.showAndWait();
+      Optional<String> selectResult = choiceDialog.showAndWait();
       // Store the respond
       String choice = choiceDialog.getSelectedItem();
 
-      // Open the fileChooser
-      File selectedFile = this.fileChooser.showOpenDialog(primaryStage);
-      try {
-        // import the file and get the list of records
-        List<Record> list = this.manager.importFile(selectedFile);
-        // import the list to the internal system
-        this.manager.importList(list, choice);
+      if (selectResult.isPresent()) {
+        // Open the fileChooser
+        File selectedFile = this.fileChooser.showOpenDialog(primaryStage);
+        try {
+          // import the file and get the list of records
+          List<Record> list = this.manager.importFile(selectedFile);
+          // import the list to the internal system
+          this.manager.importList(list, choice);
 
-        // Create an alert
-        Alert alert = new Alert(AlertType.INFORMATION, "Successfully load data");
-        // Set the title
-        alert.setTitle("Information");
-        alert.showAndWait().filter(response -> response == ButtonType.OK);
+          // Create an alert
+          Alert alert = new Alert(AlertType.INFORMATION, "Successfully load data");
+          // Set the title
+          alert.setTitle("Information");
+          alert.showAndWait().filter(response -> response == ButtonType.OK);
 
-      } catch (NumberFormatException e1) {
-        // display the warning message
-        displayWarningMessage(WarningIndex.NUMBERFORMATEXCEPTION);
-      } catch (IllegalArgumentException e1) {
-        displayWarningMessage(WarningIndex.ILLEGALARGUMENTEXCEPTION);
-      } catch (IOException e1) {
-        displayWarningMessage(WarningIndex.IOEXCEPTION);
-      } catch (IllegalRecordException e1) {
-        displayWarningMessage(WarningIndex.ILLEGALRECORDEXCEPTION);
-      } catch (ParseException e1) {
-        displayWarningMessage(WarningIndex.PARSEEXCEPTION);
-      } catch (IllegalNullKeyException e1) {
-        displayWarningMessage(WarningIndex.ILLEGALNULLKEYEXCEPTION);
-      } catch (DuplicateKeyException e1) {
-        displayWarningMessage(WarningIndex.DUPLICATEKEYEXCEPTION);
-      } catch (NullPointerException e1) {
+        } catch (NumberFormatException e1) {
+          // display the warning message
+          displayWarningMessage(WarningIndex.NUMBERFORMATEXCEPTION);
+        } catch (IllegalArgumentException e1) {
+          displayWarningMessage(WarningIndex.ILLEGALARGUMENTEXCEPTION);
+        } catch (IOException e1) {
+          displayWarningMessage(WarningIndex.IOEXCEPTION);
+        } catch (IllegalRecordException e1) {
+          displayWarningMessage(WarningIndex.ILLEGALRECORDEXCEPTION);
+        } catch (ParseException e1) {
+          displayWarningMessage(WarningIndex.PARSEEXCEPTION);
+        } catch (IllegalNullKeyException e1) {
+          displayWarningMessage(WarningIndex.ILLEGALNULLKEYEXCEPTION);
+        } catch (DuplicateKeyException e1) {
+          displayWarningMessage(WarningIndex.DUPLICATEKEYEXCEPTION);
+        } catch (NullPointerException e1) {
 
+        }
       }
     });
 
@@ -1443,6 +1446,72 @@ public class GUI {
     Button weightSortButton = getOvalButton("Asc/Des", 3.2, 2);
     weightSortButton.setStyle("-fx-base: navajowhite;");
 
+    // set the action of the farmID
+    farmIDSortButton.setOnAction(e -> {
+      // when the order of the farmID is the descending order
+      if (!this.firstFlag) {
+        // sort it into ascending order
+        Collections.sort(result, (a, b) -> {
+          return a.get(0).compareTo(b.get(0));
+        });
+        // set the flag to be true
+        firstFlag = true;
+      } else {
+        // this is the temporary arraylist to reverse the arraylist
+        ArrayList<ArrayList<String>> tmp = new ArrayList<ArrayList<String>>();
+
+        // reversely store the data in result to tmp
+        for (int i = result.size() - 1; i >= 0; i--) {
+          tmp.add(result.get(i));
+        }
+        // set result to be reversed
+        result = tmp;
+        firstFlag = false;
+      }
+
+      data.clear();
+      // set data to be new order of result
+      for (int i = 0; i < result.size(); i++) {
+        data.add(
+            new ResultRecord(result.get(i).get(0), result.get(i).get(1), result.get(i).get(2)));
+      }
+      // set the table with new data
+      table.setItems(data);
+    });
+
+    weightSortButton.setOnAction(e -> {
+
+      // when the order of the farmID is the descending order
+      if (!this.secondFlag) {
+        // sort it into ascending order
+        Collections.sort(result, (a, b) -> {
+          return a.get(1).compareTo(b.get(1));
+        });
+        // set the flag to be true
+        secondFlag = true;
+      } else {
+        // this is the temporary arraylist to reverse the arraylist
+        ArrayList<ArrayList<String>> tmp = new ArrayList<ArrayList<String>>();
+
+        // reversely store the data in result to tmp
+        for (int i = result.size() - 1; i >= 0; i--) {
+          tmp.add(result.get(i));
+        }
+        // set result to be reversed
+        result = tmp;
+        secondFlag = false;
+      }
+
+      data.clear();
+      // set data to be new order of result
+      for (int i = 0; i < result.size(); i++) {
+        data.add(
+            new ResultRecord(result.get(i).get(0), result.get(i).get(1), result.get(i).get(2)));
+      }
+      // set the table with new data
+      table.setItems(data);
+    });
+
     // Create HBox and VBox layout and add components
     HBox sortButton = new HBox(25);
     sortButton.getChildren().addAll(farmIDSortButton, weightSortButton);
@@ -1611,7 +1680,7 @@ public class GUI {
       displayWarningMessage(WarningIndex.PARSEEXCEPTION);
     }
 
-    ObservableList<ResultRecord> data = FXCollections.observableArrayList();
+    data = FXCollections.observableArrayList();
     for (int i = 0; i < result.size(); i++) {
       data.add(new ResultRecord(result.get(i).get(0), result.get(i).get(1), result.get(i).get(2)));
     }
