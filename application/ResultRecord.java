@@ -1,6 +1,6 @@
 package application;
 
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.SimpleStringProperty; 
 
 public class ResultRecord {
   private final SimpleStringProperty columnOne;
