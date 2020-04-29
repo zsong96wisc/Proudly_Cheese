@@ -92,6 +92,7 @@ public class GUI {
   // A String array to store the possible user choice when loading
   private final String[] loadFunction =
       new String[] {"Append to the existing data", "Add as a new set of data"};
+  private String[][] result;
 
   // Info for the main menu
   private static final String MAINMENU_INFO =
@@ -762,7 +763,7 @@ public class GUI {
     Label title = new Label("\nTOTAL MILK\n WEIGHT");
 
     // The result to be displayed in the list
-    String[][] result = new String[12][3];
+    result = new String[12][3];
     try {
       // Retrieve the result
       result = manager.getFarmReport(farmID,
