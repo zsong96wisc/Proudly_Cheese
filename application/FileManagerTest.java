@@ -137,16 +137,18 @@ public class FileManagerTest {
 	}
 
 	/**
-	 * Test the correct exception is thrown when export to non-existing file
+	 * Test the correct exception is not thrown and new file is created
 	 */
 	@Test
 	public void test007_exportFile_invalid() throws Exception {
+
 		List<Record> test = fm.importFile(new File("correctSample.csv"));
-		try {
-			fm.exportFile(test, new File(""));
-		} catch (IOException e) {
-			return;
-		}
+		Manager m = new Manager();
+		m.importList(test, "Add as a new set of data");
+		fm.exportReport(
+				m.getAnnualReport(new GregorianCalendar(2019, 1, 1, 0, 0, 0)),
+				new File(" "), 1);
+
 	}
 
 	/**
@@ -154,8 +156,13 @@ public class FileManagerTest {
 	 */
 	@Test
 	public void test008_exportFile_valid_Jan() throws Exception {
+
 		List<Record> test = fm.importFile(new File("correctSample.csv"));
-		fm.exportFile(test, new File("exportTester"));
+		Manager m = new Manager();
+		m.importList(test, "Add as a new set of data");
+		fm.exportReport(
+				m.getAnnualReport(new GregorianCalendar(2019, 1, 1, 0, 0, 0)),
+				new File("exportTester"), 1);
 	}
 
 	/**
@@ -163,8 +170,13 @@ public class FileManagerTest {
 	 */
 	@Test
 	public void test009_exportFile_valid_Sept() throws Exception {
+
 		List<Record> test = fm.importFile(new File("correctSampleSept.csv"));
-		fm.exportFile(test, new File("exportTester2"));
+		Manager m = new Manager();
+		m.importList(test, "Add as a new set of data");
+		fm.exportReport(
+				m.getAnnualReport(new GregorianCalendar(2019, 9, 1, 0, 0, 0)),
+				new File("exportTester2"), 1);
 	}
 
 }
