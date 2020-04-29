@@ -64,7 +64,7 @@ class ManagerTest {
       
       String[][] report = m.getFarmReport("Farm 001", date);
       assert report[0][1].equals("13");
-      assert report[0][2].equals("1.0");
+      assert report[0][2].equals("100.00%");
       
     } catch (Exception e) {
       fail("Unknown Exception Thrown");
@@ -100,7 +100,7 @@ class ManagerTest {
           for (int k = 0; k < report.size(); k++) {
             assert report.get(k).get(0).equals("Farm 001");
             assert report.get(k).get(1).equals( Integer.toString(12*(i+1)));
-            assert report.get(k).get(2).equals("1.0");
+            assert report.get(k).get(2).equals("100.00%");
           }
         }
       }
@@ -137,9 +137,9 @@ class ManagerTest {
           
           // Each month
           for (int k = 0; k < report.size(); k++) {
-              report.get(k).get(0).equals("Farm 00" + k); // two Farm
-              report.get(k).get(1).equals(Integer.toString(i+1));
-              report.get(k).get(2).equals(Double.toString(0.33));
+              assert report.get(k).get(0).equals("Farm 00" + (k+1)); // two Farm
+              assert report.get(k).get(1).equals(Integer.toString(12*(i+1)));
+              assert report.get(k).get(2).equals("33.33%");
           }
         }
       }
@@ -172,7 +172,7 @@ class ManagerTest {
         // For year 2011 and 2012
         assert report.get(0).get(0).equals("Farm 001");
         assert report.get(0).get(1).equals(Integer.toString(12 * (i + 1)));
-        assert report.get(0).get(2).equals("1.0");
+        assert report.get(0).get(2).equals("100.00%");
       }
     } catch (Exception e) {
       fail("Unkonw Exception Thrown");
@@ -245,7 +245,7 @@ class ManagerTest {
       // Total weight is 12 + 24
       assert report.get(0).get(1).equals("36");
       // Percentage should be 1.0
-      assert report.get(0).get(2).equals("1.0");
+      assert report.get(0).get(2).equals("100.00%");
       
     } catch (Exception e) {
       fail("Unkonw Exception Thrown");
@@ -441,7 +441,7 @@ class ManagerTest {
   }
   
   /**
-   * Test addRecords() throws exceptions as specified;
+   * Test changeRecords() will change records accordingly
    */
   @Test
   public void test012_change_records() {
@@ -457,28 +457,75 @@ class ManagerTest {
           m.addRecords(new Record(date, "Farm 003", 3*(i + 1)));
         }
       }
-      assert m.getNumberOfRecords() == 72;
+      
       assert m.getNumberOfFarms() == 3;
+      assert m.getNumberOfRecords() == 72;
+      
       for (int i = 0; i < 2; i++) {
         // Insert record into 2 years and each month
         for (int j = 0; j < 12; j++) {
           GregorianCalendar date =
               new GregorianCalendar(2011 + i, 0, j + 1, 0, 0, 0);
           date.setLenient(false);
-          
-          assert m.changeRecords(new Record(date, "Farm 001", i + 1), 
+          m.changeRecords(new Record(date, "Farm 001", i + 1), 
               new Record(date, "Farm 001", 3*(i + 1)));
-          assert m.changeRecords(new Record(date, "Farm 002", 2*(i + 1)), 
-              new Record(date, "Farm 001", i + 1));
-          assert m.changeRecords(new Record(date, "Farm 003", 3*(i + 1)), 
-              new Record(date, "Farm 001", (i + 1)));
+          m.changeRecords(new Record(date, "Farm 002", 2*(i + 1)), 
+              new Record(date, "Farm 002", 1*(i + 1)));
+          m.changeRecords(new Record(date, "Farm 003", 3*(i + 1)), 
+              new Record(date, "Farm 003", 2*(i + 1)));
         }
       }
-      assert m.getNumberOfRecords() == 72;
-      assert m.getNumberOfFarms() == 3;
     } catch (Exception e) {
       fail("Unkonw Exception Thrown");
     }
   }
+  
+  /**
+   * Test changeRecords() will throw exceptions accordingly
+   */
+  @Test
+  public void test013_change_records_throw_exceptions() {
+    try {
+      try { // IllegalNullKeyException
+        m.changeRecords(null, null); 
+        fail("Should throw IllegalNullKeyException");
+      } catch (IllegalNullKeyException e) {
+        // Expected
+      }
+      // Nothing has been inserted. So total number should all be 0
+      assert m.getNumberOfRecords() == 0;
+      assert m.getNumberOfFarms() == 0;
+      
+      for (int i = 0; i < 2; i++) {
+        // Insert record into 2 years and each month
+        for (int j = 0; j < 12; j++) {
+          GregorianCalendar date =
+              new GregorianCalendar(2011 + i, 0, 1, 0, 0, 0);
+          date.setLenient(false);
+          // Weight has been changed
+          m.addRecords(new Record(date, "Farm 001", j + 1));
+        }
+      }
+      assert m.getNumberOfRecords() == 24;
+      assert m.getNumberOfFarms() == 1;
+      
+      GregorianCalendar date =
+          new GregorianCalendar(2011, 0, 1, 0, 0, 0);
+      
+      try { // DuplicateKeyException
+        m.changeRecords(new Record(date, "Farm 001", 1), 
+            new Record(date, "Farm 001", 2));
+        fail("Should throw DuplicateKeyException");
+      } catch(DuplicateKeyException e){
+        // Expected
+      }
+      
+      assert m.getNumberOfRecords() == 24;
+      assert m.getNumberOfFarms() == 1;
+    } catch (Exception e) {
+      fail("Unkonw Exception Thrown");
+    }
+  }
+
   
 }
