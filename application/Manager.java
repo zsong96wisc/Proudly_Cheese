@@ -103,7 +103,7 @@ public class Manager {
       if (!(sum == 0) && !(Long.parseLong(result[i][1]) == 0)) {
         result[i][2] = df.format(100.0 * Long.parseLong(result[i][1]) / sum) + "%";
       } else {
-        result[i][2] = "0%";
+        result[i][2] = "0.00%";
       }
     }
     return result;
@@ -150,7 +150,7 @@ public class Manager {
       if (!(sumOfWeights == 0) && !(monthlyRecords.get(s) == 0)) {
         tempList.add(df.format((100.0 * monthlyRecords.get(s) / sumOfWeights)) + "%");
       } else {
-        tempList.add("0%");
+        tempList.add("0.00%");
       }
       reportOfMonth.add(tempList);
     }
@@ -203,7 +203,7 @@ public class Manager {
       if (!(sumOfWeights == 0) && !(yearlyRecords.get(s) == 0)) {
         tempList.add(df.format((100.0 * yearlyRecords.get(s) / sumOfWeights)) + "%");
       } else {
-        tempList.add("0%");
+        tempList.add("0.00%");
       }
       reportOfYear.add(tempList);
     }
@@ -256,7 +256,7 @@ public class Manager {
       if (!(sumOfWeights == 0) && !(rangeRecords.get(s) == 0)) {
         tempList.add(df.format((100.0 * rangeRecords.get(s) / sumOfWeights)) + "%");
       } else {
-        tempList.add("0%");
+        tempList.add("0.00%");
       }
       reportOfRange.add(tempList);
     }
