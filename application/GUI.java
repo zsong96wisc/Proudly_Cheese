@@ -1088,41 +1088,15 @@ public class GUI {
       getAnnualReportScene(primaryStage);
     });
 
-    // this is the new data returned by manager
-    ArrayList<ArrayList<String>> reportOfYear = new ArrayList<ArrayList<String>>();
-
     try {
       // create new calendar
       GregorianCalendar date = new GregorianCalendar(year, 1, 1, 0, 0, 0);
       // set the data
-      reportOfYear = manager.getAnnualReport(date);
+      result = manager.getAnnualReport(date);
     } catch (IllegalNullKeyException e1) {
       // display warning
       displayWarningMessage(WarningIndex.ILLEGALNULLKEYEXCEPTION);
     }
-
-    // display warning
-    if (reportOfYear.size() == 0) {
-      displayWarningMessage(WarningIndex.ILLEGALARGUMENTEXCEPTION);
-    }
-
-    // the arrayList of different farmID, weight, and percent
-    ArrayList<String> farmID = new ArrayList<String>();
-    ArrayList<String> weight = new ArrayList<String>();
-    ArrayList<String> percent = new ArrayList<String>();
-
-
-    // store data in each of the arraylist
-    for (int i = 0; i < reportOfYear.size(); i++) {
-      farmID.add(reportOfYear.get(0).get(i));
-      weight.add(reportOfYear.get(1).get(i));
-      percent.add(reportOfYear.get(2).get(i));
-    }
-
-    // add the arraylist into the result
-    result.add(farmID);
-    result.add(weight);
-    result.add(percent);
 
     // // Create three ListViews
     // ListView<String> farmIDList = getListView(result.get(0), 100, 150);
@@ -1132,6 +1106,7 @@ public class GUI {
 
 
     // add data from result into the data list
+    data = FXCollections.observableArrayList();
     for (int i = 0; i < result.size(); i++) {
       data.add(new ResultRecord(result.get(i).get(0), result.get(i).get(1), result.get(i).get(2)));
     }
@@ -1438,7 +1413,7 @@ public class GUI {
 
     result = manager.getMonthlyReport(g);
 
-    ObservableList<ResultRecord> data = FXCollections.observableArrayList();
+    data = FXCollections.observableArrayList();
     for (ArrayList<String> element : result)
       data.add(new ResultRecord(element.get(0), element.get(1), element.get(2)));
 
