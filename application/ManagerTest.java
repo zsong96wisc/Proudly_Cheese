@@ -361,7 +361,6 @@ class ManagerTest {
           assert !m.removeRecords(new Record(date, "Farm 002", 2*(i + 1)));
           assert !m.removeRecords(new Record(date, "Farm 003", 3*(i + 1)));
         }
-        
       }
       
     } catch (Exception e) {
@@ -440,4 +439,46 @@ class ManagerTest {
       fail("Unkonw Exception Thrown");
     }
   }
+  
+  /**
+   * Test addRecords() throws exceptions as specified;
+   */
+  @Test
+  public void test012_change_records() {
+    try {
+      for (int i = 0; i < 2; i++) {
+        // Insert record into 2 years and each month
+        for (int j = 0; j < 12; j++) {
+          GregorianCalendar date =
+              new GregorianCalendar(2011 + i, 0, j + 1, 0, 0, 0);
+          date.setLenient(false);
+          m.addRecords(new Record(date, "Farm 001", i + 1));
+          m.addRecords(new Record(date, "Farm 002", 2*(i + 1)));
+          m.addRecords(new Record(date, "Farm 003", 3*(i + 1)));
+        }
+      }
+      assert m.getNumberOfRecords() == 72;
+      assert m.getNumberOfFarms() == 3;
+      for (int i = 0; i < 2; i++) {
+        // Insert record into 2 years and each month
+        for (int j = 0; j < 12; j++) {
+          GregorianCalendar date =
+              new GregorianCalendar(2011 + i, 0, j + 1, 0, 0, 0);
+          date.setLenient(false);
+          
+          assert m.changeRecords(new Record(date, "Farm 001", i + 1), 
+              new Record(date, "Farm 001", 3*(i + 1)));
+          assert m.changeRecords(new Record(date, "Farm 002", 2*(i + 1)), 
+              new Record(date, "Farm 001", i + 1));
+          assert m.changeRecords(new Record(date, "Farm 003", 3*(i + 1)), 
+              new Record(date, "Farm 001", (i + 1)));
+        }
+      }
+      assert m.getNumberOfRecords() == 72;
+      assert m.getNumberOfFarms() == 3;
+    } catch (Exception e) {
+      fail("Unkonw Exception Thrown");
+    }
+  }
+  
 }

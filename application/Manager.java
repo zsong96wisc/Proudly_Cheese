@@ -308,6 +308,9 @@ public class Manager {
    */
   public boolean changeRecords(Record oldRecord, Record newRecord)
       throws IllegalNullKeyException, DuplicateKeyException {
+    if (oldRecord.compareTo(newRecord) == 0) // Record is the same
+      return true;
+    
     // get the result of the change operation
     boolean result1 = farmIDManager.changeFarmRecord(oldRecord, newRecord);
     boolean result2 = dateManager.changeFarmRecord(oldRecord, newRecord);
