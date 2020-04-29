@@ -62,9 +62,9 @@ class ManagerTest {
       Record record = new Record(date, "Farm 001", 13);
       m.addRecords(record);
       
-      String[][] report = m.getFarmReport("Farm 001", date);
-      assert report[0][1].equals("13");
-      assert report[0][2].equals("100.00%");
+      ArrayList<ArrayList<String>> report = m.getFarmReport("Farm 001", date);
+      assert report.get(0).get(1).equals("13");
+      assert report.get(0).get(2).equals("100.00%");
       
     } catch (Exception e) {
       fail("Unknown Exception Thrown");
@@ -207,9 +207,11 @@ class ManagerTest {
 
         // Each farm
         for (int k = 0; k < report.size(); k++) {
-          report.get(k).get(0).equals("Farm 00" + k); // Three Farm
-          report.get(k).get(1).equals(Integer.toString(i + 1));
-          report.get(k).get(2).equals(Double.toString(1.0/6*(k+1)));
+          assert report.get(k).get(0).equals("Farm 00" + (k+1)); // Three Farm
+          assert report.get(k).get(1).equals(
+              Integer.toString(12*(k+1)*(i + 1))); // total weight in a month
+          // assert report.get(k).get(2).equals(Double.toString(10.0/6*(k+1)));
+          // Percentage is hard to code in loops
         }
       }
     } catch (Exception e) {

@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.GregorianCalendar;
@@ -67,7 +68,7 @@ public class Manager {
    * 
    * @throws IllegalNullKeyException - if key argument is null
    */
-  public String[][] getFarmReport(String farmID, GregorianCalendar date)
+  public ArrayList<ArrayList<String>> getFarmReport(String farmID, GregorianCalendar date)
       throws IllegalNullKeyException {
     // if the date is null
     if (date == null)
@@ -77,14 +78,18 @@ public class Manager {
       throw new IllegalNullKeyException("null farmID input");
 
     // Create a 2D String array to store the result
-    String[][] result = new String[12][3];
+    ArrayList<ArrayList<String>> result = new ArrayList<ArrayList<String>>();
     // Initialize a sum to store the total weight for a particular farm in one month
     long sum = 0;
 
     // Loop through the 12 months
     for (int i = 0; i < 12; i++) {
+      result.add(new ArrayList<String>());
+      for(int j = 0; j < 3; j++) {
+        result.get(i).add(new String());
+      }
       // Set the info in the first column
-      result[i][0] = DAY[i];
+      result.get(i).set(0, DAY[i]);
       // Create a new GregorianCalendar to represent a new month
       GregorianCalendar newMonth = new GregorianCalendar(date.get(Calendar.YEAR), 0, 1, 0, 0, 0);
       newMonth.set(Calendar.MONTH, i);
@@ -93,17 +98,17 @@ public class Manager {
       // Add to the sum
       sum += weight;
       // Store in the second column
-      result[i][1] = Long.toString(weight);
+      result.get(i).set(1, Long.toString(weight));
     }
 
     // Formating Double values
     DecimalFormat df = new DecimalFormat("#.00");
     // Compute the percentage
     for (int i = 0; i < 12; i++) {
-      if (!(sum == 0) && !(Long.parseLong(result[i][1]) == 0)) {
-        result[i][2] = df.format(100.0 * Long.parseLong(result[i][1]) / sum) + "%";
+      if (!(sum == 0) && !(Long.parseLong(result.get(i).get(1)) == 0)) {
+        result.get(i).set(2, df.format(100.0 * Long.parseLong(result.get(i).get(1)) / sum) + "%");
       } else {
-        result[i][2] = "0.00%";
+        result.get(i).set(2,"0.00%");
       }
     }
     return result;
