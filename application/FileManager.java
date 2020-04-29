@@ -124,14 +124,14 @@ public class FileManager {
   }
 
   /**
-   * Export different reports to the file system in csv format
+   * Export farm reports to the file system in csv format
    * 
    * @param list - the list of record to be exported
    * @param file - the file to be exported to
    * 
    * @throws FileNotFoundException - if the exported file cannot be found
    */
-  public void exportFile(List<Record> list, File file) throws FileNotFoundException {
+  public void exportFarmReport(String[][] result, File file) throws FileNotFoundException {
     // Check the input parameter
     if (file == null) {
       throw new FileNotFoundException("The export file cannot be found");
@@ -140,16 +140,13 @@ public class FileManager {
     // Create a PrintWriter
     PrintWriter writer = new PrintWriter(file);
     // Write the first line to the file
-    writer.println("date,farm_id,weight");
+    writer.println("month,weight,percent");
     // Loop through the list
-    for (Record record : list) {
+    for (int i = 0; i < result.length; i++) {
       // Write the records into the file
-      writer.print(record.getDate().get(Calendar.YEAR) + "-");
-      int actualMonth = record.getDate().get(Calendar.MONTH) + 1;
-      writer.print(actualMonth + "-");
-      writer.print(record.getDate().get(Calendar.DATE) + ",");
-      writer.print(record.getFarmID() + ",");
-      writer.println(record.getWeight());
+      writer.print(result[i][0] + ",");
+      writer.print(result[i][1] + ",");
+      writer.println(result[i][2]);
     }
     // close the print writer
     writer.close();

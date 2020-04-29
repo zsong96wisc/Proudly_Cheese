@@ -372,8 +372,8 @@ public class Manager {
    * 
    * @throws FileNotFoundException - if the exported file cannot be found
    */
-  public void exportFile(List<Record> list, File file) throws FileNotFoundException {
-    this.fileManager.exportFile(list, file);
+  public void exportFarmReport(String[][] result, File file) throws FileNotFoundException {
+    this.fileManager.exportFarmReport(result, file);
   }
 
   /**

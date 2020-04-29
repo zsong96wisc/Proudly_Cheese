@@ -18,8 +18,11 @@
 package application;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -669,7 +672,27 @@ public class GUI {
     Button search = getOvalButton("Search", 4, 2);
     search.setStyle("-fx-base: navajowhite;");
     search.setOnAction(e -> {
-      getFarmResultScene(primaryStage, inputFarmID.getText(), inputYear.getText());
+      try {
+        // Check the input field
+        if (inputFarmID.getText().equals("") || inputYear.getText().equals("")) {
+          throw new IllegalArgumentException("input is blank");
+        }
+        
+        // Create a DateFormat
+        DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        format.setLenient(false);
+        // Add the year to a String
+        String date = "01/01/" + inputYear.getText();
+        // Parse the String through the format
+        format.parse(date);
+        
+        getFarmResultScene(primaryStage, inputFarmID.getText(), inputYear.getText());
+      } catch (IllegalArgumentException e1) {
+        // Display warning message
+        displayWarningMessage(WarningIndex.ILLEGALARGUMENTEXCEPTION);
+      } catch (ParseException e1) {
+        displayWarningMessage(WarningIndex.PARSEEXCEPTION);
+      }
     });
 
     Button clear = getOvalButton("Clear", 4, 2);
@@ -835,11 +858,17 @@ public class GUI {
     exportButton.setStyle("-fx-base: navajowhite;");
     exportButton.setOnAction(e -> {
       File selectedFile = this.fileChooser.showOpenDialog(primaryStage);
+      try {
+        manager.exportFarmReport(result, selectedFile);
+      } catch (FileNotFoundException e1) {
+        
+      }
     });
 
+    Text bText = new Text("                ");
     // Add to the layout
-    HBox buttonBox = new HBox(100);
-    buttonBox.getChildren().addAll(farmWeightSortButton, exportButton);
+    HBox buttonBox = new HBox(20);
+    buttonBox.getChildren().addAll(bText, farmWeightSortButton, exportButton);
 
     vboxCR.getChildren().addAll(hBox, buttonBox);
 
