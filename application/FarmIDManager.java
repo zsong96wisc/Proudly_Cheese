@@ -177,7 +177,7 @@ public class FarmIDManager {
         addFarmRecord(newRecord);
       } catch (DuplicateKeyException e) {
         addFarmRecord(oldRecord);
-        result = false;
+        throw new DuplicateKeyException("Duplicate record");
       }
     }
     return result;

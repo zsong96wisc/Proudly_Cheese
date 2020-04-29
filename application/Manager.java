@@ -97,7 +97,11 @@ public class Manager {
 
     // Compute the percentage
     for (int i = 0; i < 12; i++) {
-      result[i][2] = Double.toString(1.0 * Long.parseLong(result[i][1]) / sum);
+      if (!(sum == 0)) {
+        result[i][2] = Double.toString(1.0 * Long.parseLong(result[i][1]) / sum);
+      } else {
+        result[i][2] = "0%";
+      }
     }
     return result;
   }
@@ -310,7 +314,7 @@ public class Manager {
       throws IllegalNullKeyException, DuplicateKeyException {
     if (oldRecord.compareTo(newRecord) == 0) // Record is the same
       return true;
-    
+
     // get the result of the change operation
     boolean result1 = farmIDManager.changeFarmRecord(oldRecord, newRecord);
     boolean result2 = dateManager.changeFarmRecord(oldRecord, newRecord);

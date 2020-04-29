@@ -766,6 +766,7 @@ public class GUI {
 
     // The result to be displayed in the list
     result = new String[12][3];
+    
     try {
       // Retrieve the result
       result = manager.getFarmReport(farmID,
@@ -863,7 +864,15 @@ public class GUI {
       File selectedFile = this.fileChooser.showOpenDialog(primaryStage);
       try {
         manager.exportFarmReport(result, selectedFile);
+        
+        // Create an alert
+        Alert alert = new Alert(AlertType.INFORMATION, "Successfully export result");
+        // Set the title
+        alert.setTitle("Information");
+        alert.showAndWait().filter(response -> response == ButtonType.OK);
+        
       } catch (FileNotFoundException e1) {
+        // Display warning message
         displayWarningMessage(WarningIndex.FILENOTFOUNDEXCEPTION);
       }
     });
