@@ -26,11 +26,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -822,6 +825,28 @@ public class GUI {
     ListView<String> farmDateList = getListView(month, 100, 200);
     ListView<String> totalWeightList = getListView(weight, 100, 200);
     ListView<String> percentList = getListView(percentage, 100, 200);
+    
+    ObservableList<ResultRecord> data = FXCollections.observableArrayList();
+    for (int i = 0; i < 12; i++) {
+      data.add(new ResultRecord(result[i][0], result[i][1], result[i][2]));
+    }
+    
+    TableView<ResultRecord> table = new TableView<ResultRecord>();
+    TableColumn<ResultRecord, String> firstCol = new TableColumn<ResultRecord, String>("Weight");
+    firstCol.setPrefWidth(90);
+    firstCol.setCellValueFactory(
+            new PropertyValueFactory<ResultRecord, String>("columnOne"));
+    TableColumn<ResultRecord, String> secondCol = new TableColumn<ResultRecord, String>("Last Name");
+    secondCol.setPrefWidth(90);
+    secondCol.setCellValueFactory(
+            new PropertyValueFactory<ResultRecord, String>("columnTwo"));
+    TableColumn<ResultRecord, String> thirdCol = new TableColumn<ResultRecord, String>("Email");
+    thirdCol.setPrefWidth(90);
+    thirdCol.setCellValueFactory(
+            new PropertyValueFactory<ResultRecord, String>("columnThree"));
+    table.setItems(data);
+    table.getColumns().addAll(firstCol, secondCol, thirdCol);
+    table.setMaxSize(300, 200);
 
     // Set the event handler
     totalWeightList.setOnMouseClicked(e -> {
@@ -882,7 +907,7 @@ public class GUI {
     HBox buttonBox = new HBox(20);
     buttonBox.getChildren().addAll(bText, farmWeightSortButton, exportButton);
 
-    vboxCR.getChildren().addAll(hBox, buttonBox);
+    vboxCR.getChildren().addAll(table, buttonBox);
 
     // Set the main pane
     root.setTop(text);
