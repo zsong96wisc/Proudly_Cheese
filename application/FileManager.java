@@ -54,7 +54,7 @@ public class FileManager {
       NumberFormatException, IllegalArgumentException, ParseException {
     // Check the input parameter
     if (file == null) {
-      return new LinkedList<Record>();
+      throw new NullPointerException("File is null");
     }
 
     // Create a BufferedReader variable

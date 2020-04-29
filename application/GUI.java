@@ -310,6 +310,8 @@ public class GUI {
         displayWarningMessage(WarningIndex.ILLEGALNULLKEYEXCEPTION);
       } catch (DuplicateKeyException e1) {
         displayWarningMessage(WarningIndex.DUPLICATEKEYEXCEPTION);
+      } catch (NullPointerException e1) {
+        
       }
     });
 
@@ -862,7 +864,7 @@ public class GUI {
       try {
         manager.exportFarmReport(result, selectedFile);
       } catch (FileNotFoundException e1) {
-        
+        displayWarningMessage(WarningIndex.FILENOTFOUNDEXCEPTION);
       }
     });
 
