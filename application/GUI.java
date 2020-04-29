@@ -297,12 +297,14 @@ public class GUI {
 
       if (selectResult.isPresent()) {
         // Open the fileChooser
-        File selectedFile = this.fileChooser.showOpenDialog(primaryStage);
+        List<File> selectedFiles = this.fileChooser.showOpenMultipleDialog(primaryStage);
         try {
           // import the file and get the list of records
-          List<Record> list = this.manager.importFile(selectedFile);
-          // import the list to the internal system
-          this.manager.importList(list, choice);
+          for (File selectedFile : selectedFiles) {
+            List<Record> list = this.manager.importFile(selectedFile);
+            // import the list to the internal system
+            this.manager.importList(list, choice);
+          }
 
           // Create an alert
           Alert alert = new Alert(AlertType.INFORMATION, "Successfully load data");
