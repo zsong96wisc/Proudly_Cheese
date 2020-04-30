@@ -1988,6 +1988,7 @@ public class GUI {
     ToggleButton buttonCloud = new ToggleButton("", imageView);
     buttonCloud.setOnAction(event -> {
       Alert alert = new Alert(AlertType.INFORMATION, getSceneInstruction(i));
+      alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
       alert.setTitle("Instructions");
       alert.showAndWait().filter(response -> response == ButtonType.OK);
     });
