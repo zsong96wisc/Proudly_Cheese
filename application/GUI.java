@@ -39,6 +39,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
@@ -609,6 +610,11 @@ public class GUI {
     TextField newFarmID = getInputTextField("New Farm ID", 90, 10);
     TextField newDate = getInputTextField("New Date", 90, 10);
     TextField newWeight = getInputTextField("New Weight", 90, 10);
+    newWeight.setOnKeyPressed(e -> {
+      if(e.getCode() == KeyCode.ENTER){
+        change.fire();
+      }
+    });
 
     // Create VBox layout and add components
     VBox center3 = new VBox(15);
@@ -753,6 +759,12 @@ public class GUI {
         displayWarningMessage(WarningIndex.PARSEEXCEPTION);
       }
     });
+    
+    inputYear.setOnKeyPressed(e -> {
+      if(e.getCode() == KeyCode.ENTER){
+        search.fire();
+      }
+    });
 
     Button clear = getOvalButton("Clear", 4, 2);
     clear.setStyle("-fx-base: gold;");
@@ -825,9 +837,7 @@ public class GUI {
 
     // The result to be displayed in the list
     result = new ArrayList<ArrayList<String>>();
-    
-    
-
+   
     try {
       // Retrieve the result
       result = manager.getFarmReport(farmID,
@@ -993,6 +1003,11 @@ public class GUI {
     Text year = new Text();
     year.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 18));
     year.setText("Year : ");
+    year.setOnKeyPressed(e -> {
+      if(e.getCode() == KeyCode.ENTER){
+        search.fire();
+      }
+    });
 
     clear.setOnAction(e -> {
       textfield.clear();
@@ -1084,9 +1099,6 @@ public class GUI {
       summary = result.remove(result.size()-1);
     }
     
-    
-    
-
     // add data from result into the data list
     data = FXCollections.observableArrayList();
     for (int i = 0; i < result.size(); i++) {
@@ -1109,15 +1121,12 @@ public class GUI {
     table.setItems(data);
     table.getColumns().addAll(firstCol, secondCol, thirdCol);
     table.setMaxSize(300, 200);
-
-
-
+    
     // Initialize the fileChooser
     this.fileChooser = new FileChooser();
     // Add the extension constraint
     this.fileChooser.getExtensionFilters()
         .addAll(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
-   
     
     Button getSummary = getOvalButton("Summary", 3.2, 3.2);
     getSummary.setStyle("-fx-base: gold;");
@@ -1311,6 +1320,12 @@ public class GUI {
       }
     });
 
+    monthPrompt.setOnKeyPressed(e -> {
+      if(e.getCode() == KeyCode.ENTER){
+        searchButton.fire();
+      }
+    });
+    
     Button clearButton = getOvalButton("Clear", 3.2, 2);
     clearButton.setStyle("-fx-base: gold;");
     clearButton.setOnAction(e -> {
@@ -1618,6 +1633,12 @@ public class GUI {
         displayWarningMessage(WarningIndex.ILLEGALARGUMENTEXCEPTION);
       } catch (ParseException e1) {
         displayWarningMessage(WarningIndex.PARSEEXCEPTION);
+      }
+    });
+    
+    endDateField.setOnKeyPressed(e -> {
+      if(e.getCode() == KeyCode.ENTER){
+        search.fire();
       }
     });
 
