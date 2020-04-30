@@ -105,6 +105,8 @@ public class GUI {
   // Flags to keep track of the order
   private boolean firstFlag = false;
   private boolean secondFlag = false;
+  // ArrayList to store the summary statistics
+  private ArrayList<String> summary;
 
   // Info for the main menu
   private static final String MAINMENU_INFO =
@@ -303,12 +305,7 @@ public class GUI {
           for (File selectedFile : selectedFiles) {
             List<Record> list = this.manager.importFile(selectedFile);
             // import the list to the internal system
-            if (choice.equals(loadFunction[1])) {
-              this.manager.importList(list, choice);
-              choice = loadFunction[0];
-            } else {
-              this.manager.importList(list, choice);
-            }
+            this.manager.importList(list, choice);
           }
 
           // Create an alert
@@ -481,7 +478,6 @@ public class GUI {
     bottomBox.setAlignment(Pos.CENTER);
     root.setBottom(bottomBox);
 
-    // Set event handler
     add.setOnAction(e -> {
       try {
         // input the user input and retrieve the record
@@ -496,7 +492,6 @@ public class GUI {
         alert.setTitle("Information");
         alert.showAndWait().filter(response -> response == ButtonType.OK);
 
-        // Clear the fields
         farmIDTextField.clear();
         dateTextField.clear();
         weightTextField.clear();
@@ -517,7 +512,6 @@ public class GUI {
       }
     });
 
-    // Set event handler
     delete.setOnAction(e -> {
       try {
         // input the user input and retrieve the record
@@ -532,7 +526,6 @@ public class GUI {
         alert.setTitle("Information");
         alert.showAndWait().filter(response -> response == ButtonType.OK);
 
-        // Clear the fields
         farmIDTextField.clear();
         dateTextField.clear();
         weightTextField.clear();
@@ -647,7 +640,6 @@ public class GUI {
     sceneLeft.getChildren().addAll(buttonCloud, this.imageViewBrand);
     root.setLeft(sceneLeft);
 
-    // Set event handler
     change.setOnAction(e -> {
       try {
         // input the user input and retrieve the record
@@ -664,7 +656,6 @@ public class GUI {
         alert.setTitle("Information");
         alert.showAndWait().filter(response -> response == ButtonType.OK);
 
-        // Clear the fields
         newFarmID.clear();
         newDate.clear();
         newWeight.clear();
@@ -834,6 +825,8 @@ public class GUI {
 
     // The result to be displayed in the list
     result = new ArrayList<ArrayList<String>>();
+    
+    
 
     try {
       // Retrieve the result
@@ -845,6 +838,14 @@ public class GUI {
     } catch (IllegalNullKeyException e1) {
       displayWarningMessage(WarningIndex.ILLEGALNULLKEYEXCEPTION);
     }
+    
+    // Summary button
+    Button getSummary = getOvalButton("Summary", 3.2, 3.2);
+    getSummary.setStyle("-fx-base: gold;");
+    getSummary.setOnAction(e->{
+      displaySummary();
+    });
+    
 
     // Create two circles to display the result
     Circle circle1 = new Circle(40.0);
@@ -866,16 +867,12 @@ public class GUI {
     // Add the components to the VBox
     vboxCL.getChildren().addAll(title, stack, stack2);
 
-    // Store the retrieved results
     data = FXCollections.observableArrayList();
     for (int i = 0; i < 12; i++) {
       data.add(new ResultRecord(result.get(i).get(0), result.get(i).get(1), result.get(i).get(2)));
     }
 
-    // Create a table view
     TableView<ResultRecord> table = new TableView<ResultRecord>();
-
-    // Create three column
     TableColumn<ResultRecord, String> monthRow = new TableColumn<ResultRecord, String>("Month");
     monthRow.setPrefWidth(90);
     monthRow.setCellValueFactory(new PropertyValueFactory<ResultRecord, String>("columnOne"));
@@ -885,19 +882,15 @@ public class GUI {
     TableColumn<ResultRecord, String> percentRow = new TableColumn<ResultRecord, String>("Percent");
     percentRow.setPrefWidth(90);
     percentRow.setCellValueFactory(new PropertyValueFactory<ResultRecord, String>("columnThree"));
-
-    // Set the data
     table.setItems(data);
-    // Add the columns to the table
     table.getColumns().addAll(monthRow, weightRow, percentRow);
-    // Set the size
     table.setMaxSize(300, 200);
 
-    // Add event handler
     table.setOnMouseClicked(e -> {
       amount.setText(table.getSelectionModel().getSelectedItem().getColumnTwo());
       percent.setText(table.getSelectionModel().getSelectedItem().getColumnThree());
     });
+
 
     // Initialize the fileChooser
     this.fileChooser = new FileChooser();
@@ -910,22 +903,17 @@ public class GUI {
     farmWeightSortButton.setStyle("-fx-base: navajowhite;");
     farmWeightSortButton.setOnAction(e -> {
       if (!firstFlag) {
-        // Sort the ArrayList in ascending
         Collections.sort(result, (a, b) -> {
           return (int) (Long.parseLong(a.get(1)) - (Long.parseLong(b.get(1))));
         });
-        // Flip the flag
         firstFlag = !firstFlag;
       } else {
-        // Sort the ArrayList in descending
         Collections.sort(result, (a, b) -> {
           return (int) (Long.parseLong(b.get(1)) - (Long.parseLong(a.get(1))));
         });
-        // Flip the flag
         firstFlag = !firstFlag;
       }
 
-      // Add the data to the list
       data = FXCollections.observableArrayList();
       for (int i = 0; i < 12; i++) {
         data.add(
@@ -934,7 +922,6 @@ public class GUI {
       table.setItems(data);
     });
 
-    // Export button
     Button exportButton = getOvalButton("Export", 3.2, 2);
     exportButton.setStyle("-fx-base: navajowhite;");
     exportButton.setOnAction(e -> {
@@ -965,7 +952,7 @@ public class GUI {
     root.setTop(text);
     BorderPane.setAlignment(text, Pos.TOP_CENTER);
     hbox.getChildren().addAll(vboxCL, vboxCR);
-    vboxL.getChildren().addAll(buttonCloud, this.imageViewBrand);
+    vboxL.getChildren().addAll(buttonCloud, getSummary, this.imageViewBrand);
     vboxR.getChildren().addAll(returnButton, imageViewCheese2);
     root.setLeft(vboxL);
     root.setCenter(hbox);
@@ -996,6 +983,7 @@ public class GUI {
     // Create two buttons and set event handler
     Button search = getOvalButton("Search", 3.2, 2);
     search.setStyle("-fx-base: navajowhite;");
+
 
     Button clear = getOvalButton("Clear", 3.2, 2);
     clear.setStyle("-fx-base: gold;");
@@ -1036,9 +1024,22 @@ public class GUI {
     root.setRight(vboxRt);
     root.setTop(text);
     BorderPane.setAlignment(text, Pos.TOP_CENTER);
+    
 
     search.setOnAction(e -> {
-      getAnnualResultScene(primaryStage, Integer.parseInt(textfield.getText()));
+      try{
+        if(textfield.getText().equals("")) {
+          throw new IllegalNullKeyException();
+        }
+        int i= Integer.parseInt(textfield.getText());
+        getAnnualResultScene(primaryStage, i);
+      }catch (NumberFormatException e1) {
+        displayWarningMessage(WarningIndex.NUMBERFORMATEXCEPTION);
+      }
+      catch (IllegalNullKeyException e2) {
+        // Display warning message
+        displayWarningMessage(WarningIndex.ILLEGALNULLKEYEXCEPTION);
+      } 
     });
 
     // Add the scene to stage
@@ -1052,6 +1053,7 @@ public class GUI {
    */
   @SuppressWarnings("unchecked")
   public void getAnnualResultScene(Stage primaryStage, int year) {
+    
 
     // Text field for title
     Text text = getTitle("Annual Result Scene\n");
@@ -1076,6 +1078,14 @@ public class GUI {
       // display warning
       displayWarningMessage(WarningIndex.ILLEGALNULLKEYEXCEPTION);
     }
+    
+
+    if(result.size()>0) {
+      summary = result.remove(result.size()-1);
+    }
+    
+    
+    
 
     // add data from result into the data list
     data = FXCollections.observableArrayList();
@@ -1100,11 +1110,21 @@ public class GUI {
     table.getColumns().addAll(firstCol, secondCol, thirdCol);
     table.setMaxSize(300, 200);
 
+
+
     // Initialize the fileChooser
     this.fileChooser = new FileChooser();
     // Add the extension constraint
     this.fileChooser.getExtensionFilters()
         .addAll(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+   
+    
+    Button getSummary = getOvalButton("Summary", 3.2, 3.2);
+    getSummary.setStyle("-fx-base: gold;");
+    
+    getSummary.setOnAction(e ->{
+      displaySummary();
+    });
 
     // Create three buttons and add event handler
     Button farmIDSortButton = getOvalButton("Asc/Des", 3.2, 2);
@@ -1164,6 +1184,7 @@ public class GUI {
         for (int i = result.size() - 1; i >= 0; i--) {
           tmp.add(result.get(i));
         }
+        
         // set result to be reversed
         result = tmp;
         secondFlag = false;
@@ -1205,10 +1226,10 @@ public class GUI {
     VBox centerBox = new VBox(8);
     centerBox.getChildren().addAll(table, sortBox);
 
-    VBox vboxLf = new VBox(130);
+    VBox vboxLf = new VBox(50);
     VBox vboxRt = new VBox(25);
 
-    vboxLf.getChildren().addAll(buttonCloud, this.imageViewBrand);
+    vboxLf.getChildren().addAll(buttonCloud, getSummary, this.imageViewBrand);
     vboxRt.getChildren().addAll(returnBn, this.imageViewCheese, exportButton);
 
     // Main layout is Border Pane example (top,left,center,right,bottom)
@@ -1279,10 +1300,12 @@ public class GUI {
         format.parse(date);
 
         getMonthlyResultScene(primaryStage, inputYear.getText(), inputMonth.getText());
-      } catch (IllegalArgumentException e1) {
+      } 
+      catch (IllegalArgumentException e1) {
         // Display warning message
         displayWarningMessage(WarningIndex.ILLEGALARGUMENTEXCEPTION);
-      } catch (ParseException e1) {
+      } 
+      catch (ParseException e1) {
         displayWarningMessage(WarningIndex.PARSEEXCEPTION);
       } catch (IllegalNullKeyException e1) {
       }
@@ -1378,10 +1401,15 @@ public class GUI {
     Date date = df.parse(originalDate);
     GregorianCalendar g = (GregorianCalendar) GregorianCalendar.getInstance();
     g.setTime(date);
-
-    // Get the result
-    result = manager.getMonthlyReport(g);
-
+    try {
+      // Get the result
+      result = manager.getMonthlyReport(g);
+      // Get the summary
+      if (result.size() != 0)
+        summary = result.remove(result.size()-1);
+    } catch (IllegalNullKeyException e) {
+      displayWarningMessage(WarningIndex.ILLEGALNULLKEYEXCEPTION);
+    }
     // Add the result to data
     data = FXCollections.observableArrayList();
     for (ArrayList<String> element : result)
@@ -1491,8 +1519,14 @@ public class GUI {
 
     VBox vboxLf = new VBox(130);
     VBox vboxRt = new VBox(25);
+    // Summary button
+    Button getSummary = getOvalButton("Summary", 3.2, 3.2);
+    getSummary.setStyle("-fx-base: gold;");
+    getSummary.setOnAction(e->{
+      displaySummary();
+    });
 
-    vboxLf.getChildren().addAll(buttonCloud, this.imageViewBrand);
+    vboxLf.getChildren().addAll(buttonCloud, getSummary, this.imageViewBrand);
     vboxRt.getChildren().addAll(returnButton, this.imageViewCheese, export);
 
     // Main layout is Border Pane example (top,left,center,right,bottom)
@@ -1507,6 +1541,7 @@ public class GUI {
     // Add the scene to stage
     primaryStage.setScene(new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT));
   }
+
 
 
   /**
@@ -1647,6 +1682,8 @@ public class GUI {
     // Get the result
     try {
       result = manager.getDateReport(startCalendar, endCalendar);
+      if (result.size() != 0)
+        summary = result.remove(result.size()-1);
     } catch (IllegalNullKeyException e1) {
       displayWarningMessage(WarningIndex.PARSEEXCEPTION);
     }
@@ -1786,7 +1823,14 @@ public class GUI {
 
     // Create VBox layout and add components
     VBox sceneLeft = new VBox(10);
-    sceneLeft.getChildren().addAll(buttonCloud, this.imageViewBrand);
+    // Summary button
+    Button getSummary = getOvalButton("Summary", 3.2, 3.2);
+    getSummary.setStyle("-fx-base: gold;");
+    getSummary.setOnAction(e -> {
+      // DisplayWarningMessage
+      displaySummary();
+    });
+    sceneLeft.getChildren().addAll(buttonCloud, getSummary, this.imageViewBrand);
 
     // Set the main pane
     root.setLeft(sceneLeft);
@@ -2040,4 +2084,26 @@ public class GUI {
     textField.setPrefSize(length, height);
     return textField;
   }
+
+  /**
+   * display summary in a new window
+   */
+  private void displaySummary() {
+    // Create an alert
+    Alert alert = new Alert(AlertType.INFORMATION);
+    // Set the title
+    alert.setTitle("Summary");
+    alert.setHeaderText("");
+    // If there is no summary
+    if (summary == null) {
+      alert.setContentText("No summary shown");
+    }
+    else 
+      alert.setContentText(
+          "Max: " + summary.get(0) 
+          + "\n" + "Min: " + summary.get(1) + "\n" + "Average: " + summary.get(2)
+          );
+    alert.showAndWait().filter(response -> response == ButtonType.OK);
+  }
+
 }
