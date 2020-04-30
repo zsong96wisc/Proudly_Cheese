@@ -842,6 +842,8 @@ public class GUI {
       // Retrieve the result
       result = manager.getFarmReport(farmID,
           new GregorianCalendar(Integer.valueOf(year), 1, 1, 0, 0, 0));
+      if (result.size() != 0) 
+        summary = result.remove(result.size() - 1);
     } catch (NumberFormatException e1) {
       // Display the warning message
       displayWarningMessage(WarningIndex.NUMBERFORMATEXCEPTION);
@@ -853,9 +855,8 @@ public class GUI {
     Button getSummary = getOvalButton("Summary", 3.2, 3.2);
     getSummary.setStyle("-fx-base: gold;");
     getSummary.setOnAction(e->{
-      displaySummary();
+      displaySummary(true);
     });
-    
 
     // Create two circles to display the result
     Circle circle1 = new Circle(40.0);
@@ -914,12 +915,22 @@ public class GUI {
     farmWeightSortButton.setOnAction(e -> {
       if (!firstFlag) {
         Collections.sort(result, (a, b) -> {
-          return (int) (Long.parseLong(a.get(1)) - (Long.parseLong(b.get(1))));
+          if (Long.parseLong(a.get(1)) - (Long.parseLong(b.get(1))) > 0)
+            return 1;
+          else if (Long.parseLong(a.get(1)) - (Long.parseLong(b.get(1))) < 0)
+            return -1;
+          else
+            return 0;
         });
         firstFlag = !firstFlag;
       } else {
         Collections.sort(result, (a, b) -> {
-          return (int) (Long.parseLong(b.get(1)) - (Long.parseLong(a.get(1))));
+          if (Long.parseLong(a.get(1)) - (Long.parseLong(b.get(1))) > 0)
+            return 1;
+          else if (Long.parseLong(a.get(1)) - (Long.parseLong(b.get(1))) < 0)
+            return -1;
+          else
+            return 0;
         });
         firstFlag = !firstFlag;
       }
@@ -1132,7 +1143,7 @@ public class GUI {
     getSummary.setStyle("-fx-base: gold;");
     
     getSummary.setOnAction(e ->{
-      displaySummary();
+      displaySummary(false);
     });
 
     // Create three buttons and add event handler
@@ -1145,20 +1156,32 @@ public class GUI {
       if (!this.firstFlag) {
         // sort it into ascending order
         Collections.sort(result, (a, b) -> {
-          return a.get(0).compareTo(b.get(0));
+          if (a.get(0).compareTo(b.get(0)) != 0)
+            return a.get(0).compareTo(b.get(0));
+          else 
+            if (Long.parseLong(a.get(1)) - Long.parseLong(b.get(1)) > 0)
+              return 1;
+            else if (Long.parseLong(a.get(1)) - Long.parseLong(b.get(1)) < 0)
+              return -1;
+            else
+              return 0;
         });
         // set the flag to be true
         firstFlag = true;
       } else {
-        // this is the temporary arraylist to reverse the arraylist
-        ArrayList<ArrayList<String>> tmp = new ArrayList<ArrayList<String>>();
-
-        // reversely store the data in result to tmp
-        for (int i = result.size() - 1; i >= 0; i--) {
-          tmp.add(result.get(i));
-        }
+     // sort it into ascending order
+        Collections.sort(result, (b, a) -> {
+          if (a.get(0).compareTo(b.get(0)) != 0)
+            return a.get(0).compareTo(b.get(0));
+          else 
+            if (Long.parseLong(a.get(1)) - Long.parseLong(b.get(1)) > 0)
+              return 1;
+            else if (Long.parseLong(a.get(1)) - Long.parseLong(b.get(1)) < 0)
+              return -1;
+            else
+              return 0;
+        });
         // set result to be reversed
-        result = tmp;
         firstFlag = false;
       }
 
@@ -1181,21 +1204,25 @@ public class GUI {
       if (!this.secondFlag) {
         // sort it into ascending order
         Collections.sort(result, (a, b) -> {
-          return a.get(1).compareTo(b.get(1));
+          if (Long.parseLong(a.get(1)) - Long.parseLong(b.get(1)) > 0)
+            return 1;
+          else if (Long.parseLong(a.get(1)) - Long.parseLong(b.get(1)) < 0)
+            return -1;
+          else
+            return a.get(0).compareTo(b.get(0));
         });
         // set the flag to be true
         secondFlag = true;
       } else {
-        // this is the temporary arraylist to reverse the arraylist
-        ArrayList<ArrayList<String>> tmp = new ArrayList<ArrayList<String>>();
-
-        // reversely store the data in result to tmp
-        for (int i = result.size() - 1; i >= 0; i--) {
-          tmp.add(result.get(i));
-        }
-        
-        // set result to be reversed
-        result = tmp;
+     // sort it into ascending order
+        Collections.sort(result, (b, a) -> {
+          if (Long.parseLong(a.get(1)) - Long.parseLong(b.get(1)) > 0)
+            return 1;
+          else if (Long.parseLong(a.get(1)) - Long.parseLong(b.get(1)) < 0)
+            return -1;
+          else
+            return a.get(0).compareTo(b.get(0));
+        });
         secondFlag = false;
       }
 
@@ -1465,20 +1492,29 @@ public class GUI {
       if (!this.firstFlag) {
         // sort it into ascending order
         Collections.sort(result, (a, b) -> {
-          return a.get(0).compareTo(b.get(0));
+          if (a.get(0).compareTo(b.get(0)) != 0)
+            return a.get(0).compareTo(b.get(0));
+          if (Long.parseLong(a.get(1)) - Long.parseLong(b.get(1)) > 0)
+            return 1;
+          else if (Long.parseLong(a.get(1)) - Long.parseLong(b.get(1)) < 0)
+            return -1;
+          else
+            return 0;
         });
         // set the flag to be true
         firstFlag = true;
       } else {
-        // this is the temporary arraylist to reverse the arraylist
-        ArrayList<ArrayList<String>> tmp = new ArrayList<ArrayList<String>>();
-
-        // reversely store the data in result to tmp
-        for (int i = result.size() - 1; i >= 0; i--) {
-          tmp.add(result.get(i));
-        }
-        // set result to be reversed
-        result = tmp;
+        // Sort Descending
+        Collections.sort(result, (b, a) -> {
+          if (a.get(0).compareTo(b.get(0)) != 0)
+            return a.get(0).compareTo(b.get(0));
+          if (Long.parseLong(a.get(1)) - Long.parseLong(b.get(1)) > 0)
+            return 1;
+          else if (Long.parseLong(a.get(1)) - Long.parseLong(b.get(1)) < 0)
+            return -1;
+          else
+            return 0;
+        });
         firstFlag = false;
       }
 
@@ -1498,20 +1534,23 @@ public class GUI {
       if (!this.secondFlag) {
         // sort it into ascending order
         Collections.sort(result, (a, b) -> {
-          return a.get(1).compareTo(b.get(1));
+          if (Long.parseLong(a.get(1)) - Long.parseLong(b.get(1)) > 0)
+            return 1;
+          else if (Long.parseLong(a.get(1)) - Long.parseLong(b.get(1)) < 0)
+            return -1;
+          else return a.get(0).compareTo(b.get(0));
         });
         // set the flag to be true
         secondFlag = true;
       } else {
-        // this is the temporary arraylist to reverse the arraylist
-        ArrayList<ArrayList<String>> tmp = new ArrayList<ArrayList<String>>();
-
-        // reversely store the data in result to tmp
-        for (int i = result.size() - 1; i >= 0; i--) {
-          tmp.add(result.get(i));
-        }
-        // set result to be reversed
-        result = tmp;
+        // Sort in descending order
+        Collections.sort(result, (b, a) -> {
+          if (Long.parseLong(a.get(1)) - Long.parseLong(b.get(1)) > 0)
+            return 1;
+          else if (Long.parseLong(a.get(1)) - Long.parseLong(b.get(1)) < 0)
+            return -1;
+          else return a.get(0).compareTo(b.get(0));
+        });
         secondFlag = false;
       }
 
@@ -1538,7 +1577,7 @@ public class GUI {
     Button getSummary = getOvalButton("Summary", 3.2, 3.2);
     getSummary.setStyle("-fx-base: gold;");
     getSummary.setOnAction(e->{
-      displaySummary();
+      displaySummary(false);
     });
 
     vboxLf.getChildren().addAll(buttonCloud, getSummary, this.imageViewBrand);
@@ -1745,16 +1784,28 @@ public class GUI {
       if (!this.firstFlag) {
         // Sort ascending
         Collections.sort(result, (a, b) -> {
-          return a.get(0).compareTo(b.get(0));
+          if (a.get(0).compareTo(b.get(0)) != 0)
+            return a.get(0).compareTo(b.get(0));
+          else if (Long.parseLong(a.get(1)) - Long.parseLong(b.get(1)) > 0)
+            return 1;
+          else if (Long.parseLong(a.get(1)) - Long.parseLong(b.get(1)) < 0)
+            return -1;
+          else 
+            return 0;
         });
         firstFlag = true;
       } else {
         // Sort descending
-        ArrayList<ArrayList<String>> tmp = new ArrayList<ArrayList<String>>();
-        for (int i = result.size() - 1; i >= 0; i--) {
-          tmp.add(result.get(i));
-        }
-        result = tmp;
+        Collections.sort(result, (b, a) -> {
+          if (a.get(0).compareTo(b.get(0)) != 0)
+            return a.get(0).compareTo(b.get(0));
+          else if (Long.parseLong(a.get(1)) - Long.parseLong(b.get(1)) > 0)
+            return 1;
+          else if (Long.parseLong(a.get(1)) - Long.parseLong(b.get(1)) < 0)
+            return -1;
+          else 
+            return 0;
+        });
         firstFlag = false;
       }
       // Clear the old sorted data
@@ -1774,16 +1825,25 @@ public class GUI {
     weightSortButton.setOnAction(e -> {
 
       if (this.secondFlag) {
+     // Sort ascending
         Collections.sort(result, (a, b) -> {
-          return a.get(1).compareTo(b.get(1));
+          if (Long.parseLong(a.get(1)) - Long.parseLong(b.get(1)) > 0)
+            return 1;
+          else if (Long.parseLong(a.get(1)) - Long.parseLong(b.get(1)) < 0)
+            return -1;
+          else 
+            return a.get(0).compareTo(b.get(0));
         });
         secondFlag = false;
       } else {
-        ArrayList<ArrayList<String>> tmp = new ArrayList<ArrayList<String>>();
-        for (int i = result.size() - 1; i >= 0; i--) {
-          tmp.add(result.get(i));
-        }
-        result = tmp;
+        Collections.sort(result, (b, a) -> {
+          if (Long.parseLong(a.get(1)) - Long.parseLong(b.get(1)) > 0)
+            return 1;
+          else if (Long.parseLong(a.get(1)) - Long.parseLong(b.get(1)) < 0)
+            return -1;
+          else 
+            return a.get(0).compareTo(b.get(0));
+        });
         secondFlag = true;
       }
       data.clear();
@@ -1849,7 +1909,7 @@ public class GUI {
     getSummary.setStyle("-fx-base: gold;");
     getSummary.setOnAction(e -> {
       // DisplayWarningMessage
-      displaySummary();
+      displaySummary(false);
     });
     sceneLeft.getChildren().addAll(buttonCloud, getSummary, this.imageViewBrand);
 
@@ -2109,7 +2169,7 @@ public class GUI {
   /**
    * display summary in a new window
    */
-  private void displaySummary() {
+  private void displaySummary(boolean farmReport) {
     // Create an alert
     Alert alert = new Alert(AlertType.INFORMATION);
     // Set the title
@@ -2119,12 +2179,20 @@ public class GUI {
     if (summary == null) {
       alert.setContentText("No summary shown");
     }
-    else 
-      alert.setContentText(
-          "Max: " + summary.get(0) 
-          + "\n" + "Min: " + summary.get(1) + "\n" + "Average: " + summary.get(2)
-          );
-    alert.showAndWait().filter(response -> response == ButtonType.OK);
+    else {// The format of the Min, max Record would be Farm ID/Month, Weight, Percent
+      if (farmReport) // Report for farms
+        alert.setContentText("Max Record: " + "Month - " + summary.get(0)
+            + "Weight - " + summary.get(1) + "Percent - " + summary.get(2)
+            + "\n" + "Min Record: " + "Month - " + summary.get(3) + " "
+            + "Weight - " + summary.get(4) + "Percent - " + summary.get(5)
+            + "\n" + "Average: " + summary.get(6));
+      else // Report for Date
+        alert.setContentText("Max Record: " + "Farm ID" + summary.get(0)
+            + "Weight - " + summary.get(1) + "Percent - " + summary.get(2)
+            + "\n" + "Min Record: " + "Farm ID" + summary.get(3) + " "
+            + "Weight - " + summary.get(4) + "Percent - " + summary.get(5)
+            + "\n" + "Average: " + summary.get(6));
+      alert.showAndWait().filter(response -> response == ButtonType.OK);
+    }
   }
-
 }
