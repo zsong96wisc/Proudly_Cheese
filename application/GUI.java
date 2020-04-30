@@ -902,7 +902,6 @@ public class GUI {
       percent.setText(table.getSelectionModel().getSelectedItem().getColumnThree());
     });
 
-
     // Initialize the fileChooser
     this.fileChooser = new FileChooser();
     // Add the extension constraint
@@ -1005,7 +1004,6 @@ public class GUI {
     Button search = getOvalButton("Search", 3.2, 2);
     search.setStyle("-fx-base: navajowhite;");
 
-
     Button clear = getOvalButton("Clear", 3.2, 2);
     clear.setStyle("-fx-base: gold;");
 
@@ -1051,7 +1049,6 @@ public class GUI {
     root.setTop(text);
     BorderPane.setAlignment(text, Pos.TOP_CENTER);
     
-
     search.setOnAction(e -> {
       try{
         if(textfield.getText().equals("")) {
@@ -1078,9 +1075,7 @@ public class GUI {
    * @param primaryStage - the stage that displays the scene
    */
   @SuppressWarnings("unchecked")
-  public void getAnnualResultScene(Stage primaryStage, int year) {
-    
-
+  public void getAnnualResultScene(Stage primaryStage, int year) {    
     // Text field for title
     Text text = getTitle("Annual Result Scene\n");
 
@@ -2182,15 +2177,15 @@ public class GUI {
     else {// The format of the Min, max Record would be Farm ID/Month, Weight, Percent
       if (farmReport) // Report for farms
         alert.setContentText("Max Record: " + "Month - " + summary.get(0)
-            + "Weight - " + summary.get(1) + "Percent - " + summary.get(2)
+            + " Weight - " + summary.get(1) + " Percent - " + summary.get(2)
             + "\n" + "Min Record: " + "Month - " + summary.get(3) + " "
-            + "Weight - " + summary.get(4) + "Percent - " + summary.get(5)
+            + " Weight - " + summary.get(4) + " Percent - " + summary.get(5)
             + "\n" + "Average: " + summary.get(6));
       else // Report for Date
         alert.setContentText("Max Record: " + "Farm ID" + summary.get(0)
-            + "Weight - " + summary.get(1) + "Percent - " + summary.get(2)
+            + " Weight - " + summary.get(1) + " Percent - " + summary.get(2)
             + "\n" + "Min Record: " + "Farm ID" + summary.get(3) + " "
-            + "Weight - " + summary.get(4) + "Percent - " + summary.get(5)
+            + " Weight - " + summary.get(4) + " Percent - " + summary.get(5)
             + "\n" + "Average: " + summary.get(6));
       alert.showAndWait().filter(response -> response == ButtonType.OK);
     }
