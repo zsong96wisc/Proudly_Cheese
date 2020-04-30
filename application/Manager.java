@@ -212,17 +212,6 @@ public class Manager {
 						monthlyRecords.get(r.getFarmID()) + r.getWeight());
 			else
 				monthlyRecords.put(r.getFarmID(), Long.valueOf(r.getWeight()));
-			// check and update current min and max
-			if (r.getWeight() > maxWeight) {
-				max.set(0, r.getFarmID());
-				maxWeight = r.getWeight();
-				max.set(1, Long.toString(maxWeight));
-			}
-			if (r.getWeight() < minWeight) {
-				min.set(0, r.getFarmID());
-				minWeight = r.getWeight();
-				min.set(1, Long.toString(minWeight));
-			}
 		}
 
 		// An ArrayList to store the result
@@ -243,11 +232,21 @@ public class Manager {
 				tempList.add("0.00%");
 			}
 			reportOfMonth.add(tempList);
+			// check and update current min and max
+			long curWeight = Long.parseLong(tempList.get(1));
+			if (curWeight > maxWeight) {
+				max.set(0, tempList.get(0));
+				maxWeight = curWeight;
+				max.set(1, tempList.get(1));
+				max.set(2, tempList.get(2));
+			}
+			if (curWeight < minWeight) {
+				min.set(0, tempList.get(0));
+				minWeight = curWeight;
+				min.set(1, tempList.get(1));
+				min.set(2, tempList.get(2));
+			}
 		}
-
-		// calculate the average
-		max.set(2, df.format(100.0 * minWeight / sumOfWeights));
-		min.set(2, df.format(100.0 * minWeight / sumOfWeights));
 
 		// Sort the ArrayList
 		Collections.sort(reportOfMonth, (a, b) -> {
@@ -314,18 +313,6 @@ public class Manager {
 						annualRecords.get(r.getFarmID()) + r.getWeight());
 			else
 				annualRecords.put(r.getFarmID(), Long.valueOf(r.getWeight()));
-			// check and update current min and max
-			if (r.getWeight() > maxWeight) {
-				max.set(0, r.getFarmID());
-				maxWeight = r.getWeight();
-				max.set(1, Long.toString(maxWeight));
-			}
-			if (r.getWeight() < minWeight) {
-				min.set(0, r.getFarmID());
-				minWeight = r.getWeight();
-				min.set(1, Long.toString(minWeight));
-			}
-
 		}
 
 		// An ArrayList to store the result
@@ -346,11 +333,21 @@ public class Manager {
 				tempList.add("0.00%");
 			}
 			reportOfYear.add(tempList);
+			// check and update current min and max
+			long curWeight = Long.parseLong(tempList.get(1));
+			if (curWeight > maxWeight) {
+				max.set(0, tempList.get(0));
+				maxWeight = curWeight;
+				max.set(1, tempList.get(1));
+				max.set(2, tempList.get(2));
+			}
+			if (curWeight < minWeight) {
+				min.set(0, tempList.get(0));
+				minWeight = curWeight;
+				min.set(1, tempList.get(1));
+				min.set(2, tempList.get(2));
+			}
 		}
-
-		// calculate the average
-		max.set(2, df.format(100.0 * minWeight / sumOfWeights));
-		min.set(2, df.format(100.0 * minWeight / sumOfWeights));
 
 		// Sort the ArrayList
 		Collections.sort(reportOfYear, (a, b) -> {
@@ -416,17 +413,6 @@ public class Manager {
 						rangeRecords.get(r.getFarmID()) + r.getWeight());
 			else
 				rangeRecords.put(r.getFarmID(), Long.valueOf(r.getWeight()));
-			// check and update current min and max
-			if (r.getWeight() > maxWeight) {
-				max.set(0, r.getFarmID());
-				maxWeight = r.getWeight();
-				max.set(1, Long.toString(maxWeight));
-			}
-			if (r.getWeight() < minWeight) {
-				min.set(0, r.getFarmID());
-				minWeight = r.getWeight();
-				min.set(1, Long.toString(minWeight));
-			}
 		}
 
 		// An ArrayList to store the result
@@ -447,11 +433,21 @@ public class Manager {
 				tempList.add("0.00%");
 			}
 			reportOfRange.add(tempList);
+			// check and update current min and max
+			long curWeight = Long.parseLong(tempList.get(1));
+			if (curWeight > maxWeight) {
+				max.set(0, tempList.get(0));
+				maxWeight = curWeight;
+				max.set(1, tempList.get(1));
+				max.set(2, tempList.get(2));
+			}
+			if (curWeight < minWeight) {
+				min.set(0, tempList.get(0));
+				minWeight = curWeight;
+				min.set(1, tempList.get(1));
+				min.set(2, tempList.get(2));
+			}
 		}
-
-		// calculate the average
-		max.set(2, df.format(100.0 * minWeight / sumOfWeights));
-		min.set(2, df.format(100.0 * minWeight / sumOfWeights));
 
 		// Sort the ArrayList
 		Collections.sort(reportOfRange, (a, b) -> {
