@@ -265,7 +265,10 @@ public class Manager {
 		}
 
 		// calculate average
-		summary.add(df.format(sumOfWeights / reportOfMonth.size()));
+		if (reportOfMonth.size() == 0)
+			summary.add(df.format(0.0));
+		else
+			summary.add(df.format(sumOfWeights / reportOfMonth.size()));
 
 		reportOfMonth.add(summary);
 
@@ -364,7 +367,10 @@ public class Manager {
 			summary.add(min.get(i));
 		}
 		// calculate average
-		summary.add(df.format(sumOfWeights / reportOfYear.size()));
+		if (reportOfYear.size() == 0)
+			summary.add(df.format(0.0));
+		else
+			summary.add(df.format(sumOfWeights / reportOfYear.size()));
 
 		reportOfYear.add(summary);
 
@@ -463,7 +469,10 @@ public class Manager {
 		}
 
 		// calculate average
-		summary.add(df.format(sumOfWeights / reportOfRange.size()));
+		if (reportOfRange.size() == 0)
+			summary.add(df.format(0.0));
+		else
+			summary.add(df.format(sumOfWeights / reportOfRange.size()));
 
 		reportOfRange.add(summary);
 
