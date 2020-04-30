@@ -218,7 +218,7 @@ public class GUI {
 
     // Three VBox layout management in the BroadPane
     VBox vbox = new VBox(20);
-    VBox vboxL = new VBox(5);
+    VBox vboxL = new VBox(15);
     VBox vboxR = new VBox(20);
 
     // Text field for title
@@ -810,7 +810,7 @@ public class GUI {
     HBox hbox = new HBox();
     VBox vboxCL = new VBox(20);
     VBox vboxCR = new VBox();
-    VBox vboxL = new VBox(60);
+    VBox vboxL = new VBox(30);
     VBox vboxR = new VBox(20);
 
     // Text field for title
@@ -945,7 +945,7 @@ public class GUI {
     Button exportButton = getOvalButton("Export", 3.2, 2);
     exportButton.setStyle("-fx-base: navajowhite;");
     exportButton.setOnAction(e -> {
-      File selectedFile = this.fileChooser.showOpenDialog(primaryStage);
+      File selectedFile = this.fileChooser.showSaveDialog(primaryStage);
       try {
         manager.exportReport(result, selectedFile, 0);
 
@@ -1234,7 +1234,7 @@ public class GUI {
     Button exportButton = getOvalButton("Export", 3.2, 2);
     exportButton.setStyle("-fx-base: gold;");
     exportButton.setOnAction(e -> {
-      File selectedFile = this.fileChooser.showOpenDialog(primaryStage);
+      File selectedFile = this.fileChooser.showSaveDialog(primaryStage);
       try {
         manager.exportReport(result, selectedFile, 1);
 
@@ -1256,7 +1256,7 @@ public class GUI {
     VBox centerBox = new VBox(8);
     centerBox.getChildren().addAll(table, sortBox);
 
-    VBox vboxLf = new VBox(50);
+    VBox vboxLf = new VBox(25);
     VBox vboxRt = new VBox(25);
 
     vboxLf.getChildren().addAll(buttonCloud, getSummary, this.imageViewBrand);
@@ -1415,7 +1415,7 @@ public class GUI {
     Button export = getOvalButton("Export", 3.2, 2);
     export.setStyle("-fx-base: gold;");
     export.setOnAction(e -> {
-      File selectedFile = this.fileChooser.showOpenDialog(primaryStage);
+      File selectedFile = this.fileChooser.showSaveDialog(primaryStage);
       try {
         manager.exportReport(result, selectedFile, 1);
 
@@ -1564,7 +1564,7 @@ public class GUI {
     VBox centerBox = new VBox(8);
     centerBox.getChildren().addAll(list, sortButton);
 
-    VBox vboxLf = new VBox(130);
+    VBox vboxLf = new VBox(25);
     VBox vboxRt = new VBox(25);
     // Summary button
     Button getSummary = getOvalButton("Summary", 3.2, 3.2);
@@ -1871,7 +1871,7 @@ public class GUI {
     Button exportButton = getOvalButton("Export", 3.2, 2);
     exportButton.setStyle("-fx-base: gold;");
     exportButton.setOnAction(e -> {
-      File selectedFile = this.fileChooser.showOpenDialog(primaryStage);
+      File selectedFile = this.fileChooser.showSaveDialog(primaryStage);
       try {
         manager.exportReport(result, selectedFile, 1);
 
@@ -1895,7 +1895,7 @@ public class GUI {
     ToggleButton buttonCloud = getbuttonCloud(SceneIndex.DATERANGEREPORTRESULT);
 
     // Create VBox layout and add components
-    VBox sceneLeft = new VBox(10);
+    VBox sceneLeft = new VBox(25);
     // Summary button
     Button getSummary = getOvalButton("Summary", 3.2, 3.2);
     getSummary.setStyle("-fx-base: gold;");
