@@ -193,12 +193,10 @@ public class Manager {
 		long sumOfWeights = 0;
 
 		// creates local variable to keep tracking min and max
-		Record min = new Record(null, "null", 0);
-		Record max = new Record(null, "null", 0);;
+		ArrayList<String> max = new ArrayList<String>();
+		ArrayList<String> min = new ArrayList<String>();
 		long minWeight = Long.MAX_VALUE;
 		long maxWeight = 0;
-		String maxPercent = "";
-		String minPercent = "";
 
 		// Traverse all of the records to and their total weight
 		for (Record r : records) {
@@ -209,10 +207,16 @@ public class Manager {
 			else
 				monthlyRecords.put(r.getFarmID(), Long.valueOf(r.getWeight()));
 
-			if (r.getWeight() > maxWeight)
-				max = r;
-			if (r.getWeight() < minWeight)
-				min = r;
+			if (r.getWeight() > maxWeight) {
+				max.set(0, r.getFarmID());
+				maxWeight = r.getWeight();
+				max.set(1, Long.toString(maxWeight));
+			}
+			if (r.getWeight() < minWeight) {
+				min.set(0, r.getFarmID());
+				minWeight = r.getWeight();
+				min.set(1, Long.toString(minWeight));
+			}
 		}
 
 		// An ArrayList to store the result
@@ -229,17 +233,14 @@ public class Manager {
 			if (!(sumOfWeights == 0) && !(monthlyRecords.get(s) == 0)) {
 				tempList.add(
 						df.format((100.0 * monthlyRecords.get(s) / sumOfWeights)) + "%");
-				if (monthlyRecords.get(s).equals((Long) maxWeight))
-					maxPercent += (df
-							.format((100.0 * monthlyRecords.get(s) / sumOfWeights)) + "%");
-				if (monthlyRecords.get(s).equals((Long) minWeight))
-					maxPercent += (df
-							.format((100.0 * monthlyRecords.get(s) / sumOfWeights)) + "%");
 			} else {
 				tempList.add("0.00%");
 			}
 			reportOfMonth.add(tempList);
 		}
+
+		max.set(2, df.format((100.0 * maxWeight / sumOfWeights)) + "%");
+		min.set(2, df.format((100.0 * minWeight / sumOfWeights)) + "%");
 
 		// Sort the ArrayList
 		Collections.sort(reportOfMonth, (a, b) -> {
@@ -248,13 +249,14 @@ public class Manager {
 
 		// append summary info to the report
 		ArrayList<String> summary = new ArrayList<String>();
-		summary.add(max.getFarmID());
-		summary.add(Long.toString(max.getWeight()));
-		summary.add(maxPercent);
-		summary.add(min.getFarmID());
-		summary.add(Long.toString(min.getWeight()));
-		summary.add(minPercent);
-		summary.add(df.format(100.0 * sumOfWeights / reportOfMonth.size()) + "%");
+		for (int i = 0; i < 3; i++) {
+			summary.add(max.get(i));
+		}
+
+		for (int i = 0; i < 3; i++) {
+			summary.add(min.get(i));
+		}
+
 		reportOfMonth.add(summary);
 
 		return reportOfMonth;
@@ -280,12 +282,10 @@ public class Manager {
 		long sumOfWeights = 0;
 
 		// creates local variable to keep tracking min and max
-		Record min = new Record(null, "null", 0);;
-		Record max = new Record(null, "null", 0);;
+		ArrayList<String> max = new ArrayList<String>();
+		ArrayList<String> min = new ArrayList<String>();
 		long minWeight = Long.MAX_VALUE;
 		long maxWeight = 0;
-		String maxPercent = "";
-		String minPercent = "";
 
 		// Traverse all of the records to get all FarmID and their total weight
 		for (Record r : records) {
@@ -295,10 +295,17 @@ public class Manager {
 						annualRecords.get(r.getFarmID()) + r.getWeight());
 			else
 				annualRecords.put(r.getFarmID(), Long.valueOf(r.getWeight()));
-			if (r.getWeight() > maxWeight)
-				max = r;
-			if (r.getWeight() < minWeight)
-				min = r;
+			if (r.getWeight() > maxWeight) {
+				max.set(0, r.getFarmID());
+				maxWeight = r.getWeight();
+				max.set(1, Long.toString(maxWeight));
+			}
+			if (r.getWeight() < minWeight) {
+				min.set(0, r.getFarmID());
+				minWeight = r.getWeight();
+				min.set(1, Long.toString(minWeight));
+			}
+
 		}
 
 		// An ArrayList to store the result
@@ -315,17 +322,14 @@ public class Manager {
 			if (!(sumOfWeights == 0) && !(annualRecords.get(s) == 0)) {
 				tempList.add(
 						df.format((100.0 * annualRecords.get(s) / sumOfWeights)) + "%");
-				if (annualRecords.get(s).equals((Long) maxWeight))
-					maxPercent += (df
-							.format((100.0 * annualRecords.get(s) / sumOfWeights)) + "%");
-				if (annualRecords.get(s).equals((Long) minWeight))
-					maxPercent += (df
-							.format((100.0 * annualRecords.get(s) / sumOfWeights)) + "%");
 			} else {
 				tempList.add("0.00%");
 			}
 			reportOfYear.add(tempList);
 		}
+
+		max.set(2, df.format((100.0 * maxWeight / sumOfWeights)) + "%");
+		min.set(2, df.format((100.0 * minWeight / sumOfWeights)) + "%");
 
 		// Sort the ArrayList
 		Collections.sort(reportOfYear, (a, b) -> {
@@ -334,13 +338,14 @@ public class Manager {
 
 		// append summary info to the report
 		ArrayList<String> summary = new ArrayList<String>();
-		summary.add(max.getFarmID());
-		summary.add(Long.toString(max.getWeight()));
-		summary.add(maxPercent);
-		summary.add(min.getFarmID());
-		summary.add(Long.toString(min.getWeight()));
-		summary.add(minPercent);
-		summary.add(df.format(100.0 * sumOfWeights / reportOfYear.size()) + "%");
+		for (int i = 0; i < 3; i++) {
+			summary.add(max.get(i));
+		}
+
+		for (int i = 0; i < 3; i++) {
+			summary.add(min.get(i));
+		}
+
 		reportOfYear.add(summary);
 
 		return reportOfYear;
@@ -366,12 +371,10 @@ public class Manager {
 		long sumOfWeights = 0;
 
 		// creates local variable to keep tracking min and max
-		Record min = new Record(null, "null", 0);;
-		Record max = new Record(null, "null", 0);;
+		ArrayList<String> max = new ArrayList<String>();
+		ArrayList<String> min = new ArrayList<String>();
 		long minWeight = Long.MAX_VALUE;
 		long maxWeight = 0;
-		String maxPercent = "";
-		String minPercent = "";
 
 		// Traverse all of the records to get all FarmID and their total weight
 		for (Record r : records) {
@@ -381,10 +384,16 @@ public class Manager {
 						rangeRecords.get(r.getFarmID()) + r.getWeight());
 			else
 				rangeRecords.put(r.getFarmID(), Long.valueOf(r.getWeight()));
-			if (r.getWeight() > maxWeight)
-				max = r;
-			if (r.getWeight() < minWeight)
-				min = r;
+			if (r.getWeight() > maxWeight) {
+				max.set(0, r.getFarmID());
+				maxWeight = r.getWeight();
+				max.set(1, Long.toString(maxWeight));
+			}
+			if (r.getWeight() < minWeight) {
+				min.set(0, r.getFarmID());
+				minWeight = r.getWeight();
+				min.set(1, Long.toString(minWeight));
+			}
 		}
 
 		// An ArrayList to store the result
@@ -401,31 +410,30 @@ public class Manager {
 			if (!(sumOfWeights == 0) && !(rangeRecords.get(s) == 0)) {
 				tempList
 						.add(df.format((100.0 * rangeRecords.get(s) / sumOfWeights)) + "%");
-				if (rangeRecords.get(s).equals((Long) maxWeight))
-					maxPercent += (df.format((100.0 * rangeRecords.get(s) / sumOfWeights))
-							+ "%");
-				if (rangeRecords.get(s).equals((Long) minWeight))
-					maxPercent += (df.format((100.0 * rangeRecords.get(s) / sumOfWeights))
-							+ "%");
 			} else {
 				tempList.add("0.00%");
 			}
 			reportOfRange.add(tempList);
 		}
 
+		max.set(2, df.format((100.0 * maxWeight / sumOfWeights)) + "%");
+		min.set(2, df.format((100.0 * minWeight / sumOfWeights)) + "%");
+
 		// Sort the ArrayList
 		Collections.sort(reportOfRange, (a, b) -> {
 			return a.get(0).compareTo(b.get(0));
 		});
+		
 		// append summary info to the report
 		ArrayList<String> summary = new ArrayList<String>();
-		summary.add(max.getFarmID());
-		summary.add(Long.toString(max.getWeight()));
-		summary.add(maxPercent);
-		summary.add(min.getFarmID());
-		summary.add(Long.toString(min.getWeight()));
-		summary.add(minPercent);
-		summary.add(df.format(100.0 * sumOfWeights / reportOfRange.size()) + "%");
+		for (int i = 0; i < 3; i++) {
+			summary.add(max.get(i));
+		}
+
+		for (int i = 0; i < 3; i++) {
+			summary.add(min.get(i));
+		}
+
 		reportOfRange.add(summary);
 
 		return reportOfRange;
