@@ -81,12 +81,18 @@ public class Manager {
     // Initialize a sum to store the total weight for a particular farm in one month
     long sum = 0;
 
+    // Formating Double values
+    DecimalFormat df = new DecimalFormat("#.00");
+    
     // Loop through the 12 months
     for (int i = 0; i < 12; i++) {
       result.add(new ArrayList<String>());
       for (int j = 0; j < 3; j++) {
         result.get(i).add(new String());
       }
+      
+      // Initialize the sum
+      sum = 0;
       // Set the info in the first column
       result.get(i).set(0, DAY[i]);
       // Create a new GregorianCalendar to represent a new month
@@ -94,16 +100,17 @@ public class Manager {
       newMonth.set(Calendar.MONTH, i);
       // Retrieve the total weight
       long weight = dateManager.getFarmMonthlyWeight(farmID, newMonth);
-      // Add to the sum
-      sum += weight;
       // Store in the second column
       result.get(i).set(1, Long.toString(weight));
-    }
-
-    // Formating Double values
-    DecimalFormat df = new DecimalFormat("#.00");
-    // Compute the percentage
-    for (int i = 0; i < 12; i++) {
+      
+      // Create an arraylist to store all the farm records in one month
+      ArrayList<ArrayList<String>> allFarm = getMonthlyReport(newMonth);
+      // Retrieve the weight for each farm
+      for (ArrayList<String> farm : allFarm) {
+        sum += Long.parseLong(farm.get(1));
+      }
+      
+      // Calculate the percent
       if (!(sum == 0) && !(Long.parseLong(result.get(i).get(1)) == 0)) {
         result.get(i).set(2, df.format(100.0 * Long.parseLong(result.get(i).get(1)) / sum) + "%");
       } else {
