@@ -245,8 +245,8 @@ public class Manager {
 			reportOfMonth.add(tempList);
 		}
 
-		max.set(2, df.format((100.0 * maxWeight / sumOfWeights)) + "%");
-		min.set(2, df.format((100.0 * minWeight / sumOfWeights)) + "%");
+		max.set(2, df.format((100.0 * maxWeight / sumOfWeights)));
+		min.set(2, df.format((100.0 * minWeight / sumOfWeights)));
 
 		// Sort the ArrayList
 		Collections.sort(reportOfMonth, (a, b) -> {
@@ -340,8 +340,8 @@ public class Manager {
 			reportOfYear.add(tempList);
 		}
 
-		max.set(2, df.format((100.0 * maxWeight / sumOfWeights)) + "%");
-		min.set(2, df.format((100.0 * minWeight / sumOfWeights)) + "%");
+		max.set(2, df.format((100.0 * maxWeight / sumOfWeights)));
+		min.set(2, df.format((100.0 * minWeight / sumOfWeights)));
 
 		// Sort the ArrayList
 		Collections.sort(reportOfYear, (a, b) -> {
@@ -434,8 +434,8 @@ public class Manager {
 			reportOfRange.add(tempList);
 		}
 
-		max.set(2, df.format((100.0 * maxWeight / sumOfWeights)) + "%");
-		min.set(2, df.format((100.0 * minWeight / sumOfWeights)) + "%");
+		max.set(2, df.format((100.0 * maxWeight / sumOfWeights)));
+		min.set(2, df.format((100.0 * minWeight / sumOfWeights)));
 
 		// Sort the ArrayList
 		Collections.sort(reportOfRange, (a, b) -> {
