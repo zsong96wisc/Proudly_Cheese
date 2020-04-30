@@ -193,8 +193,8 @@ public class Manager {
 		long sumOfWeights = 0;
 
 		// creates local variable to keep tracking min and max
-		Record min = null;
-		Record max = null;
+		Record min = new Record(null, "null", 0);
+		Record max = new Record(null, "null", 0);;
 		long minWeight = Long.MAX_VALUE;
 		long maxWeight = 0;
 		String maxPercent = "";
@@ -280,8 +280,8 @@ public class Manager {
 		long sumOfWeights = 0;
 
 		// creates local variable to keep tracking min and max
-		Record min = null;
-		Record max = null;
+		Record min = new Record(null, "null", 0);;
+		Record max = new Record(null, "null", 0);;
 		long minWeight = Long.MAX_VALUE;
 		long maxWeight = 0;
 		String maxPercent = "";
@@ -366,8 +366,8 @@ public class Manager {
 		long sumOfWeights = 0;
 
 		// creates local variable to keep tracking min and max
-		Record min = null;
-		Record max = null;
+		Record min = new Record(null, "null", 0);;
+		Record max = new Record(null, "null", 0);;
 		long minWeight = Long.MAX_VALUE;
 		long maxWeight = 0;
 		String maxPercent = "";
