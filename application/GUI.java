@@ -435,7 +435,7 @@ public class GUI {
 
     // Define three TextFields
     TextField farmIDTextField = getInputTextField("Farm ID", 50, 10);
-    TextField dateTextField = getInputTextField("Date", 50, 10);
+    TextField dateTextField = getInputTextField("Date (YYYY-MM-DD)", 50, 10);
     TextField weightTextField = getInputTextField("Weight", 50, 10);
 
     // Add them to the layout
@@ -590,7 +590,7 @@ public class GUI {
 
     // Define three TextFields
     TextField oldFarmID = getInputTextField("Old Farm ID", 90, 10);
-    TextField oldDate = getInputTextField("Old Date", 90, 10);
+    TextField oldDate = getInputTextField("Date(YYYY-MM-DD)", 90, 10);
     TextField oldWeight = getInputTextField("Old Weight", 90, 10);
 
     // Create VBox layout and add components
@@ -608,7 +608,7 @@ public class GUI {
 
     // Define three TextField
     TextField newFarmID = getInputTextField("New Farm ID", 90, 10);
-    TextField newDate = getInputTextField("New Date", 90, 10);
+    TextField newDate = getInputTextField("Date(YYYY-MM-DD)", 90, 10);
     TextField newWeight = getInputTextField("New Weight", 90, 10);
     newWeight.setOnKeyPressed(e -> {
       if(e.getCode() == KeyCode.ENTER){
@@ -956,8 +956,7 @@ public class GUI {
         alert.showAndWait().filter(response -> response == ButtonType.OK);
 
       } catch (FileNotFoundException e1) {
-        // Display warning message
-        displayWarningMessage(WarningIndex.FILENOTFOUNDEXCEPTION);
+        
       }
     });
 
@@ -1012,8 +1011,9 @@ public class GUI {
     Text year = new Text();
     year.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 18));
     year.setText("Year : ");
-    year.setOnKeyPressed(e -> {
+    textfield.setOnKeyPressed(e -> {
       if(e.getCode() == KeyCode.ENTER){
+        System.out.println("bb");
         search.fire();
       }
     });
@@ -1245,8 +1245,7 @@ public class GUI {
         alert.showAndWait().filter(response -> response == ButtonType.OK);
 
       } catch (FileNotFoundException e1) {
-        // Display warning message
-        displayWarningMessage(WarningIndex.FILENOTFOUNDEXCEPTION);
+
       }
     });
 
@@ -1342,7 +1341,7 @@ public class GUI {
       }
     });
 
-    monthPrompt.setOnKeyPressed(e -> {
+    inputMonth.setOnKeyPressed(e -> {
       if(e.getCode() == KeyCode.ENTER){
         searchButton.fire();
       }
@@ -1427,8 +1426,7 @@ public class GUI {
         alert.showAndWait().filter(response -> response == ButtonType.OK);
 
       } catch (FileNotFoundException e1) {
-        // Display warning message
-        displayWarningMessage(WarningIndex.FILENOTFOUNDEXCEPTION);
+
       }
     });
 
@@ -1606,8 +1604,8 @@ public class GUI {
     Text text = getTitle("Date Report Scene\n");
 
     // Define two TextFields for start date and end date
-    TextField endDateField = getInputTextField("Enter end Date", 50, 10);
-    TextField startDateField = getInputTextField("Enter start Date", 50, 10);
+    TextField endDateField = getInputTextField("Enter end Date (Format YYYY-MM-DD)", 50, 10);
+    TextField startDateField = getInputTextField("Enter start Date (Format YYYY-MM-DD)", 50, 10);
 
     // Create VBox layout and add components
     VBox vBox = new VBox(20);
@@ -1884,8 +1882,7 @@ public class GUI {
         alert.showAndWait().filter(response -> response == ButtonType.OK);
 
       } catch (FileNotFoundException e1) {
-        // Display warning message
-        displayWarningMessage(WarningIndex.FILENOTFOUNDEXCEPTION);
+
       }
     });
 
@@ -2182,9 +2179,9 @@ public class GUI {
             + " Weight - " + summary.get(4) + " Percent - " + summary.get(5)
             + "\n" + "Average: " + summary.get(6));
       else // Report for Date
-        alert.setContentText("Max Record: " + "Farm ID" + summary.get(0)
+        alert.setContentText("Max Record: " + "Farm ID - " + summary.get(0)
             + " Weight - " + summary.get(1) + " Percent - " + summary.get(2)
-            + "\n" + "Min Record: " + "Farm ID" + summary.get(3) + " "
+            + "\n" + "Min Record: " + "Farm ID - " + summary.get(3) + " "
             + " Weight - " + summary.get(4) + " Percent - " + summary.get(5)
             + "\n" + "Average: " + summary.get(6));
       alert.showAndWait().filter(response -> response == ButtonType.OK);
