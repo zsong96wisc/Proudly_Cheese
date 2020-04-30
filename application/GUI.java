@@ -303,7 +303,12 @@ public class GUI {
           for (File selectedFile : selectedFiles) {
             List<Record> list = this.manager.importFile(selectedFile);
             // import the list to the internal system
-            this.manager.importList(list, choice);
+            if (choice.equals(loadFunction[1])) {
+              this.manager.importList(list, choice);
+              choice = loadFunction[0];
+            } else {
+              this.manager.importList(list, choice);
+            }
           }
 
           // Create an alert
@@ -328,7 +333,7 @@ public class GUI {
         } catch (DuplicateKeyException e1) {
           displayWarningMessage(WarningIndex.DUPLICATEKEYEXCEPTION);
         } catch (NullPointerException e1) {
-          
+
         }
       }
     });
@@ -869,7 +874,7 @@ public class GUI {
 
     // Create a table view
     TableView<ResultRecord> table = new TableView<ResultRecord>();
-    
+
     // Create three column
     TableColumn<ResultRecord, String> monthRow = new TableColumn<ResultRecord, String>("Month");
     monthRow.setPrefWidth(90);
@@ -880,7 +885,7 @@ public class GUI {
     TableColumn<ResultRecord, String> percentRow = new TableColumn<ResultRecord, String>("Percent");
     percentRow.setPrefWidth(90);
     percentRow.setCellValueFactory(new PropertyValueFactory<ResultRecord, String>("columnThree"));
-    
+
     // Set the data
     table.setItems(data);
     // Add the columns to the table
@@ -1367,7 +1372,7 @@ public class GUI {
       }
     });
 
-    // Get the date 
+    // Get the date
     String originalDate = year + "-" + month;
     DateFormat df = new SimpleDateFormat("yyyy-MM");
     Date date = df.parse(originalDate);
@@ -1382,7 +1387,7 @@ public class GUI {
     for (ArrayList<String> element : result)
       data.add(new ResultRecord(element.get(0), element.get(1), element.get(2)));
 
-    // Create a table view 
+    // Create a table view
     TableView<ResultRecord> table = new TableView<ResultRecord>();
     // Create three columns
     TableColumn<ResultRecord, String> firstCol = new TableColumn<ResultRecord, String>("Farm ID");
