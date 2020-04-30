@@ -194,7 +194,13 @@ public class Manager {
 
 		// creates local variable to keep tracking min and max
 		ArrayList<String> max = new ArrayList<String>();
+		max.add("");
+		max.add("");
+		max.add("");
 		ArrayList<String> min = new ArrayList<String>();
+		min.add("");
+		min.add("");
+		min.add("");
 		long minWeight = Long.MAX_VALUE;
 		long maxWeight = 0;
 
@@ -283,7 +289,13 @@ public class Manager {
 
 		// creates local variable to keep tracking min and max
 		ArrayList<String> max = new ArrayList<String>();
+		max.add("");
+		max.add("");
+		max.add("");
 		ArrayList<String> min = new ArrayList<String>();
+		min.add("");
+		min.add("");
+		min.add("");
 		long minWeight = Long.MAX_VALUE;
 		long maxWeight = 0;
 
@@ -372,7 +384,13 @@ public class Manager {
 
 		// creates local variable to keep tracking min and max
 		ArrayList<String> max = new ArrayList<String>();
+		max.add("");
+		max.add("");
+		max.add("");
 		ArrayList<String> min = new ArrayList<String>();
+		min.add("");
+		min.add("");
+		min.add("");
 		long minWeight = Long.MAX_VALUE;
 		long maxWeight = 0;
 
@@ -423,7 +441,7 @@ public class Manager {
 		Collections.sort(reportOfRange, (a, b) -> {
 			return a.get(0).compareTo(b.get(0));
 		});
-		
+
 		// append summary info to the report
 		ArrayList<String> summary = new ArrayList<String>();
 		for (int i = 0; i < 3; i++) {
