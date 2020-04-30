@@ -328,7 +328,7 @@ public class GUI {
         } catch (DuplicateKeyException e1) {
           displayWarningMessage(WarningIndex.DUPLICATEKEYEXCEPTION);
         } catch (NullPointerException e1) {
-
+          
         }
       }
     });
@@ -476,6 +476,7 @@ public class GUI {
     bottomBox.setAlignment(Pos.CENTER);
     root.setBottom(bottomBox);
 
+    // Set event handler
     add.setOnAction(e -> {
       try {
         // input the user input and retrieve the record
@@ -490,6 +491,7 @@ public class GUI {
         alert.setTitle("Information");
         alert.showAndWait().filter(response -> response == ButtonType.OK);
 
+        // Clear the fields
         farmIDTextField.clear();
         dateTextField.clear();
         weightTextField.clear();
@@ -510,6 +512,7 @@ public class GUI {
       }
     });
 
+    // Set event handler
     delete.setOnAction(e -> {
       try {
         // input the user input and retrieve the record
@@ -524,6 +527,7 @@ public class GUI {
         alert.setTitle("Information");
         alert.showAndWait().filter(response -> response == ButtonType.OK);
 
+        // Clear the fields
         farmIDTextField.clear();
         dateTextField.clear();
         weightTextField.clear();
@@ -638,6 +642,7 @@ public class GUI {
     sceneLeft.getChildren().addAll(buttonCloud, this.imageViewBrand);
     root.setLeft(sceneLeft);
 
+    // Set event handler
     change.setOnAction(e -> {
       try {
         // input the user input and retrieve the record
@@ -654,6 +659,7 @@ public class GUI {
         alert.setTitle("Information");
         alert.showAndWait().filter(response -> response == ButtonType.OK);
 
+        // Clear the fields
         newFarmID.clear();
         newDate.clear();
         newWeight.clear();
@@ -835,18 +841,6 @@ public class GUI {
       displayWarningMessage(WarningIndex.ILLEGALNULLKEYEXCEPTION);
     }
 
-    // // Create three String arrays to store results for ListView
-    // String[] month = new String[12];
-    // String[] weight = new String[12];
-    // String[] percentage = new String[12];
-    //
-    // // Add the result to the arrays
-    // for (int i = 0; i < 12; i++) {
-    // month[i] = result[i][0];
-    // weight[i] = result[i][1];
-    // percentage[i] = result[i][2];
-    // }
-
     // Create two circles to display the result
     Circle circle1 = new Circle(40.0);
     circle1.setFill(Color.rgb(255, 255, 0, 0.7));
@@ -867,25 +861,16 @@ public class GUI {
     // Add the components to the VBox
     vboxCL.getChildren().addAll(title, stack, stack2);
 
-    // Create Labels and VBoxs layout
-    // Label farmDateLabel = new Label("Date");
-    // Label farmWeightLabel = new Label("Weight");
-    // Label farmPercentLabel = new Label("Percent");
-    // VBox vBoxFirstList = new VBox();
-    // VBox vBoxSecondList = new VBox();
-    // VBox vBoxThirdList = new VBox();
-
-    // // Create three ListViews
-    // ListView<String> farmDateList = getListView(month, 100, 200);
-    // ListView<String> totalWeightList = getListView(weight, 100, 200);
-    // ListView<String> percentList = getListView(percentage, 100, 200);
-
+    // Store the retrieved results
     data = FXCollections.observableArrayList();
     for (int i = 0; i < 12; i++) {
       data.add(new ResultRecord(result.get(i).get(0), result.get(i).get(1), result.get(i).get(2)));
     }
 
+    // Create a table view
     TableView<ResultRecord> table = new TableView<ResultRecord>();
+    
+    // Create three column
     TableColumn<ResultRecord, String> monthRow = new TableColumn<ResultRecord, String>("Month");
     monthRow.setPrefWidth(90);
     monthRow.setCellValueFactory(new PropertyValueFactory<ResultRecord, String>("columnOne"));
@@ -895,40 +880,19 @@ public class GUI {
     TableColumn<ResultRecord, String> percentRow = new TableColumn<ResultRecord, String>("Percent");
     percentRow.setPrefWidth(90);
     percentRow.setCellValueFactory(new PropertyValueFactory<ResultRecord, String>("columnThree"));
+    
+    // Set the data
     table.setItems(data);
+    // Add the columns to the table
     table.getColumns().addAll(monthRow, weightRow, percentRow);
+    // Set the size
     table.setMaxSize(300, 200);
 
+    // Add event handler
     table.setOnMouseClicked(e -> {
       amount.setText(table.getSelectionModel().getSelectedItem().getColumnTwo());
       percent.setText(table.getSelectionModel().getSelectedItem().getColumnThree());
     });
-
-
-    // // Set the event handler
-    // totalWeightList.setOnMouseClicked(e -> {
-    // // When mouse is clicked, update the label in the circle
-    // amount.setText(totalWeightList.getSelectionModel().getSelectedItem());
-    // percent.setText(
-    // percentList.getItems().get((totalWeightList.getSelectionModel().getSelectedIndex())));
-    // });
-    //
-    // // Set the event handler
-    // percentList.setOnMouseClicked(e -> {
-    // // When mouse is clicked, update the label in the circle
-    // percent.setText(percentList.getSelectionModel().getSelectedItem());
-    // amount.setText(
-    // totalWeightList.getItems().get((percentList.getSelectionModel().getSelectedIndex())));
-    // });
-
-    // // Add them to the VBox
-    // vBoxFirstList.getChildren().addAll(farmDateLabel, farmDateList);
-    // vBoxSecondList.getChildren().addAll(farmWeightLabel, totalWeightList);
-    // vBoxThirdList.getChildren().addAll(farmPercentLabel, percentList);
-
-    // // Create HBox layout and add components
-    // HBox hBox = new HBox();
-    // hBox.getChildren().addAll(vBoxFirstList, vBoxSecondList, vBoxThirdList);
 
     // Initialize the fileChooser
     this.fileChooser = new FileChooser();
@@ -941,17 +905,22 @@ public class GUI {
     farmWeightSortButton.setStyle("-fx-base: navajowhite;");
     farmWeightSortButton.setOnAction(e -> {
       if (!firstFlag) {
+        // Sort the ArrayList in ascending
         Collections.sort(result, (a, b) -> {
           return (int) (Long.parseLong(a.get(1)) - (Long.parseLong(b.get(1))));
         });
+        // Flip the flag
         firstFlag = !firstFlag;
       } else {
+        // Sort the ArrayList in descending
         Collections.sort(result, (a, b) -> {
           return (int) (Long.parseLong(b.get(1)) - (Long.parseLong(a.get(1))));
         });
+        // Flip the flag
         firstFlag = !firstFlag;
       }
 
+      // Add the data to the list
       data = FXCollections.observableArrayList();
       for (int i = 0; i < 12; i++) {
         data.add(
@@ -960,6 +929,7 @@ public class GUI {
       table.setItems(data);
     });
 
+    // Export button
     Button exportButton = getOvalButton("Export", 3.2, 2);
     exportButton.setStyle("-fx-base: navajowhite;");
     exportButton.setOnAction(e -> {
@@ -1021,7 +991,6 @@ public class GUI {
     // Create two buttons and set event handler
     Button search = getOvalButton("Search", 3.2, 2);
     search.setStyle("-fx-base: navajowhite;");
-
 
     Button clear = getOvalButton("Clear", 3.2, 2);
     clear.setStyle("-fx-base: gold;");
@@ -1103,13 +1072,6 @@ public class GUI {
       displayWarningMessage(WarningIndex.ILLEGALNULLKEYEXCEPTION);
     }
 
-    // // Create three ListViews
-    // ListView<String> farmIDList = getListView(result.get(0), 100, 150);
-    // ListView<String> weightList = getListView(result.get(1), 100, 150);
-    // ListView<String> percentList = getListView(result.get(2), 100, 150);
-
-
-
     // add data from result into the data list
     data = FXCollections.observableArrayList();
     for (int i = 0; i < result.size(); i++) {
@@ -1132,11 +1094,6 @@ public class GUI {
     table.setItems(data);
     table.getColumns().addAll(firstCol, secondCol, thirdCol);
     table.setMaxSize(300, 200);
-
-
-    // Create HBox layout and add components
-    // HBox list = new HBox();
-    // list.getChildren().addAll(farmIDList, weightList, percentList);
 
     // Initialize the fileChooser
     this.fileChooser = new FileChooser();
@@ -1410,19 +1367,24 @@ public class GUI {
       }
     });
 
+    // Get the date 
     String originalDate = year + "-" + month;
     DateFormat df = new SimpleDateFormat("yyyy-MM");
     Date date = df.parse(originalDate);
     GregorianCalendar g = (GregorianCalendar) GregorianCalendar.getInstance();
     g.setTime(date);
 
+    // Get the result
     result = manager.getMonthlyReport(g);
 
+    // Add the result to data
     data = FXCollections.observableArrayList();
     for (ArrayList<String> element : result)
       data.add(new ResultRecord(element.get(0), element.get(1), element.get(2)));
 
+    // Create a table view 
     TableView<ResultRecord> table = new TableView<ResultRecord>();
+    // Create three columns
     TableColumn<ResultRecord, String> firstCol = new TableColumn<ResultRecord, String>("Farm ID");
     firstCol.setPrefWidth(90);
     firstCol.setCellValueFactory(new PropertyValueFactory<ResultRecord, String>("columnOne"));
@@ -1434,6 +1396,7 @@ public class GUI {
     thirdCol.setPrefWidth(90);
     thirdCol.setCellValueFactory(new PropertyValueFactory<ResultRecord, String>("columnThree"));
     table.setItems(data);
+    // Add three columns
     table.getColumns().addAll(firstCol, secondCol, thirdCol);
     table.setMaxSize(300, 200);
 
@@ -1676,12 +1639,14 @@ public class GUI {
     endCalendar = (GregorianCalendar) GregorianCalendar.getInstance();
     endCalendar.setTime(endDate);
 
+    // Get the result
     try {
       result = manager.getDateReport(startCalendar, endCalendar);
     } catch (IllegalNullKeyException e1) {
       displayWarningMessage(WarningIndex.PARSEEXCEPTION);
     }
 
+    // Add to data
     data = FXCollections.observableArrayList();
     for (int i = 0; i < result.size(); i++) {
       data.add(new ResultRecord(result.get(i).get(0), result.get(i).get(1), result.get(i).get(2)));
@@ -2070,28 +2035,4 @@ public class GUI {
     textField.setPrefSize(length, height);
     return textField;
   }
-
-  // /**
-  // * Create the ListView
-  // *
-  // * @param result - the array of data
-  // * @param length - the length of the field
-  // * @param height - the height of the field
-  // *
-  // * @return the ListView<String>
-  // */
-  // private ListView<String> getListView(ArrayList<String> result, int length, int height) {
-  // // Create a new listView
-  // ListView<String> listView = new ListView<String>();
-  //
-  // // Add data to the list
-  // for (int i = 0; i < result.size(); i++) {
-  // listView.getItems().add(result.get(i));
-  // }
-  //
-  // // Set the size
-  // listView.setMaxSize(length, height);
-  // return listView;
-  // }
-
 }
