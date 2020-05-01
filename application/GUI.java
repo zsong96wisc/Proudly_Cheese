@@ -899,20 +899,38 @@ public class GUI {
       data.add(new ResultRecord(result.get(i).get(0), result.get(i).get(1), result.get(i).get(2)));
     }
 
+    // Create table view
     TableView<ResultRecord> table = new TableView<ResultRecord>();
+
+    // Create the first column
     TableColumn<ResultRecord, String> monthRow = new TableColumn<ResultRecord, String>("Month");
+
+    // Set the width
     monthRow.setPrefWidth(90);
     monthRow.setCellValueFactory(new PropertyValueFactory<ResultRecord, String>("columnOne"));
+
+    // Create the second column
     TableColumn<ResultRecord, String> weightRow = new TableColumn<ResultRecord, String>("Weight");
+
+    // Set the width
     weightRow.setPrefWidth(90);
     weightRow.setCellValueFactory(new PropertyValueFactory<ResultRecord, String>("columnTwo"));
+
+    // Create the third column
     TableColumn<ResultRecord, String> percentRow = new TableColumn<ResultRecord, String>("Percent");
+
+    // Set the width
     percentRow.setPrefWidth(90);
     percentRow.setCellValueFactory(new PropertyValueFactory<ResultRecord, String>("columnThree"));
+
+    // Set the items
     table.setItems(data);
+
+    // Add the columns to the table
     table.getColumns().addAll(monthRow, weightRow, percentRow);
     table.setMaxSize(300, 200);
 
+    // Add handler
     table.setOnMouseClicked(e -> {
       amount.setText(table.getSelectionModel().getSelectedItem().getColumnTwo());
       percent.setText(table.getSelectionModel().getSelectedItem().getColumnThree());
@@ -929,6 +947,7 @@ public class GUI {
     farmWeightSortButton.setStyle("-fx-base: navajowhite;");
     farmWeightSortButton.setOnAction(e -> {
       if (!firstFlag) {
+        // Sort the arraylist ascending
         Collections.sort(result, (a, b) -> {
           if (Long.parseLong(a.get(1)) - (Long.parseLong(b.get(1))) > 0)
             return 1;
@@ -937,8 +956,11 @@ public class GUI {
           else
             return 0;
         });
+
+        // Flip the flag
         firstFlag = !firstFlag;
       } else {
+        // Sort the arraylist descending
         Collections.sort(result, (a, b) -> {
           if (Long.parseLong(a.get(1)) - (Long.parseLong(b.get(1))) > 0)
             return 1;
@@ -947,17 +969,23 @@ public class GUI {
           else
             return 0;
         });
+
+        // Flip the flag
         firstFlag = !firstFlag;
       }
 
+      // Add the new data to table
       data = FXCollections.observableArrayList();
       for (int i = 0; i < 12; i++) {
         data.add(
             new ResultRecord(result.get(i).get(0), result.get(i).get(1), result.get(i).get(2)));
       }
+
+      // Set the items
       table.setItems(data);
     });
 
+    // Create exprot button
     Button exportButton = getOvalButton("Export", 3.2, 2);
     exportButton.setStyle("-fx-base: navajowhite;");
     exportButton.setOnAction(e -> {
@@ -1129,17 +1157,32 @@ public class GUI {
     // this is the tableView of the final shown table
     TableView<ResultRecord> table = new TableView<ResultRecord>();
 
+    // Create the first column
     TableColumn<ResultRecord, String> firstCol = new TableColumn<ResultRecord, String>("FarmID");
+
+    // Set the width
     firstCol.setPrefWidth(90);
     firstCol.setCellValueFactory(new PropertyValueFactory<ResultRecord, String>("columnOne"));
+
+    // Create the second column
     TableColumn<ResultRecord, String> secondCol =
         new TableColumn<ResultRecord, String>("Total Weight");
+
+    // Set the width
     secondCol.setPrefWidth(90);
     secondCol.setCellValueFactory(new PropertyValueFactory<ResultRecord, String>("columnTwo"));
+
+    // Create the three column
     TableColumn<ResultRecord, String> thirdCol = new TableColumn<ResultRecord, String>("Percent");
+
+    // Set the width
     thirdCol.setPrefWidth(90);
     thirdCol.setCellValueFactory(new PropertyValueFactory<ResultRecord, String>("columnThree"));
+
+    // Set the items
     table.setItems(data);
+
+    // Add the columns to table
     table.getColumns().addAll(firstCol, secondCol, thirdCol);
     table.setMaxSize(300, 200);
 
@@ -1463,18 +1506,30 @@ public class GUI {
 
     // Create a table view
     TableView<ResultRecord> table = new TableView<ResultRecord>();
-    // Create three columns
+
+    // Create first columns
     TableColumn<ResultRecord, String> firstCol = new TableColumn<ResultRecord, String>("Farm ID");
+
+    // Set the width
     firstCol.setPrefWidth(90);
     firstCol.setCellValueFactory(new PropertyValueFactory<ResultRecord, String>("columnOne"));
+
+    // Create second columns
     TableColumn<ResultRecord, String> secondCol = new TableColumn<ResultRecord, String>("Weight");
+
+    // Set the width
     secondCol.setPrefWidth(90);
     secondCol.setCellValueFactory(new PropertyValueFactory<ResultRecord, String>("columnTwo"));
+
+    // Create three columns
     TableColumn<ResultRecord, String> thirdCol =
         new TableColumn<ResultRecord, String>("Percentage");
+
+    // Set the width
     thirdCol.setPrefWidth(90);
     thirdCol.setCellValueFactory(new PropertyValueFactory<ResultRecord, String>("columnThree"));
     table.setItems(data);
+
     // Add three columns
     table.getColumns().addAll(firstCol, secondCol, thirdCol);
     table.setMaxSize(300, 200);
@@ -1681,6 +1736,7 @@ public class GUI {
       }
     });
 
+    // Set handler
     endDateField.setOnKeyPressed(e -> {
       if (e.getCode() == KeyCode.ENTER) {
         search.fire();
@@ -1842,6 +1898,7 @@ public class GUI {
         });
         secondFlag = false;
       } else {
+        // Sort descending
         Collections.sort(result, (b, a) -> {
           if (Long.parseLong(a.get(1)) - Long.parseLong(b.get(1)) > 0)
             return 1;
@@ -1852,7 +1909,11 @@ public class GUI {
         });
         secondFlag = true;
       }
+
+      // Clear the data
       data.clear();
+
+      // Add the data to the table
       for (int i = 0; i < result.size(); i++) {
         data.add(
             new ResultRecord(result.get(i).get(0), result.get(i).get(1), result.get(i).get(2)));
@@ -2174,6 +2235,8 @@ public class GUI {
 
   /**
    * display summary in a new window
+   * 
+   * @parm farmReport - the boolean value for whether it is farm report or not
    */
   private void displaySummary(boolean farmReport) {
     // Create an alert

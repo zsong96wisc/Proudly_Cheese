@@ -535,10 +535,12 @@ public class Manager {
    */
   public boolean changeRecords(Record oldRecord, Record newRecord)
       throws IllegalNullKeyException, DuplicateKeyException {
+    // Check the input
     if (oldRecord == null || newRecord == null) {
       throw new IllegalNullKeyException("The input is null");
     }
 
+    // Record is the same
     if (oldRecord.compareTo(newRecord) == 0) // Record is the same
       return true;
 
@@ -585,6 +587,8 @@ public class Manager {
    * This method is used to import the new file, and return a list of records
    * 
    * @param file - input file
+   * 
+   * @return the list of record
    * 
    * @throws IOException              - the exception that may be thrown
    * @throws IllegalRecordException   - when the record format is wrong

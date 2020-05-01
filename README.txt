@@ -4,10 +4,10 @@ Course: cs400
 Semester: Spring 2020
 Project name: Proudly_Cheese
 Team Members:
-1. Hairong Yin, Lec 002, and hyin55@wisc.edu
-2. Haonan Shen, Lec 001, and hshen37@wisc.edu
-3. Xiaoxi Sun, Lec 002, and xsun279@wisc.edu
-4. Zhiwei Song, Lec 002, and zsong96@wisc.edu
+1. Hairong Yin, Lec 002, hyin55@wisc.edu, xteam: 218
+2. Haonan Shen, Lec 001, hshen37@wisc.edu, xteam: 149
+3. Xiaoxi Sun, Lec 002, xsun279@wisc.edu, xteam: 211
+4. Zhiwei Song, Lec 002, zsong96@wisc.edu, xteam: 219
  
 Which team members were on same xteam together?
 None
