@@ -13,7 +13,7 @@ Which team members were on same xteam together?
 None
 
 Data specification:
-1. The input csv file requires the first time to the title of the column because the program skipps the first line in files. 
+1. The input csv file requires the first time to the title of the column because the program skips the first line in files. 
 2. The date format is YYYY-MM-DD.
 
 Known bug: None

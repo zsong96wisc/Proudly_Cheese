@@ -817,6 +817,8 @@ public class GUI {
    * Define the Farm Result Scene of the GUI
    * 
    * @param primaryStage - the stage that displays the scene
+   * @param farmID       - the input farmID
+   * @param year         - the input year
    */
   @SuppressWarnings("unchecked")
   public void getFarmResultScene(Stage primaryStage, String farmID, String year) {
@@ -1116,6 +1118,7 @@ public class GUI {
    * Define the Annual Result Scene of the GUI
    * 
    * @param primaryStage - the stage that displays the scene
+   * @param year         - the input year
    */
   @SuppressWarnings("unchecked")
   public void getAnnualResultScene(Stage primaryStage, int year) {
@@ -1439,6 +1442,9 @@ public class GUI {
    * Define the Monthly Result Scene of the GUI
    * 
    * @param primaryStage - the stage that displays the scene
+   * @param year         - the input year
+   * @param month        - the input month
+   * 
    * @throws IllegalNullKeyException
    * @throws ParseException
    */
@@ -1767,6 +1773,8 @@ public class GUI {
    * Define the Date Result Scene of the GUI
    * 
    * @param primaryStage - the stage that displays the scene
+   * @param start        - the start date
+   * @param end          - the end date
    */
   @SuppressWarnings("unchecked")
   public void getDateResultScene(Stage primaryStage, String start, String end) {
@@ -2197,7 +2205,9 @@ public class GUI {
   /**
    * Create the Oval Button
    * 
-   * @param text - the text displayed on the button
+   * @param text   - the text displayed on the button\
+   * @param length - the length of the oval
+   * @param width  - the width of the oval
    * 
    * @return the Oval Button
    */
@@ -2236,7 +2246,7 @@ public class GUI {
   /**
    * display summary in a new window
    * 
-   * @parm farmReport - the boolean value for whether it is farm report or not
+   * @param farmReport - the boolean value for whether it is farm report or not
    */
   private void displaySummary(boolean farmReport) {
     // Create an alert
