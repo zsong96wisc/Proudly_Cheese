@@ -47,8 +47,8 @@ public class RecordsOfDate {
   public RecordsOfDate(GregorianCalendar g) {
     this.g = (GregorianCalendar) GregorianCalendar.getInstance();
     // Initialize all the variables
-    this.g.set(g.get(GregorianCalendar.YEAR), 
-        g.get(GregorianCalendar.MONTH), g.get(GregorianCalendar.DATE), 0, 0, 0);
+    this.g.set(g.get(GregorianCalendar.YEAR), g.get(GregorianCalendar.MONTH),
+        g.get(GregorianCalendar.DATE), 0, 0, 0);
     this.recordSet = new TreeSet<Record>();
     this.totalWeight = 0;
     this.numKeys = 0;

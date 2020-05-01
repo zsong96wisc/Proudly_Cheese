@@ -17,10 +17,11 @@
 
 package application;
 
-import javafx.beans.property.SimpleStringProperty; 
+import javafx.beans.property.SimpleStringProperty;
 
 /**
  * ResultRecord - Representing one piece of the result to be shown in the table
+ * 
  * @author aTeam 147 (2020)
  *
  */
@@ -33,8 +34,8 @@ public class ResultRecord {
   /**
    * Constructor - create an object with info for each column
    * 
-   * @param columnOne - the info for first column
-   * @param columnTwo - the info for second column
+   * @param columnOne   - the info for first column
+   * @param columnTwo   - the info for second column
    * @param columnThree - the info for third column
    */
   public ResultRecord(String columnOne, String columnTwo, String columnThree) {

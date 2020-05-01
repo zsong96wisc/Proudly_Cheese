@@ -106,7 +106,7 @@ public class FileManager {
 
     // Get the integer weight and farmID String
     String farmID = recordInStrings[1];
-    int weight = Integer.valueOf(recordInStrings[2]);
+    long weight = Long.valueOf(recordInStrings[2].trim());
 
     if (weight < 0) {
       // invalid weight

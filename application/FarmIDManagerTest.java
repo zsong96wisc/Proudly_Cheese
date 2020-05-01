@@ -31,6 +31,7 @@ import org.junit.jupiter.api.Test;
  */
 class FarmIDManagerTest {
   private FarmIDManager fm; // Instance to be tested
+
   /**
    * instantiate a FarmIDManager instance every time before test
    * 
@@ -50,7 +51,7 @@ class FarmIDManagerTest {
   public void tearDown() throws Exception {
     fm = null;
   }
-  
+
   @Test
   public void test001_add_farm_record() {
     try {
@@ -59,12 +60,12 @@ class FarmIDManagerTest {
       fm.addFarmRecord(record);
       List<Record> report = fm.getFarmRecords("Farm 001");
       assert report.get(0).compareTo(record) == 0;
-      
+
     } catch (Exception e) {
       fail("Unkonw Exception Thrown");
     }
   }
-  
+
   /**
    * Test addFarmRecord() will successfully add multiple records
    */
@@ -72,26 +73,26 @@ class FarmIDManagerTest {
   public void test002_add_more_farm_records() {
     try {
       List<Record> recordsAddedInFarm1 = new LinkedList<Record>();
-      for (int i = 1; i<=12; i++) {
-        GregorianCalendar date = new GregorianCalendar(2013, i-1, i, 0, 0, 0);
+      for (int i = 1; i <= 12; i++) {
+        GregorianCalendar date = new GregorianCalendar(2013, i - 1, i, 0, 0, 0);
         date.setLenient(false);
 
         // Record the record being added
         Record record = new Record(date, "Farm 001", 13);
         recordsAddedInFarm1.add(record);
-        
+
         fm.addFarmRecord(record);
       }
-      
+
       List<Record> recordsAddedInFarm2 = new LinkedList<Record>();
-      for (int i = 1; i<=12; i++) {
-        GregorianCalendar date = new GregorianCalendar(2014, i-1, i, 0, 0, 0);
+      for (int i = 1; i <= 12; i++) {
+        GregorianCalendar date = new GregorianCalendar(2014, i - 1, i, 0, 0, 0);
         date.setLenient(false);
-        
+
         // Record the record being added
         Record record = new Record(date, "Farm 002", 13);
         recordsAddedInFarm2.add(record);
-        
+
         fm.addFarmRecord(record);
       }
       // total number of records should be 24
@@ -104,68 +105,63 @@ class FarmIDManagerTest {
       assert recordsAddedInFarm1.containsAll(reportListInFarm1);
       assert reportListInFarm2.containsAll(recordsAddedInFarm2);
       assert recordsAddedInFarm2.containsAll(reportListInFarm2);
-    } catch(Exception e) {
+    } catch (Exception e) {
       fail("Unkonw Exception Thrown");
     }
   }
-  
+
   /**
-   * Test addFarmRecord() will throw exceptions under special 
-   * circumstances
+   * Test addFarmRecord() will throw exceptions under special circumstances
    */
   @Test
   public void test003_add_farm_records_excetions() {
     try {
       fm.addFarmRecord(null);
       fail("no exception triggered");
-    } catch(IllegalNullKeyException e) {
+    } catch (IllegalNullKeyException e) {
       // expected
-    } 
-    catch(Exception e) {
+    } catch (Exception e) {
       fail("Unkonw Exception Thrown");
     }
-    
+
     try {
       GregorianCalendar date = new GregorianCalendar(2013, 1, 1, 0, 0, 0);
       Record record = new Record(date, "Farm 001", 13);
       fm.addFarmRecord(record);
       fm.addFarmRecord(record);
       fail("no exception triggered");
-    } catch(DuplicateKeyException e) {
+    } catch (DuplicateKeyException e) {
       // expected
-    } 
-    catch(Exception e) {
+    } catch (Exception e) {
       fail("Unkonw Exception Thrown");
     }
   }
-  
+
   /**
-   * Test addFarmRecord() will throw exceptions under special 
-   * circumstances
+   * Test addFarmRecord() will throw exceptions under special circumstances
    */
   @Test
   public void test004_remove_farm_record() {
     try {
       List<Record> recordsAdded = new LinkedList<Record>();
-      for (int i = 1; i<=12; i++) {
-        GregorianCalendar date = 
-            new GregorianCalendar(2000 + i, i - 1, i, 0, 0, 0);
+      for (int i = 1; i <= 12; i++) {
+        GregorianCalendar date = new GregorianCalendar(2000 + i, i - 1, i, 0, 0, 0);
         date.setLenient(false);
         // Record the record being added
         Record record = new Record(date, "Farm 001", 13);
         recordsAdded.add(record);
-        
+
         fm.addFarmRecord(record);
         // one new record added
-        assert fm.getTotalNumberOfRecords() == 1; 
+        assert fm.getTotalNumberOfRecords() == 1;
         fm.removeFarmRecord(record);
         assert fm.getTotalNumberOfRecords() == 0;
-        
+
         // Should be able to add once again
         fm.addFarmRecord(record);
         fm.removeFarmRecord(record); // Then remove it
       }
-    } catch(Exception e) {
+    } catch (Exception e) {
       fail("Unkonw Exception Thrown");
     }
   }

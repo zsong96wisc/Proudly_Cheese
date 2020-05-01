@@ -525,7 +525,10 @@ public class GUI {
         Record record = manager.inputRecord(farmIDTextField.getText(), dateTextField.getText(),
             weightTextField.getText());
         // remove the records from the internal system
-        manager.removeRecords(record);
+        boolean r = manager.removeRecords(record);
+        if (!r) {
+          throw new KeyNotFoundException("Record can not be found");
+        }
 
         // Create an alert
         Alert alert = new Alert(AlertType.INFORMATION, "Successfully delete record");
@@ -548,6 +551,8 @@ public class GUI {
         displayWarningMessage(WarningIndex.PARSEEXCEPTION);
       } catch (IllegalNullKeyException e5) {
         displayWarningMessage(WarningIndex.ILLEGALNULLKEYEXCEPTION);
+      } catch (KeyNotFoundException e6) {
+        displayWarningMessage(WarningIndex.KEYNOTFOUNDEXCEPTION);
       }
     });
 
@@ -660,7 +665,10 @@ public class GUI {
         Record newRecord =
             manager.inputRecord(newFarmID.getText(), newDate.getText(), newWeight.getText());
         // Change the records from the internal system
-        manager.changeRecords(oldRecord, newRecord);
+        boolean r = manager.changeRecords(oldRecord, newRecord);
+        if (!r) {
+          throw new KeyNotFoundException("Record can not be found");
+        }
 
         // Create an alert
         Alert alert = new Alert(AlertType.INFORMATION, "Successfully change record");
@@ -688,6 +696,8 @@ public class GUI {
         displayWarningMessage(WarningIndex.ILLEGALRECORDEXCEPTION);
       } catch (ParseException e1) {
         displayWarningMessage(WarningIndex.PARSEEXCEPTION);
+      } catch (KeyNotFoundException e1) {
+        displayWarningMessage(WarningIndex.KEYNOTFOUNDEXCEPTION);
       }
     });
 
@@ -2176,15 +2186,15 @@ public class GUI {
       alert.setContentText("No summary shown");
     } else {// The format of the Min, max Record would be Farm ID/Month, Weight, Percent
       if (farmReport) // Report for farms
-        alert.setContentText("Max Record: " + summary.get(0) + " Weight - "
-            + summary.get(1) + " Percent - " + summary.get(2) + "\n" + "Min Record: "
-            + summary.get(3) + " " + " Weight - " + summary.get(4) + " Percent - " + summary.get(5)
-            + "\n" + "Average: " + summary.get(6));
+        alert.setContentText("Max Record: " + summary.get(0) + " Weight - " + summary.get(1)
+            + " Percent - " + summary.get(2) + "\n" + "Min Record: " + summary.get(3) + " "
+            + " Weight - " + summary.get(4) + " Percent - " + summary.get(5) + "\n" + "Average: "
+            + summary.get(6));
       else // Report for Date
-        alert.setContentText("Max Record: " + summary.get(0) + " Weight - "
-            + summary.get(1) + " Percent - " + summary.get(2) + "\n" + "Min Record: "
-            + summary.get(3) + " " + " Weight - " + summary.get(4) + " Percent - " + summary.get(5)
-            + "\n" + "Average: " + summary.get(6));
+        alert.setContentText("Max Record: " + summary.get(0) + " Weight - " + summary.get(1)
+            + " Percent - " + summary.get(2) + "\n" + "Min Record: " + summary.get(3) + " "
+            + " Weight - " + summary.get(4) + " Percent - " + summary.get(5) + "\n" + "Average: "
+            + summary.get(6));
       alert.showAndWait().filter(response -> response == ButtonType.OK);
     }
   }

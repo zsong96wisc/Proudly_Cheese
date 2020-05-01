@@ -111,21 +111,19 @@ public class DateManager {
    * @throws IllegalNullKeyException - when the given parameter is null
    * @throws DuplicateKeyException   - when the inserted RecordsOfDate is already in the set
    */
-  public void addFarmRecord(Record record) 
-      throws IllegalNullKeyException, DuplicateKeyException {
+  public void addFarmRecord(Record record) throws IllegalNullKeyException, DuplicateKeyException {
     if (record == null) // parameter is null
       throw new IllegalNullKeyException("insert null reference");
-    
+
     // Date belongs to Records of Date
-    GregorianCalendar rodDate = 
-        (GregorianCalendar) GregorianCalendar.getInstance();
-    rodDate.set(record.getDate().get(GregorianCalendar.YEAR), 
-        record.getDate().get(GregorianCalendar.MONTH), 
-        record.getDate().get(GregorianCalendar.DATE), 0, 0, 0);
-    
+    GregorianCalendar rodDate = (GregorianCalendar) GregorianCalendar.getInstance();
+    rodDate.set(record.getDate().get(GregorianCalendar.YEAR),
+        record.getDate().get(GregorianCalendar.MONTH), record.getDate().get(GregorianCalendar.DATE),
+        0, 0, 0);
+
     // Create a new RecordsOfDate instance
     RecordsOfDate tempRecordsOfDate = new RecordsOfDate(rodDate);
-    
+
     // Search and store in a subset
     NavigableSet<RecordsOfDate> searchResult =
         rodSet.subSet(tempRecordsOfDate, true, tempRecordsOfDate, true);
@@ -134,7 +132,7 @@ public class DateManager {
     if (searchResult.isEmpty()) {
       tempRecordsOfDate.insert(record);
       rodSet.add(tempRecordsOfDate);
-    } else { 
+    } else {
       // There is no such RecordsOfDate
       if (searchResult.first().contains(record))
         // If there is a duplicate record
@@ -161,12 +159,11 @@ public class DateManager {
     if (record == null)
       throw new IllegalNullKeyException("null record input");
     // Date belongs to Records of Date
-    GregorianCalendar rodDate = 
-        (GregorianCalendar) GregorianCalendar.getInstance();
-    rodDate.set(record.getDate().get(GregorianCalendar.YEAR), 
-        record.getDate().get(GregorianCalendar.MONTH), 
-        record.getDate().get(GregorianCalendar.DATE), 0, 0, 0);
-    
+    GregorianCalendar rodDate = (GregorianCalendar) GregorianCalendar.getInstance();
+    rodDate.set(record.getDate().get(GregorianCalendar.YEAR),
+        record.getDate().get(GregorianCalendar.MONTH), record.getDate().get(GregorianCalendar.DATE),
+        0, 0, 0);
+
     RecordsOfDate tempRecordsOfDate = new RecordsOfDate(rodDate);
     // The search result
     NavigableSet<RecordsOfDate> searchResult =
@@ -289,7 +286,7 @@ public class DateManager {
    * Retrieve the total weight of a certain farm in a month
    * 
    * @param farmID - the farm to be search
-   * @param date - the month to be searched
+   * @param date   - the month to be searched
    * 
    * @return - total weight of that farm
    * 
@@ -298,7 +295,7 @@ public class DateManager {
   public long getFarmMonthlyWeight(String farmID, GregorianCalendar date)
       throws IllegalNullKeyException {
     // if the date is null
-    if (date == null) 
+    if (date == null)
       throw new IllegalNullKeyException("null date input");
     // if the farmID is null
     if (farmID == null)
@@ -319,7 +316,7 @@ public class DateManager {
       // Traverse the search result
       long totolWeight = 0;
       for (RecordsOfDate rod : searchResult) {
-        // Create the MAX and MIN record 
+        // Create the MAX and MIN record
         Record startRecord = new Record(rod.getDate(), farmID, 0);
         Record endRecord = new Record(rod.getDate(), farmID, Long.MAX_VALUE);
         // Retrieve the subset
