@@ -12,5 +12,15 @@ Team Members:
 Which team members were on same xteam together?
 None
 
+Data specification:
+1. The input csv file requires the first time to the title of the column because the program skipps the first line in files. 
+2. The date format is YYYY-MM-DD.
+
+Known bug: None
+
+Future plan:
+1. add charts to the result panes
+2. Improve the efficiency when storing data
+3. Export files contents based on asc/des sequence 
+
 Other notes or comments to the grader:
-Example data has been coded into the program in order to display expected the results pane appearance

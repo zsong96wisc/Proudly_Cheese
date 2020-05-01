@@ -2176,8 +2176,8 @@ public class GUI {
       alert.setContentText("No summary shown");
     } else {// The format of the Min, max Record would be Farm ID/Month, Weight, Percent
       if (farmReport) // Report for farms
-        alert.setContentText("Max Record: " + "Month - " + summary.get(0) + " Weight - "
-            + summary.get(1) + " Percent - " + summary.get(2) + "\n" + "Min Record: " + "Month - "
+        alert.setContentText("Max Record: " + summary.get(0) + " Weight - "
+            + summary.get(1) + " Percent - " + summary.get(2) + "\n" + "Min Record: "
             + summary.get(3) + " " + " Weight - " + summary.get(4) + " Percent - " + summary.get(5)
             + "\n" + "Average: " + summary.get(6));
       else // Report for Date
