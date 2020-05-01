@@ -305,8 +305,14 @@ public class GUI {
           // import the file and get the list of records
           for (File selectedFile : selectedFiles) {
             List<Record> list = this.manager.importFile(selectedFile);
-            // import the list to the internal system
-            this.manager.importList(list, choice);
+            if (choice.equals(loadFunction[1])) {
+              // import the list to the internal system
+              this.manager.importList(list, choice);
+              choice = loadFunction[0];
+            } else {
+              // import the list to the internal system
+              this.manager.importList(list, choice);
+            }
           }
 
           // Create an alert
@@ -611,7 +617,7 @@ public class GUI {
     TextField newDate = getInputTextField("Date(YYYY-MM-DD)", 90, 10);
     TextField newWeight = getInputTextField("New Weight", 90, 10);
     newWeight.setOnKeyPressed(e -> {
-      if(e.getCode() == KeyCode.ENTER){
+      if (e.getCode() == KeyCode.ENTER) {
         change.fire();
       }
     });
@@ -759,9 +765,9 @@ public class GUI {
         displayWarningMessage(WarningIndex.PARSEEXCEPTION);
       }
     });
-    
+
     inputYear.setOnKeyPressed(e -> {
-      if(e.getCode() == KeyCode.ENTER){
+      if (e.getCode() == KeyCode.ENTER) {
         search.fire();
       }
     });
@@ -837,12 +843,12 @@ public class GUI {
 
     // The result to be displayed in the list
     result = new ArrayList<ArrayList<String>>();
-   
+
     try {
       // Retrieve the result
       result = manager.getFarmReport(farmID,
           new GregorianCalendar(Integer.valueOf(year), 1, 1, 0, 0, 0));
-      if (result.size() != 0) 
+      if (result.size() != 0)
         summary = result.remove(result.size() - 1);
     } catch (NumberFormatException e1) {
       // Display the warning message
@@ -850,11 +856,11 @@ public class GUI {
     } catch (IllegalNullKeyException e1) {
       displayWarningMessage(WarningIndex.ILLEGALNULLKEYEXCEPTION);
     }
-    
+
     // Summary button
     Button getSummary = getOvalButton("Summary", 3.2, 3.2);
     getSummary.setStyle("-fx-base: gold;");
-    getSummary.setOnAction(e->{
+    getSummary.setOnAction(e -> {
       displaySummary(true);
     });
 
@@ -956,7 +962,7 @@ public class GUI {
         alert.showAndWait().filter(response -> response == ButtonType.OK);
 
       } catch (FileNotFoundException e1) {
-        
+
       }
     });
 
@@ -1012,7 +1018,7 @@ public class GUI {
     year.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 18));
     year.setText("Year : ");
     textfield.setOnKeyPressed(e -> {
-      if(e.getCode() == KeyCode.ENTER){
+      if (e.getCode() == KeyCode.ENTER) {
         System.out.println("bb");
         search.fire();
       }
@@ -1048,21 +1054,20 @@ public class GUI {
     root.setRight(vboxRt);
     root.setTop(text);
     BorderPane.setAlignment(text, Pos.TOP_CENTER);
-    
+
     search.setOnAction(e -> {
-      try{
-        if(textfield.getText().equals("")) {
+      try {
+        if (textfield.getText().equals("")) {
           throw new IllegalNullKeyException();
         }
-        int i= Integer.parseInt(textfield.getText());
+        int i = Integer.parseInt(textfield.getText());
         getAnnualResultScene(primaryStage, i);
-      }catch (NumberFormatException e1) {
+      } catch (NumberFormatException e1) {
         displayWarningMessage(WarningIndex.NUMBERFORMATEXCEPTION);
-      }
-      catch (IllegalNullKeyException e2) {
+      } catch (IllegalNullKeyException e2) {
         // Display warning message
         displayWarningMessage(WarningIndex.ILLEGALNULLKEYEXCEPTION);
-      } 
+      }
     });
 
     // Add the scene to stage
@@ -1075,7 +1080,7 @@ public class GUI {
    * @param primaryStage - the stage that displays the scene
    */
   @SuppressWarnings("unchecked")
-  public void getAnnualResultScene(Stage primaryStage, int year) {    
+  public void getAnnualResultScene(Stage primaryStage, int year) {
     // Text field for title
     Text text = getTitle("Annual Result Scene\n");
 
@@ -1099,12 +1104,12 @@ public class GUI {
       // display warning
       displayWarningMessage(WarningIndex.ILLEGALNULLKEYEXCEPTION);
     }
-    
 
-    if(result.size()>0) {
-      summary = result.remove(result.size()-1);
+
+    if (result.size() > 0) {
+      summary = result.remove(result.size() - 1);
     }
-    
+
     // add data from result into the data list
     data = FXCollections.observableArrayList();
     for (int i = 0; i < result.size(); i++) {
@@ -1127,17 +1132,17 @@ public class GUI {
     table.setItems(data);
     table.getColumns().addAll(firstCol, secondCol, thirdCol);
     table.setMaxSize(300, 200);
-    
+
     // Initialize the fileChooser
     this.fileChooser = new FileChooser();
     // Add the extension constraint
     this.fileChooser.getExtensionFilters()
         .addAll(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
-    
+
     Button getSummary = getOvalButton("Summary", 3.2, 3.2);
     getSummary.setStyle("-fx-base: gold;");
-    
-    getSummary.setOnAction(e ->{
+
+    getSummary.setOnAction(e -> {
       displaySummary(false);
     });
 
@@ -1153,28 +1158,26 @@ public class GUI {
         Collections.sort(result, (a, b) -> {
           if (a.get(0).compareTo(b.get(0)) != 0)
             return a.get(0).compareTo(b.get(0));
-          else 
-            if (Long.parseLong(a.get(1)) - Long.parseLong(b.get(1)) > 0)
-              return 1;
-            else if (Long.parseLong(a.get(1)) - Long.parseLong(b.get(1)) < 0)
-              return -1;
-            else
-              return 0;
+          else if (Long.parseLong(a.get(1)) - Long.parseLong(b.get(1)) > 0)
+            return 1;
+          else if (Long.parseLong(a.get(1)) - Long.parseLong(b.get(1)) < 0)
+            return -1;
+          else
+            return 0;
         });
         // set the flag to be true
         firstFlag = true;
       } else {
-     // sort it into ascending order
+        // sort it into ascending order
         Collections.sort(result, (b, a) -> {
           if (a.get(0).compareTo(b.get(0)) != 0)
             return a.get(0).compareTo(b.get(0));
-          else 
-            if (Long.parseLong(a.get(1)) - Long.parseLong(b.get(1)) > 0)
-              return 1;
-            else if (Long.parseLong(a.get(1)) - Long.parseLong(b.get(1)) < 0)
-              return -1;
-            else
-              return 0;
+          else if (Long.parseLong(a.get(1)) - Long.parseLong(b.get(1)) > 0)
+            return 1;
+          else if (Long.parseLong(a.get(1)) - Long.parseLong(b.get(1)) < 0)
+            return -1;
+          else
+            return 0;
         });
         // set result to be reversed
         firstFlag = false;
@@ -1209,7 +1212,7 @@ public class GUI {
         // set the flag to be true
         secondFlag = true;
       } else {
-     // sort it into ascending order
+        // sort it into ascending order
         Collections.sort(result, (b, a) -> {
           if (Long.parseLong(a.get(1)) - Long.parseLong(b.get(1)) > 0)
             return 1;
@@ -1330,23 +1333,21 @@ public class GUI {
         format.parse(date);
 
         getMonthlyResultScene(primaryStage, inputYear.getText(), inputMonth.getText());
-      } 
-      catch (IllegalArgumentException e1) {
+      } catch (IllegalArgumentException e1) {
         // Display warning message
         displayWarningMessage(WarningIndex.ILLEGALARGUMENTEXCEPTION);
-      } 
-      catch (ParseException e1) {
+      } catch (ParseException e1) {
         displayWarningMessage(WarningIndex.PARSEEXCEPTION);
       } catch (IllegalNullKeyException e1) {
       }
     });
 
     inputMonth.setOnKeyPressed(e -> {
-      if(e.getCode() == KeyCode.ENTER){
+      if (e.getCode() == KeyCode.ENTER) {
         searchButton.fire();
       }
     });
-    
+
     Button clearButton = getOvalButton("Clear", 3.2, 2);
     clearButton.setStyle("-fx-base: gold;");
     clearButton.setOnAction(e -> {
@@ -1441,7 +1442,7 @@ public class GUI {
       result = manager.getMonthlyReport(g);
       // Get the summary
       if (result.size() != 0)
-        summary = result.remove(result.size()-1);
+        summary = result.remove(result.size() - 1);
     } catch (IllegalNullKeyException e) {
       displayWarningMessage(WarningIndex.ILLEGALNULLKEYEXCEPTION);
     }
@@ -1531,7 +1532,8 @@ public class GUI {
             return 1;
           else if (Long.parseLong(a.get(1)) - Long.parseLong(b.get(1)) < 0)
             return -1;
-          else return a.get(0).compareTo(b.get(0));
+          else
+            return a.get(0).compareTo(b.get(0));
         });
         // set the flag to be true
         secondFlag = true;
@@ -1542,7 +1544,8 @@ public class GUI {
             return 1;
           else if (Long.parseLong(a.get(1)) - Long.parseLong(b.get(1)) < 0)
             return -1;
-          else return a.get(0).compareTo(b.get(0));
+          else
+            return a.get(0).compareTo(b.get(0));
         });
         secondFlag = false;
       }
@@ -1569,7 +1572,7 @@ public class GUI {
     // Summary button
     Button getSummary = getOvalButton("Summary", 3.2, 3.2);
     getSummary.setStyle("-fx-base: gold;");
-    getSummary.setOnAction(e->{
+    getSummary.setOnAction(e -> {
       displaySummary(false);
     });
 
@@ -1667,9 +1670,9 @@ public class GUI {
         displayWarningMessage(WarningIndex.PARSEEXCEPTION);
       }
     });
-    
+
     endDateField.setOnKeyPressed(e -> {
-      if(e.getCode() == KeyCode.ENTER){
+      if (e.getCode() == KeyCode.ENTER) {
         search.fire();
       }
     });
@@ -1736,7 +1739,7 @@ public class GUI {
     try {
       result = manager.getDateReport(startCalendar, endCalendar);
       if (result.size() != 0)
-        summary = result.remove(result.size()-1);
+        summary = result.remove(result.size() - 1);
     } catch (IllegalNullKeyException e1) {
       displayWarningMessage(WarningIndex.PARSEEXCEPTION);
     }
@@ -1783,7 +1786,7 @@ public class GUI {
             return 1;
           else if (Long.parseLong(a.get(1)) - Long.parseLong(b.get(1)) < 0)
             return -1;
-          else 
+          else
             return 0;
         });
         firstFlag = true;
@@ -1796,7 +1799,7 @@ public class GUI {
             return 1;
           else if (Long.parseLong(a.get(1)) - Long.parseLong(b.get(1)) < 0)
             return -1;
-          else 
+          else
             return 0;
         });
         firstFlag = false;
@@ -1818,13 +1821,13 @@ public class GUI {
     weightSortButton.setOnAction(e -> {
 
       if (this.secondFlag) {
-     // Sort ascending
+        // Sort ascending
         Collections.sort(result, (a, b) -> {
           if (Long.parseLong(a.get(1)) - Long.parseLong(b.get(1)) > 0)
             return 1;
           else if (Long.parseLong(a.get(1)) - Long.parseLong(b.get(1)) < 0)
             return -1;
-          else 
+          else
             return a.get(0).compareTo(b.get(0));
         });
         secondFlag = false;
@@ -1834,7 +1837,7 @@ public class GUI {
             return 1;
           else if (Long.parseLong(a.get(1)) - Long.parseLong(b.get(1)) < 0)
             return -1;
-          else 
+          else
             return a.get(0).compareTo(b.get(0));
         });
         secondFlag = true;
@@ -2171,19 +2174,16 @@ public class GUI {
     // If there is no summary
     if (summary == null) {
       alert.setContentText("No summary shown");
-    }
-    else {// The format of the Min, max Record would be Farm ID/Month, Weight, Percent
+    } else {// The format of the Min, max Record would be Farm ID/Month, Weight, Percent
       if (farmReport) // Report for farms
-        alert.setContentText("Max Record: " + "Month - " + summary.get(0)
-            + " Weight - " + summary.get(1) + " Percent - " + summary.get(2)
-            + "\n" + "Min Record: " + "Month - " + summary.get(3) + " "
-            + " Weight - " + summary.get(4) + " Percent - " + summary.get(5)
+        alert.setContentText("Max Record: " + "Month - " + summary.get(0) + " Weight - "
+            + summary.get(1) + " Percent - " + summary.get(2) + "\n" + "Min Record: " + "Month - "
+            + summary.get(3) + " " + " Weight - " + summary.get(4) + " Percent - " + summary.get(5)
             + "\n" + "Average: " + summary.get(6));
       else // Report for Date
-        alert.setContentText("Max Record: " + "Farm ID - " + summary.get(0)
-            + " Weight - " + summary.get(1) + " Percent - " + summary.get(2)
-            + "\n" + "Min Record: " + "Farm ID - " + summary.get(3) + " "
-            + " Weight - " + summary.get(4) + " Percent - " + summary.get(5)
+        alert.setContentText("Max Record: " + summary.get(0) + " Weight - "
+            + summary.get(1) + " Percent - " + summary.get(2) + "\n" + "Min Record: "
+            + summary.get(3) + " " + " Weight - " + summary.get(4) + " Percent - " + summary.get(5)
             + "\n" + "Average: " + summary.get(6));
       alert.showAndWait().filter(response -> response == ButtonType.OK);
     }
